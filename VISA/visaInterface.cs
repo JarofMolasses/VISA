@@ -326,6 +326,9 @@ namespace VISA
             loadOff();
             mbSession.Dispose();
             Console.WriteLine("Test aborted");
+            
+            // todo: this allows the window to be safely closed if you need to change the setup. However, this is not elegant and means if you cancel the test, you need to relaunch the form. 
+            // Needs adjustment to elegantly cancel test without needing to relaunch
         }
 
     }

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.openSessionButton = new System.Windows.Forms.Button();
             this.closeSessionButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -93,7 +93,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 18);
+            this.label1.Location = new System.Drawing.Point(287, 46);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(71, 13);
             this.label1.TabIndex = 2;
@@ -101,14 +101,14 @@
             // 
             // writeTextBox
             // 
-            this.writeTextBox.Location = new System.Drawing.Point(11, 34);
+            this.writeTextBox.Location = new System.Drawing.Point(289, 62);
             this.writeTextBox.Name = "writeTextBox";
             this.writeTextBox.Size = new System.Drawing.Size(276, 20);
             this.writeTextBox.TabIndex = 3;
             // 
             // queryButton
             // 
-            this.queryButton.Location = new System.Drawing.Point(11, 60);
+            this.queryButton.Location = new System.Drawing.Point(289, 88);
             this.queryButton.Name = "queryButton";
             this.queryButton.Size = new System.Drawing.Size(82, 24);
             this.queryButton.TabIndex = 4;
@@ -118,7 +118,7 @@
             // 
             // writeButton
             // 
-            this.writeButton.Location = new System.Drawing.Point(99, 60);
+            this.writeButton.Location = new System.Drawing.Point(377, 88);
             this.writeButton.Name = "writeButton";
             this.writeButton.Size = new System.Drawing.Size(91, 25);
             this.writeButton.TabIndex = 5;
@@ -128,7 +128,7 @@
             // 
             // readButton
             // 
-            this.readButton.Location = new System.Drawing.Point(196, 61);
+            this.readButton.Location = new System.Drawing.Point(474, 89);
             this.readButton.Name = "readButton";
             this.readButton.Size = new System.Drawing.Size(91, 24);
             this.readButton.TabIndex = 6;
@@ -139,7 +139,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 124);
+            this.label2.Location = new System.Drawing.Point(293, 180);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 13);
             this.label2.TabIndex = 7;
@@ -147,7 +147,7 @@
             // 
             // readTextBox
             // 
-            this.readTextBox.Location = new System.Drawing.Point(10, 140);
+            this.readTextBox.Location = new System.Drawing.Point(291, 196);
             this.readTextBox.Multiline = true;
             this.readTextBox.Name = "readTextBox";
             this.readTextBox.Size = new System.Drawing.Size(277, 63);
@@ -155,7 +155,7 @@
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(11, 209);
+            this.clearButton.Location = new System.Drawing.Point(292, 265);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(277, 30);
             this.clearButton.TabIndex = 9;
@@ -174,7 +174,7 @@
             this.groupBox1.Controls.Add(this.availableResourcesListBox);
             this.groupBox1.Controls.Add(this.closeSessionButton);
             this.groupBox1.Controls.Add(this.openSessionButton);
-            this.groupBox1.Location = new System.Drawing.Point(309, 12);
+            this.groupBox1.Location = new System.Drawing.Point(10, 12);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(266, 300);
             this.groupBox1.TabIndex = 10;
@@ -193,7 +193,7 @@
             // activeResourcesListBox
             // 
             this.activeResourcesListBox.FormattingEnabled = true;
-            this.activeResourcesListBox.Location = new System.Drawing.Point(6, 237);
+            this.activeResourcesListBox.Location = new System.Drawing.Point(7, 239);
             this.activeResourcesListBox.Name = "activeResourcesListBox";
             this.activeResourcesListBox.Size = new System.Drawing.Size(253, 56);
             this.activeResourcesListBox.TabIndex = 9;
@@ -237,7 +237,7 @@
             // availableResourcesListBox
             // 
             this.availableResourcesListBox.FormattingEnabled = true;
-            this.availableResourcesListBox.Location = new System.Drawing.Point(6, 70);
+            this.availableResourcesListBox.Location = new System.Drawing.Point(6, 75);
             this.availableResourcesListBox.Name = "availableResourcesListBox";
             this.availableResourcesListBox.Size = new System.Drawing.Size(254, 56);
             this.availableResourcesListBox.TabIndex = 3;
@@ -258,7 +258,7 @@
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.resStepTextBox);
             this.groupBox2.Controls.Add(this.ivStartButton);
-            this.groupBox2.Location = new System.Drawing.Point(5, 318);
+            this.groupBox2.Location = new System.Drawing.Point(4, 344);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(570, 265);
             this.groupBox2.TabIndex = 11;
@@ -305,16 +305,16 @@
             // chart1
             // 
             this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea2.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart1.Legends.Add(legend2);
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chart1.Legends.Add(legend3);
             this.chart1.Location = new System.Drawing.Point(201, 10);
             this.chart1.Name = "chart1";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart1.Series.Add(series2);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart1.Series.Add(series3);
             this.chart1.Size = new System.Drawing.Size(364, 236);
             this.chart1.TabIndex = 7;
             this.chart1.Text = "chart1";
@@ -382,7 +382,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(591, 595);
+            this.ClientSize = new System.Drawing.Size(585, 621);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.clearButton);
