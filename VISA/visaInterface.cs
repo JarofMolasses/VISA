@@ -295,7 +295,7 @@ namespace VISA
             mbSession.RawIO.Write($"RES:L1 {resString} OHM\n");
             Console.WriteLine($"Setting L1 CR to: {resString}");
 
-            writeTextBox.Text = "RES:L1?\n";
+            writeTextBox.Text = "RES:L1?\n";    // bruh. you are writing in the textbox and then running query() smh. 
             query();
         }
 
