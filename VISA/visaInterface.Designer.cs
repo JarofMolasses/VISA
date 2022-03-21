@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.openSessionButton = new System.Windows.Forms.Button();
             this.closeSessionButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -65,6 +65,10 @@
             this.ivStartButton = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.label10 = new System.Windows.Forms.Label();
+            this.stepTimeTextBox = new System.Windows.Forms.TextBox();
+            this.testProgressTextBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
@@ -246,6 +250,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Controls.Add(this.testProgressTextBox);
+            this.groupBox2.Controls.Add(this.stepTimeTextBox);
+            this.groupBox2.Controls.Add(this.label10);
             this.groupBox2.Controls.Add(this.cancelButton);
             this.groupBox2.Controls.Add(this.selectFileButton);
             this.groupBox2.Controls.Add(this.label9);
@@ -258,16 +266,16 @@
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.resStepTextBox);
             this.groupBox2.Controls.Add(this.ivStartButton);
-            this.groupBox2.Location = new System.Drawing.Point(4, 344);
+            this.groupBox2.Location = new System.Drawing.Point(4, 318);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(570, 265);
+            this.groupBox2.Size = new System.Drawing.Size(570, 291);
             this.groupBox2.TabIndex = 11;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "IV curve plotter";
             // 
             // cancelButton
             // 
-            this.cancelButton.Location = new System.Drawing.Point(97, 228);
+            this.cancelButton.Location = new System.Drawing.Point(97, 254);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(88, 31);
             this.cancelButton.TabIndex = 11;
@@ -277,7 +285,7 @@
             // 
             // selectFileButton
             // 
-            this.selectFileButton.Location = new System.Drawing.Point(7, 117);
+            this.selectFileButton.Location = new System.Drawing.Point(11, 143);
             this.selectFileButton.Name = "selectFileButton";
             this.selectFileButton.Size = new System.Drawing.Size(178, 24);
             this.selectFileButton.TabIndex = 10;
@@ -288,7 +296,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(7, 144);
+            this.label9.Location = new System.Drawing.Point(8, 170);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(63, 13);
             this.label9.TabIndex = 9;
@@ -296,7 +304,7 @@
             // 
             // fileNameTextBox
             // 
-            this.fileNameTextBox.Location = new System.Drawing.Point(6, 160);
+            this.fileNameTextBox.Location = new System.Drawing.Point(8, 186);
             this.fileNameTextBox.Multiline = true;
             this.fileNameTextBox.Name = "fileNameTextBox";
             this.fileNameTextBox.Size = new System.Drawing.Size(179, 62);
@@ -305,30 +313,30 @@
             // chart1
             // 
             this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea3.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea3);
-            legend3.Name = "Legend1";
-            this.chart1.Legends.Add(legend3);
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
             this.chart1.Location = new System.Drawing.Point(201, 10);
             this.chart1.Name = "chart1";
-            series3.ChartArea = "ChartArea1";
-            series3.Legend = "Legend1";
-            series3.Name = "Series1";
-            this.chart1.Series.Add(series3);
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chart1.Series.Add(series4);
             this.chart1.Size = new System.Drawing.Size(364, 236);
             this.chart1.TabIndex = 7;
             this.chart1.Text = "chart1";
             // 
             // startResTextBox
             // 
-            this.startResTextBox.Location = new System.Drawing.Point(131, 25);
+            this.startResTextBox.Location = new System.Drawing.Point(131, 22);
             this.startResTextBox.Name = "startResTextBox";
             this.startResTextBox.Size = new System.Drawing.Size(50, 20);
             this.startResTextBox.TabIndex = 6;
             // 
             // stopResTextBox
             // 
-            this.stopResTextBox.Location = new System.Drawing.Point(131, 51);
+            this.stopResTextBox.Location = new System.Drawing.Point(130, 51);
             this.stopResTextBox.Name = "stopResTextBox";
             this.stopResTextBox.Size = new System.Drawing.Size(50, 20);
             this.stopResTextBox.TabIndex = 5;
@@ -336,7 +344,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(29, 53);
+            this.label8.Location = new System.Drawing.Point(25, 54);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(100, 13);
             this.label8.TabIndex = 4;
@@ -345,7 +353,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(29, 28);
+            this.label7.Location = new System.Drawing.Point(25, 25);
             this.label7.Name = "label7";
             this.label7.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.label7.Size = new System.Drawing.Size(100, 13);
@@ -355,7 +363,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(26, 80);
+            this.label6.Location = new System.Drawing.Point(22, 80);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(103, 13);
             this.label6.TabIndex = 2;
@@ -363,20 +371,53 @@
             // 
             // resStepTextBox
             // 
-            this.resStepTextBox.Location = new System.Drawing.Point(131, 77);
+            this.resStepTextBox.Location = new System.Drawing.Point(130, 77);
             this.resStepTextBox.Name = "resStepTextBox";
             this.resStepTextBox.Size = new System.Drawing.Size(50, 20);
             this.resStepTextBox.TabIndex = 1;
             // 
             // ivStartButton
             // 
-            this.ivStartButton.Location = new System.Drawing.Point(7, 228);
+            this.ivStartButton.Location = new System.Drawing.Point(8, 254);
             this.ivStartButton.Name = "ivStartButton";
             this.ivStartButton.Size = new System.Drawing.Size(88, 31);
             this.ivStartButton.TabIndex = 0;
             this.ivStartButton.Text = "Start IV test";
             this.ivStartButton.UseVisualStyleBackColor = true;
             this.ivStartButton.Click += new System.EventHandler(this.ivStartButton_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(56, 110);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(68, 13);
+            this.label10.TabIndex = 12;
+            this.label10.Text = "Step time [s]:";
+            // 
+            // stepTimeTextBox
+            // 
+            this.stepTimeTextBox.Location = new System.Drawing.Point(130, 107);
+            this.stepTimeTextBox.Name = "stepTimeTextBox";
+            this.stepTimeTextBox.Size = new System.Drawing.Size(50, 20);
+            this.stepTimeTextBox.TabIndex = 13;
+           
+            // 
+            // testProgressTextBox
+            // 
+            this.testProgressTextBox.Location = new System.Drawing.Point(443, 256);
+            this.testProgressTextBox.Name = "testProgressTextBox";
+            this.testProgressTextBox.Size = new System.Drawing.Size(117, 20);
+            this.testProgressTextBox.TabIndex = 14;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(363, 259);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(74, 13);
+            this.label11.TabIndex = 15;
+            this.label11.Text = "Test progress:";
             // 
             // visaInterface
             // 
@@ -440,6 +481,10 @@
         private System.Windows.Forms.TextBox fileNameTextBox;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox testProgressTextBox;
+        private System.Windows.Forms.TextBox stepTimeTextBox;
+        private System.Windows.Forms.Label label10;
     }
 }
 

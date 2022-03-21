@@ -11,7 +11,7 @@ using NationalInstruments.Visa;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
-
+using Ivi.Visa;
 
 namespace VISA
 {
@@ -20,20 +20,34 @@ namespace VISA
         StreamWriter outFile;
 
         private MessageBasedSession mbSession;
-        int averageBuffer = 20;
 
-        int plotBufferLimit = 128; // failsafe
+        Int32 averageBuffer = 24;
+        Int32 plotBufferLimit = 256; // failsafe, don't accumulate huge amounts of plot data in memory
+
+        // I-V test variables
+        Int32 ivStepTime = 1;         // default test period 1 second
+        bool testInProgress = false;
 
         Queue<float> voltPlotQueue = new Queue<float>();
         Queue<float> ampsPlotQueue = new Queue<float>();
         public visaInterface()
         {
             InitializeComponent();
+
+            // initialization code
             chart1.Titles.Add("I-V plot");
             chart1.Series.Clear();
             chart1.Series.Add("CR");
             chart1.Series["CR"].ChartType = SeriesChartType.Line;
             chart1.Series["CR"].Points.DataBindXY(voltPlotQueue, ampsPlotQueue);
+
+            ChartArea ca = chart1.ChartAreas[0];
+            ca.AxisX.LabelStyle.Format = "0.00";
+            ca.AxisY.LabelStyle.Format = "0.00";
+
+            // I-V plot defaults
+            resStepTextBox.Text = "0.5";
+            stepTimeTextBox.Text = $"{ivStepTime.ToString()}";
         }
         public string ResourceName
         {
@@ -244,10 +258,14 @@ namespace VISA
             }
             else
             {
+                testInProgress = true;
                 Queue<float> resistanceList = new Queue<float>();
                 float start = float.Parse(startResTextBox.Text); float stop = float.Parse(stopResTextBox.Text); float step = float.Parse(resStepTextBox.Text);
+               
+                int numSteps = 0;
                 for (float res = start; res <= stop; res += step)
                 {
+                    numSteps++;
                     resistanceList.Enqueue(res);
                 }
 
@@ -257,23 +275,32 @@ namespace VISA
                 loadOn();
                 foreach (float r in resistanceList)
                 {
+                    numSteps--;
+                    testProgressTextBox.Text = $"Steps remaining: {numSteps}";
+                    
                     setLoadRes(r.ToString());
-                    await Task.Delay(2000);
+                    await Task.Delay(int.Parse(stepTimeTextBox.Text.ToString())*1000);     // ivStepTime [s] * 1000 ms/s
+                    
                     float volts = 0; float amps = 0;
-                    for(int i = 0; i < averageBuffer; i++)
+                    for(int i = 0; i < averageBuffer && testInProgress == true; i++)
                     {
                         writeTextBox.Text = "MEAS:VOLT?\n";
                         volts += float.Parse(stripFloatTerminator(query()));
                         writeTextBox.Text = "MEAS:CURR?\n";
                         amps += float.Parse(stripFloatTerminator(query()));
 
-                        await Task.Delay(100);
+                        await Task.Delay(100);              // basic delay between averaging readings
                     }
                     volts/= (float)averageBuffer;
                     amps /= (float)averageBuffer;
 
                     voltPlotQueue.Enqueue(volts);
                     ampsPlotQueue.Enqueue(amps);
+                    if(voltPlotQueue.Count > plotBufferLimit) // limits I-V plot buffer 
+                    {
+                        voltPlotQueue.Dequeue();
+                        ampsPlotQueue.Dequeue();
+                    }
 
                     chart1.Series["CR"].Points.AddXY(volts, amps);
 
@@ -281,6 +308,7 @@ namespace VISA
                 }
                 loadOff();
                 outFile.Close();
+                testInProgress = false;
             }
         }
 
@@ -326,6 +354,7 @@ namespace VISA
             loadOff();
             mbSession.Dispose();
             Console.WriteLine("Test aborted");
+            testInProgress = false;
             
             // todo: this allows the window to be safely closed if you need to change the setup. However, this is not elegant and means if you cancel the test, you need to relaunch the form. 
             // Needs adjustment to elegantly cancel test without needing to relaunch
