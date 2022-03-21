@@ -270,6 +270,7 @@ namespace VISA
                 }
 
                 outFile.WriteLine("CR,Volts,Amps");
+                mbSession.RawIO.Write("CONF:REM ON\n");
                 mbSession.RawIO.Write("RES 0\n");
                 setLoadRes(resistanceList.Peek().ToString());
                 loadOn();
