@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NationalInstruments.Visa;
 
 namespace VISA
 {
@@ -16,6 +17,8 @@ namespace VISA
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            
             Application.Run(new visaInterface());
         }
     }

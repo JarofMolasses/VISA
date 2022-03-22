@@ -11,7 +11,7 @@ using NationalInstruments.Visa;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
-using Ivi.Visa;
+
 
 namespace VISA
 {
@@ -19,9 +19,11 @@ namespace VISA
     {
         StreamWriter outFile;
 
-        private MessageBasedSession mbSession;
+        List<MessageBasedSession> mbSessionList = new List<MessageBasedSession>();          // i will declare an array here 
 
-        Int32 averageBuffer = 24;
+        //int selectedOpenSession = 0;
+
+        Int32 averageBuffer = 32;
         Int32 plotBufferLimit = 256; // failsafe, don't accumulate huge amounts of plot data in memory
 
         // I-V test variables
@@ -39,15 +41,15 @@ namespace VISA
             chart1.Series.Clear();
             chart1.Series.Add("CR");
             chart1.Series["CR"].ChartType = SeriesChartType.Line;
-            chart1.Series["CR"].Points.DataBindXY(voltPlotQueue, ampsPlotQueue);
 
             ChartArea ca = chart1.ChartAreas[0];
             ca.AxisX.LabelStyle.Format = "0.00";
             ca.AxisY.LabelStyle.Format = "0.00";
 
             // I-V plot defaults
-            resStepTextBox.Text = "0.5";
+            resStepTextBox.Text = "0.25";
             stepTimeTextBox.Text = $"{ivStepTime.ToString()}";
+
         }
         public string ResourceName
         {
@@ -60,6 +62,27 @@ namespace VISA
                 visaResourceNameTextBox.Text = value;
             }
         }
+
+        public string targetName
+        {
+            get
+            {
+                return selectTargetResourceDropdown.Text;
+            }
+
+            set
+            {
+                selectTargetResourceDropdown.Text = value;
+            }
+        }
+
+        public int selectedOpenSession
+        {
+            get
+            {
+                return activeResourcesListBox.SelectedIndex;
+            }
+        }
         private void findResourceButton_Click(object sender, EventArgs e)
         {
             // This example uses an instance of the NationalInstruments.Visa.ResourceManager class to find resources on the system.
@@ -69,6 +92,7 @@ namespace VISA
             {
                 availableResourcesListBox.Items.Clear();
                 var resources = rmSession.Find("(ASRL|GPIB|TCPIP|USB)?*");
+                
                 foreach (string s in resources)
                 {
                     availableResourcesListBox.Items.Add(s);
@@ -86,17 +110,19 @@ namespace VISA
         {
             string selectedString = (string)availableResourcesListBox.SelectedItem;
             ResourceName = selectedString;
+            SetupControlStateMaster();
         }
 
         private void openSessionButton_MouseClick(object sender, MouseEventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
+
             using (var rmSession = new ResourceManager())
             {
                 try
                 {
-                    mbSession = (MessageBasedSession)rmSession.Open(ResourceName);          // initialize the VISA session. TODO: allow for multiple simultaneous sessions. Have a list box with "active resources", and option to clear specific ones.
-                    SetupControlState(true);
+                    mbSessionList.Add((MessageBasedSession)rmSession.Open(ResourceName));          // initialize the VISA session
+                    SetupControlStateMaster();
                 }
                 catch (InvalidCastException)
                 {
@@ -117,12 +143,12 @@ namespace VISA
         private void queryButton_MouseClick(object sender, MouseEventArgs e)
         {
             readTextBox.Text = String.Empty;
-            this.Cursor = Cursors.WaitCursor;
+            //this.Cursor = Cursors.WaitCursor;     // makes sense in manual entry, not so much in automated mode
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                mbSession.RawIO.Write(textToWrite);
-                readTextBox.Text = InsertCommonEscapeSequences(mbSession.RawIO.ReadString());
+                mbSessionList[selectedOpenSession].RawIO.Write(textToWrite);
+                readTextBox.Text = InsertCommonEscapeSequences(mbSessionList[0].RawIO.ReadString());
             }
             catch (Exception exp)
             {
@@ -139,7 +165,7 @@ namespace VISA
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                mbSession.RawIO.Write(textToWrite);
+                mbSessionList[selectedOpenSession].RawIO.Write(textToWrite);
             }
             catch (Exception exp)
             {
@@ -150,10 +176,10 @@ namespace VISA
         private void readButton_MouseClick(object sender, MouseEventArgs e)
         {
             readTextBox.Text = String.Empty;
-            this.Cursor = Cursors.WaitCursor;
+            //this.Cursor = Cursors.WaitCursor;     // use for manual entry
             try
             {
-                readTextBox.Text = InsertCommonEscapeSequences(mbSession.RawIO.ReadString());
+                readTextBox.Text = InsertCommonEscapeSequences(mbSessionList[selectedOpenSession].RawIO.ReadString());
             }
             catch (Exception exp)
             {
@@ -181,17 +207,32 @@ namespace VISA
         }
 
         /*
-         * Controls the greying out of panels - carried over from old code
+         * State function.
+         * Controls the greying out of open/close buttons - carried over from old code
+         * Controls the updating of the list of active resources and the selected resource
          */
-        private void SetupControlState(bool isSessionOpen)
+        private void SetupControlStateOpenClose()
         {
+            bool isSessionOpen = false;
+            int selectedSessionIndex = -1;
+
+            foreach(MessageBasedSession mb in mbSessionList)
+            {
+                if(!mb.IsDisposed && mb.ResourceName.Equals(ResourceName))
+                {
+                    selectedSessionIndex = mbSessionList.IndexOf(mb);
+                }
+
+            }
+
+            if(selectedSessionIndex != -1 && !mbSessionList[selectedSessionIndex].IsDisposed)
+            {
+                isSessionOpen = true;
+            }
+
             openSessionButton.Enabled = !isSessionOpen;
             closeSessionButton.Enabled = isSessionOpen;
-            queryButton.Enabled = isSessionOpen;
-            writeButton.Enabled = isSessionOpen;
-            readButton.Enabled = isSessionOpen;
-            writeTextBox.Enabled = isSessionOpen;
-            clearButton.Enabled = isSessionOpen;
+            
             if (isSessionOpen)
             {
                 readTextBox.Text = String.Empty;
@@ -199,10 +240,47 @@ namespace VISA
             }
         }
 
+        // new setupcontrolstate for greying out read/write buttons
+        private void SetupControlStateMaster()
+        {
+            activeResourcesListBox.Items.Clear();
+
+            foreach (MessageBasedSession mb in mbSessionList)
+            {
+                if (mb != null && !mb.IsDisposed)      // if the resourcename exists and the mbsession is not disposed, then it is an active session (i think) (i hope)
+                {
+                    activeResourcesListBox.Items.Add(mb.ResourceName.ToString());
+                }
+            }
+
+            SetupControlStateOpenClose();
+        }
+
         private void closeSessionButton_MouseClick(object sender, MouseEventArgs e)
         {
-            SetupControlState(false);
-            mbSession.Dispose();
+            //SetupControlState(false);
+
+            int selectedOpenSessionToClose = -1;
+            
+            foreach(MessageBasedSession mb in mbSessionList)
+            {
+                if(mb.ResourceName.Equals(this.ResourceName))
+                {
+                    selectedOpenSessionToClose = mbSessionList.IndexOf(mb);
+                }
+            }
+            try
+            {
+                mbSessionList[selectedOpenSessionToClose].Dispose();
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+            finally
+            {
+                SetupControlStateMaster();
+            }
         }
 
         private string query()
@@ -212,9 +290,9 @@ namespace VISA
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                mbSession.RawIO.Write(textToWrite);
-                //readTextBox.Text = InsertCommonEscapeSequences(mbSession.RawIO.ReadString());
-                readTextBox.Text = mbSession.RawIO.ReadString();
+                mbSessionList[selectedOpenSession].RawIO.Write(textToWrite);
+                //readTextBox.Text = InsertCommonEscapeSequences(mbSessionArray[0].RawIO.ReadString());
+                readTextBox.Text = mbSessionList[selectedOpenSession].RawIO.ReadString();
                 Console.WriteLine(readTextBox.Text);
                 return readTextBox.Text.ToString();
             }
@@ -270,8 +348,8 @@ namespace VISA
                 }
 
                 outFile.WriteLine("CR,Volts,Amps");
-                mbSession.RawIO.Write("CONF:REM ON\n");
-                mbSession.RawIO.Write("RES 0\n");
+                mbSessionList[0].RawIO.Write("CONF:REM ON\n");
+                mbSessionList[0].RawIO.Write("RES 0\n");
                 setLoadRes(resistanceList.Peek().ToString());
                 loadOn();
                 foreach (float r in resistanceList)
@@ -279,9 +357,9 @@ namespace VISA
                     numSteps--;
                     testProgressTextBox.Text = $"Steps remaining: {numSteps}";
                     
-                    setLoadRes(r.ToString());
                     await Task.Delay(int.Parse(stepTimeTextBox.Text.ToString())*1000);     // ivStepTime [s] * 1000 ms/s
-                    
+                    setLoadRes(r.ToString());
+
                     float volts = 0; float amps = 0;
                     for(int i = 0; i < averageBuffer && testInProgress == true; i++)
                     {
@@ -321,7 +399,7 @@ namespace VISA
 
         private void setLoadRes(string resString)
         {
-            mbSession.RawIO.Write($"RES:L1 {resString} OHM\n");
+            mbSessionList[0].RawIO.Write($"RES:L1 {resString} OHM\n");
             Console.WriteLine($"Setting L1 CR to: {resString}");
 
             writeTextBox.Text = "RES:L1?\n";    // bruh. you are writing in the textbox and then running query() smh. 
@@ -330,13 +408,13 @@ namespace VISA
 
         private void loadOn()
         {
-            mbSession.RawIO.Write("LOAD ON\n");
+            mbSessionList[0].RawIO.Write("LOAD ON\n");
             Console.WriteLine("Setting Load ON");
         }
 
         private void loadOff()
         {
-            mbSession.RawIO.Write("LOAD OFF\n");
+            mbSessionList[0].RawIO.Write("LOAD OFF\n");
             Console.WriteLine("Setting Load OFF");
         }
 
@@ -353,7 +431,7 @@ namespace VISA
         private void cancelButton_MouseClick(object sender, MouseEventArgs e)
         {
             loadOff();
-            mbSession.Dispose();
+            mbSessionList[0].Dispose();
             Console.WriteLine("Test aborted");
             testInProgress = false;
             
@@ -361,6 +439,17 @@ namespace VISA
             // Needs adjustment to elegantly cancel test without needing to relaunch
         }
 
+        private void queryIDShortcutButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            writeTextBox.Text = @"*IDN?\n";
+            query();
+        }
+
+        private void activeResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string target = activeResourcesListBox.SelectedItem.ToString();
+            targetName = target;
+        }
     }
 
 
