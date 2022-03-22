@@ -19,19 +19,14 @@ namespace VISA
     {
         StreamWriter outFile;
 
-        List<MessageBasedSession> mbSessionList = new List<MessageBasedSession>();          // i will declare an array here 
-
-        //int selectedOpenSession = 0;
+        List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // i will declare an array here 
 
         Int32 averageBuffer = 32;
-        Int32 plotBufferLimit = 256; // failsafe, don't accumulate huge amounts of plot data in memory
-
+      
         // I-V test variables
         Int32 ivStepTime = 1;         // default test period 1 second
         bool testInProgress = false;
 
-        Queue<float> voltPlotQueue = new Queue<float>();
-        Queue<float> ampsPlotQueue = new Queue<float>();
         public visaInterface()
         {
             InitializeComponent();
@@ -67,22 +62,23 @@ namespace VISA
         {
             get
             {
-                return selectTargetResourceDropdown.Text;
+                return selectedTargetResourceTextBox.Text;
             }
 
             set
             {
-                selectTargetResourceDropdown.Text = value;
+                selectedTargetResourceTextBox.Text = value;
             }
         }
 
-        public int selectedOpenSession
+        public int selectedOpenSessionIndex
         {
             get
             {
-                return activeResourcesListBox.SelectedIndex;
+                return openResourcesListBox.SelectedIndex;
             }
         }
+
         private void findResourceButton_Click(object sender, EventArgs e)
         {
             // This example uses an instance of the NationalInstruments.Visa.ResourceManager class to find resources on the system.
@@ -121,7 +117,7 @@ namespace VISA
             {
                 try
                 {
-                    mbSessionList.Add((MessageBasedSession)rmSession.Open(ResourceName));          // initialize the VISA session
+                    openSessionList.Add((MessageBasedSession)rmSession.Open(ResourceName));          // initialize the VISA session
                     SetupControlStateMaster();
                 }
                 catch (InvalidCastException)
@@ -143,12 +139,12 @@ namespace VISA
         private void queryButton_MouseClick(object sender, MouseEventArgs e)
         {
             readTextBox.Text = String.Empty;
-            //this.Cursor = Cursors.WaitCursor;     // makes sense in manual entry, not so much in automated mode
+            this.Cursor = Cursors.WaitCursor;     // makes sense in manual entry, not so much in automated mode
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                mbSessionList[selectedOpenSession].RawIO.Write(textToWrite);
-                readTextBox.Text = InsertCommonEscapeSequences(mbSessionList[0].RawIO.ReadString());
+                openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
+                readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
             }
             catch (Exception exp)
             {
@@ -165,7 +161,7 @@ namespace VISA
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                mbSessionList[selectedOpenSession].RawIO.Write(textToWrite);
+                openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
             }
             catch (Exception exp)
             {
@@ -179,7 +175,7 @@ namespace VISA
             //this.Cursor = Cursors.WaitCursor;     // use for manual entry
             try
             {
-                readTextBox.Text = InsertCommonEscapeSequences(mbSessionList[selectedOpenSession].RawIO.ReadString());
+                readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
             }
             catch (Exception exp)
             {
@@ -208,70 +204,61 @@ namespace VISA
 
         /*
          * State function.
-         * Controls the greying out of open/close buttons - carried over from old code
+         * Controls the greying out of buttons - carried over from old code
          * Controls the updating of the list of active resources and the selected resource
          */
-        private void SetupControlStateOpenClose()
+        private void SetupControlStateMaster()
         {
+            // Update the open resources list box
+            openResourcesListBox.Items.Clear();
+            foreach (MessageBasedSession mb in openSessionList)
+            {
+                if (mb != null && !mb.IsDisposed)      // possibly redundant. There are only open sessions in the openSessionList
+                {
+                    openResourcesListBox.Items.Add(mb.ResourceName.ToString());
+                }
+            }
+
+            // Grey out the open/close buttons based on selected session from all available sessions
             bool isSessionOpen = false;
             int selectedSessionIndex = -1;
 
-            foreach(MessageBasedSession mb in mbSessionList)
+            foreach (MessageBasedSession mb in openSessionList)
             {
-                if(!mb.IsDisposed && mb.ResourceName.Equals(ResourceName))
+                if (!mb.IsDisposed && mb.ResourceName.Equals(this.ResourceName))
                 {
-                    selectedSessionIndex = mbSessionList.IndexOf(mb);
+                    selectedSessionIndex = openSessionList.IndexOf(mb);
                 }
-
             }
 
-            if(selectedSessionIndex != -1 && !mbSessionList[selectedSessionIndex].IsDisposed)
+            if (selectedSessionIndex != -1 && !openSessionList[selectedSessionIndex].IsDisposed)
             {
                 isSessionOpen = true;
+                readTextBox.Text = String.Empty;
+                writeTextBox.Focus();
             }
 
             openSessionButton.Enabled = !isSessionOpen;
             closeSessionButton.Enabled = isSessionOpen;
-            
-            if (isSessionOpen)
-            {
-                readTextBox.Text = String.Empty;
-                writeTextBox.Focus();
-            }
-        }
-
-        // new setupcontrolstate for greying out read/write buttons
-        private void SetupControlStateMaster()
-        {
-            activeResourcesListBox.Items.Clear();
-
-            foreach (MessageBasedSession mb in mbSessionList)
-            {
-                if (mb != null && !mb.IsDisposed)      // if the resourcename exists and the mbsession is not disposed, then it is an active session (i think) (i hope)
-                {
-                    activeResourcesListBox.Items.Add(mb.ResourceName.ToString());
-                }
-            }
-
-            SetupControlStateOpenClose();
         }
 
         private void closeSessionButton_MouseClick(object sender, MouseEventArgs e)
         {
-            //SetupControlState(false);
-
+            this.Cursor = Cursors.WaitCursor;
             int selectedOpenSessionToClose = -1;
             
-            foreach(MessageBasedSession mb in mbSessionList)
+            foreach(MessageBasedSession mb in openSessionList)
             {
-                if(mb.ResourceName.Equals(this.ResourceName))
+                if(!mb.IsDisposed&& mb.ResourceName.Equals(this.ResourceName))
                 {
-                    selectedOpenSessionToClose = mbSessionList.IndexOf(mb);
+                    selectedOpenSessionToClose = openSessionList.IndexOf(mb);
                 }
             }
             try
             {
-                mbSessionList[selectedOpenSessionToClose].Dispose();
+                openSessionList[selectedOpenSessionToClose].Dispose();
+                openSessionList.RemoveAt(selectedOpenSessionToClose);
+                SetupControlStateMaster();
             }
             catch (Exception exp)
             {
@@ -279,20 +266,19 @@ namespace VISA
             }
             finally
             {
-                SetupControlStateMaster();
+                this.Cursor = Cursors.Default;
             }
         }
 
         private string query()
         {
             readTextBox.Text = String.Empty;
-            this.Cursor = Cursors.WaitCursor;
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                mbSessionList[selectedOpenSession].RawIO.Write(textToWrite);
+                openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
                 //readTextBox.Text = InsertCommonEscapeSequences(mbSessionArray[0].RawIO.ReadString());
-                readTextBox.Text = mbSessionList[selectedOpenSession].RawIO.ReadString();
+                readTextBox.Text = openSessionList[selectedOpenSessionIndex].RawIO.ReadString();
                 Console.WriteLine(readTextBox.Text);
                 return readTextBox.Text.ToString();
             }
@@ -325,10 +311,7 @@ namespace VISA
             {
                 MessageBox.Show("File is currently open");
             }
-            finally
-            {
-                // nothing, really.
-            }
+
 
             if (resStepTextBox.Text == "" || startResTextBox.Text == "" || stopResTextBox.Text == "" || float.Parse(startResTextBox.Text) > float.Parse(stopResTextBox.Text))
             {
@@ -348,8 +331,8 @@ namespace VISA
                 }
 
                 outFile.WriteLine("CR,Volts,Amps");
-                mbSessionList[0].RawIO.Write("CONF:REM ON\n");
-                mbSessionList[0].RawIO.Write("RES 0\n");
+                openSessionList[0].RawIO.Write("CONF:REM ON\n");
+                openSessionList[0].RawIO.Write("RES 0\n");
                 setLoadRes(resistanceList.Peek().ToString());
                 loadOn();
                 foreach (float r in resistanceList)
@@ -373,18 +356,11 @@ namespace VISA
                     volts/= (float)averageBuffer;
                     amps /= (float)averageBuffer;
 
-                    voltPlotQueue.Enqueue(volts);
-                    ampsPlotQueue.Enqueue(amps);
-                    if(voltPlotQueue.Count > plotBufferLimit) // limits I-V plot buffer 
-                    {
-                        voltPlotQueue.Dequeue();
-                        ampsPlotQueue.Dequeue();
-                    }
-
                     chart1.Series["CR"].Points.AddXY(volts, amps);
 
                     outFile.WriteLine($"{r.ToString()}, {volts.ToString()}, {amps.ToString()}");
                 }
+
                 loadOff();
                 outFile.Close();
                 testInProgress = false;
@@ -399,22 +375,22 @@ namespace VISA
 
         private void setLoadRes(string resString)
         {
-            mbSessionList[0].RawIO.Write($"RES:L1 {resString} OHM\n");
+            openSessionList[0].RawIO.Write($"RES:L1 {resString} OHM\n");
             Console.WriteLine($"Setting L1 CR to: {resString}");
 
-            writeTextBox.Text = "RES:L1?\n";    // bruh. you are writing in the textbox and then running query() smh. 
+            writeTextBox.Text = "RES:L1?\n";    // bruh. you are writing in the textbox and then running query(). just consolidate that  
             query();
         }
 
         private void loadOn()
         {
-            mbSessionList[0].RawIO.Write("LOAD ON\n");
+            openSessionList[0].RawIO.Write("LOAD ON\n");
             Console.WriteLine("Setting Load ON");
         }
 
         private void loadOff()
         {
-            mbSessionList[0].RawIO.Write("LOAD OFF\n");
+            openSessionList[0].RawIO.Write("LOAD OFF\n");
             Console.WriteLine("Setting Load OFF");
         }
 
@@ -431,7 +407,7 @@ namespace VISA
         private void cancelButton_MouseClick(object sender, MouseEventArgs e)
         {
             loadOff();
-            mbSessionList[0].Dispose();
+            openSessionList[0].Dispose();
             Console.WriteLine("Test aborted");
             testInProgress = false;
             
@@ -447,7 +423,7 @@ namespace VISA
 
         private void activeResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string target = activeResourcesListBox.SelectedItem.ToString();
+            string target = openResourcesListBox.SelectedItem.ToString();
             targetName = target;
         }
     }
