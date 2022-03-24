@@ -13,18 +13,18 @@ using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 
 
+
 namespace VISA
 {
     public partial class visaInterface : Form
     {
+        const int CR = 0; const int CC = 1; const int CV = 2;
         StreamWriter outFile;
 
         List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // i will declare an array here 
 
-        Int32 averageBuffer = 32;
-      
         // I-V test variables
-        Int32 ivStepTime = 1;         // default test period 1 second
+        Int32 ivStepTime = 2;         // default test period 1 second
         bool testInProgress = false;
 
         public visaInterface()
@@ -34,8 +34,6 @@ namespace VISA
             // initialization code
             chart1.Titles.Add("I-V plot");
             chart1.Series.Clear();
-            chart1.Series.Add("CR");
-            chart1.Series["CR"].ChartType = SeriesChartType.Line;
 
             ChartArea ca = chart1.ChartAreas[0];
             ca.AxisX.LabelStyle.Format = "0.00";
@@ -88,7 +86,7 @@ namespace VISA
             {
                 availableResourcesListBox.Items.Clear();
                 var resources = rmSession.Find("(ASRL|GPIB|TCPIP|USB)?*");
-                
+
                 foreach (string s in resources)
                 {
                     availableResourcesListBox.Items.Add(s);
@@ -133,7 +131,7 @@ namespace VISA
                     this.Cursor = Cursors.Default;
                 }
             }
-            
+
         }
 
         private void queryButton_MouseClick(object sender, MouseEventArgs e)
@@ -218,7 +216,6 @@ namespace VISA
                     openResourcesListBox.Items.Add(mb.ResourceName.ToString());
                 }
             }
-
             // Grey out the open/close buttons based on selected session from all available sessions
             bool isSessionOpen = false;
             int selectedSessionIndex = -1;
@@ -246,10 +243,10 @@ namespace VISA
         {
             this.Cursor = Cursors.WaitCursor;
             int selectedOpenSessionToClose = -1;
-            
-            foreach(MessageBasedSession mb in openSessionList)
+
+            foreach (MessageBasedSession mb in openSessionList)
             {
-                if(!mb.IsDisposed&& mb.ResourceName.Equals(this.ResourceName))
+                if (!mb.IsDisposed && mb.ResourceName.Equals(this.ResourceName))
                 {
                     selectedOpenSessionToClose = openSessionList.IndexOf(mb);
                 }
@@ -270,15 +267,17 @@ namespace VISA
             }
         }
 
-        private string query()
+        private string query(string queryString, int openSessionIndex)
         {
             readTextBox.Text = String.Empty;
             try
             {
-                string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
-                //readTextBox.Text = InsertCommonEscapeSequences(mbSessionArray[0].RawIO.ReadString());
-                readTextBox.Text = openSessionList[selectedOpenSessionIndex].RawIO.ReadString();
+                string textToWrite = ReplaceCommonEscapeSequences(queryString);
+                writeTextBox.Text = textToWrite;
+
+                openSessionList[openSessionIndex].RawIO.Write(textToWrite);
+                
+                readTextBox.Text = openSessionList[openSessionIndex].RawIO.ReadString();
                 Console.WriteLine(readTextBox.Text);
                 return readTextBox.Text.ToString();
             }
@@ -289,12 +288,27 @@ namespace VISA
             }
             finally
             {
-                this.Cursor = Cursors.Default;   
+                this.Cursor = Cursors.Default;
             }
         }
 
-        private async void ivStartButton_Click(object sender, EventArgs e)
+        private void ivStartButton_Click(object sender, EventArgs e)
         {
+            runIVTest();
+        }
+
+        private async void runIVTest()
+        {
+            Queue<float> conditionList = new Queue<float>();
+            float start = 0; float stop = 0; float step = 0;
+            int mode = ivTabControl.SelectedIndex;
+
+            Int32 averageBuffer = 1;
+            if (averagingCheckBox.Checked)
+            {
+                averageBuffer = 32;
+            }
+
             try
             {
                 if (!fileNameTextBox.Text.EndsWith(".csv"))
@@ -312,74 +326,185 @@ namespace VISA
                 MessageBox.Show("File is currently open");
             }
 
-
-            if (resStepTextBox.Text == "" || startResTextBox.Text == "" || stopResTextBox.Text == "" || float.Parse(startResTextBox.Text) > float.Parse(stopResTextBox.Text))
+            if(mode == CR)
             {
-                MessageBox.Show("Invalid test conditions");
+                start = float.Parse(startResTextBox.Text); 
+                stop = float.Parse(stopResTextBox.Text); 
+                step = float.Parse(resStepTextBox.Text);
             }
-            else
+            else if(mode == CC)
             {
-                testInProgress = true;
-                Queue<float> resistanceList = new Queue<float>();
-                float start = float.Parse(startResTextBox.Text); float stop = float.Parse(stopResTextBox.Text); float step = float.Parse(resStepTextBox.Text);
-               
-                int numSteps = 0;
-                for (float res = start; res <= stop; res += step)
-                {
-                    numSteps++;
-                    resistanceList.Enqueue(res);
-                }
-
-                outFile.WriteLine("CR,Volts,Amps");
-                openSessionList[0].RawIO.Write("CONF:REM ON\n");
-                openSessionList[0].RawIO.Write("RES 0\n");
-                setLoadRes(resistanceList.Peek().ToString());
-                loadOn();
-                foreach (float r in resistanceList)
-                {
-                    numSteps--;
-                    testProgressTextBox.Text = $"Steps remaining: {numSteps}";
+                start = float.Parse(startCurrentTextBox.Text); 
+                stop = float.Parse(stopCurrentTextBox.Text); 
+                step = float.Parse(curStepTextBox.Text);
+            }
+            else if(mode == CV)
+            {
+                start = float.Parse(startVoltageTextBox.Text); 
+                stop = float.Parse(stopVoltageTextBox.Text); 
+                step = float.Parse(voltStepTextBox.Text);
+            }
                     
-                    await Task.Delay(int.Parse(stepTimeTextBox.Text.ToString())*1000);     // ivStepTime [s] * 1000 ms/s
-                    setLoadRes(r.ToString());
-
-                    float volts = 0; float amps = 0;
-                    for(int i = 0; i < averageBuffer && testInProgress == true; i++)
-                    {
-                        writeTextBox.Text = "MEAS:VOLT?\n";
-                        volts += float.Parse(stripFloatTerminator(query()));
-                        writeTextBox.Text = "MEAS:CURR?\n";
-                        amps += float.Parse(stripFloatTerminator(query()));
-
-                        await Task.Delay(100);              // basic delay between averaging readings
-                    }
-                    volts/= (float)averageBuffer;
-                    amps /= (float)averageBuffer;
-
-                    chart1.Series["CR"].Points.AddXY(volts, amps);
-
-                    outFile.WriteLine($"{r.ToString()}, {volts.ToString()}, {amps.ToString()}");
-                }
-
-                loadOff();
-                outFile.Close();
-                testInProgress = false;
+            int numSteps = 0;
+            for (float value = start; value <= stop; value += step)
+            {
+                numSteps++;
+                conditionList.Enqueue(value);
             }
+
+            testInProgress = true;
+            switch (mode)
+            {                  
+                case CR:
+                    chart1.Series.Clear();
+                    chart1.Series.Add("CR");
+                    chart1.Series["CR"].ChartType = SeriesChartType.Line;
+                    
+                    outFile.WriteLine("CR,Volts,Amps");
+                    foreach (float r in conditionList)
+                    {
+                        numSteps--;
+                        testProgressTextBox.Text = $"Steps remaining: {numSteps}";
+
+                        setLoadRes(r);
+                        loadOn();                        
+                        await Task.Delay(int.Parse(stepTimeTextBox.Text.ToString()) * 1000);     // ivStepTime [s] * 1000 ms/s
+
+
+                        float volts = 0; float amps = 0;
+                        for (int i = 0; i < averageBuffer; i++)
+                        {
+                            volts += float.Parse(stripFloatTerminator(query("MEAS:VOLT?\n", selectedOpenSessionIndex)));
+                            amps += float.Parse(stripFloatTerminator(query("MEAS:CURR?\n", selectedOpenSessionIndex)));
+
+                            await Task.Delay(50);              // fixed delay between averaging readings
+                        }
+                        volts /= (float)averageBuffer;
+                        amps /= (float)averageBuffer;
+
+                        chart1.Series["CR"].Points.AddXY(volts, amps);
+
+                        outFile.WriteLine($"{r.ToString()}, {volts.ToString()}, {amps.ToString()}");
+                    }
+
+                    break;
+
+                case CC:
+                    chart1.Series.Clear();
+                    chart1.Series.Add("CC");
+                    chart1.Series["CC"].ChartType = SeriesChartType.Line;
+
+                    outFile.WriteLine("CC,Volts,Amps");
+                    foreach (float a in conditionList)
+                    {
+                        numSteps--;
+                        testProgressTextBox.Text = $"Steps remaining: {numSteps}";
+
+                        
+                        setLoadCurr(a);
+                        loadOn();
+                        await Task.Delay(int.Parse(stepTimeTextBox.Text.ToString()) * 1000);     // ivStepTime [s] * 1000 ms/s
+
+                        float volts = 0; float amps = 0;
+                        for (int i = 0; i < averageBuffer; i++)
+                        {
+                            volts += float.Parse(stripFloatTerminator(query("MEAS:VOLT?\n", selectedOpenSessionIndex)));
+                            amps += float.Parse(stripFloatTerminator(query("MEAS:CURR?\n", selectedOpenSessionIndex)));
+
+                            await Task.Delay(50);              // basic delay between averaging readings
+                        }
+                        volts /= (float)averageBuffer;
+                        amps /= (float)averageBuffer;
+
+                        chart1.Series["CC"].Points.AddXY(volts, amps);
+
+                        outFile.WriteLine($"{a.ToString()}, {volts.ToString()}, {amps.ToString()}");
+                    }
+                    break;
+
+                case CV:
+                    chart1.Series.Clear();
+                    chart1.Series.Add("CV");
+                    chart1.Series["CV"].ChartType = SeriesChartType.Line;
+
+                    outFile.WriteLine("CV,Volts,Amps");
+                    foreach (float v in conditionList)
+                    {
+                        numSteps--;
+                        testProgressTextBox.Text = $"Steps remaining: {numSteps}";
+
+                       
+                        setLoadVolts(v);
+                        loadOn();
+                        await Task.Delay(int.Parse(stepTimeTextBox.Text.ToString()) * 1000);     // ivStepTime [s] * 1000 ms/s
+
+                        float volts = 0; float amps = 0;
+                        for (int i = 0; i < averageBuffer; i++)
+                        {
+                            volts += float.Parse(stripFloatTerminator(query("MEAS:VOLT?\n", selectedOpenSessionIndex)));
+                            amps += float.Parse(stripFloatTerminator(query("MEAS:CURR?\n", selectedOpenSessionIndex)));
+
+                            await Task.Delay(50);              // basic delay between averaging readings
+                        }
+                        volts /= (float)averageBuffer;
+                        amps /= (float)averageBuffer;
+
+                        chart1.Series["CV"].Points.AddXY(volts, amps);
+
+                        outFile.WriteLine($"{v.ToString()}, {volts.ToString()}, {amps.ToString()}");
+                    }
+                    break;
+            }
+
+            loadOff();
+            outFile.Close();
+            testInProgress = false;
         }
 
-        private void selectFileButton_MouseClick(object sender, MouseEventArgs e)
+        private void setLoadCR()
         {
-            saveFileDialog1.ShowDialog();
-            fileNameTextBox.Text = saveFileDialog1.FileName;
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("CONF:REM ON\n");
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("MODE CRL\n");
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("RES 0\n");
         }
 
-        private void setLoadRes(string resString)
+        private void setLoadCC()
         {
-            openSessionList[0].RawIO.Write($"RES:L1 {resString} OHM\n");
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("CONF:REM ON\n");
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("MODE CCH\n");
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("CURR:STAT 0\n");
+        }
+
+        private void setLoadCV()
+        {
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("CONF:REM ON\n");
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("MODE CVH\n");
+            openSessionList[selectedOpenSessionIndex].RawIO.Write("VOLT 0\n");
+        }
+
+
+        private void setLoadRes(float res)
+        {
+            setLoadCR();
+            string resString = res.ToString();
+            openSessionList[selectedOpenSessionIndex].RawIO.Write($"RES:L1 {resString} OHM\n");
             Console.WriteLine($"Setting L1 CR to: {resString}");
+        }
+        
+        private void setLoadCurr(float curr)
+        {
+            setLoadCC();
+            string currString = curr.ToString();
+            openSessionList[selectedOpenSessionIndex].RawIO.Write($"CURR:STAT:L1 {currString}\n");
+            Console.WriteLine($"Setting L1 CC to: {currString}");
+        }
 
-            writeTextBox.Text = "RES:L1?\n";    // bruh. you are writing in the textbox and then running query(). just consolidate that  
-            query();
+        private void setLoadVolts(float volts)
+        {
+            setLoadCV();
+            string voltsString = volts.ToString();
+            openSessionList[selectedOpenSessionIndex].RawIO.Write($"VOLT:L1 {voltsString}\n");
+            Console.WriteLine($"Setting L1 CV to: {voltsString}");
         }
 
         private void loadOn()
@@ -392,6 +517,11 @@ namespace VISA
         {
             openSessionList[0].RawIO.Write("LOAD OFF\n");
             Console.WriteLine("Setting Load OFF");
+        }
+        private void selectFileButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            saveFileDialog1.ShowDialog();
+            fileNameTextBox.Text = saveFileDialog1.FileName;
         }
 
         private string stripFloatTerminator(string s)
@@ -407,7 +537,7 @@ namespace VISA
         private void cancelButton_MouseClick(object sender, MouseEventArgs e)
         {
             loadOff();
-            openSessionList[0].Dispose();
+            openSessionList.Clear();
             Console.WriteLine("Test aborted");
             testInProgress = false;
             
@@ -418,7 +548,7 @@ namespace VISA
         private void queryIDShortcutButton_MouseClick(object sender, MouseEventArgs e)
         {
             writeTextBox.Text = @"*IDN?\n";
-            query();
+            query(writeTextBox.Text.ToString(), selectedOpenSessionIndex);
         }
 
         private void activeResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -427,6 +557,5 @@ namespace VISA
             targetName = target;
         }
     }
-
 
 }
