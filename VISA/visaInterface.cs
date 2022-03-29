@@ -11,6 +11,7 @@ using NationalInstruments.Visa;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
+using System.Diagnostics;
 
 namespace VISA
 {
@@ -21,8 +22,7 @@ namespace VISA
 
         List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // i will declare an array here 
 
-        // I-V test variables
-        Int32 ivStepTime = 2;         // default test period 1 second
+        // I-V test state
         bool testInProgress = false;
 
         public visaInterface()
@@ -30,16 +30,18 @@ namespace VISA
             InitializeComponent();
 
             // initialization code
-            chart1.Titles.Add("I-V plot");
-            chart1.Series.Clear();
 
             ChartArea ca = chart1.ChartAreas[0];
             ca.AxisX.LabelStyle.Format = "0.00";
             ca.AxisY.LabelStyle.Format = "0.00";
 
+            ChartArea ca2 = chart2.ChartAreas[0];
+            ca2.AxisX.LabelStyle.Format = "0.00";
+            ca2.AxisY.LabelStyle.Format = "0.00";
+
             // I-V plot defaults
             resStepTextBox.Text = "0.25";
-            stepTimeTextBox.Text = $"{ivStepTime.ToString()}";
+            stepTimeTextBox.Text = "0.5";
 
             SetupControlStateMaster();
             setupIVControlState();
@@ -116,6 +118,7 @@ namespace VISA
                 try
                 {
                     openSessionList.Add((MessageBasedSession)rmSession.Open(ResourceName));          // initialize the VISA session
+                    
                     SetupControlStateMaster();
                 }
                 catch (InvalidCastException)
@@ -272,6 +275,7 @@ namespace VISA
             try
             {
                 openSessionList[selectedOpenSessionToClose].Dispose();
+                
                 openSessionList.RemoveAt(selectedOpenSessionToClose);
                 SetupControlStateMaster();
             }
@@ -330,25 +334,45 @@ namespace VISA
                 return ivTargetDaqNameDropdown.SelectedIndex;
             }
         }
+
         private async void runIVTest()
         {
-            Queue<float> conditionList = new Queue<float>();
+            Stopwatch stopwatch = new Stopwatch();
+            List<float> conditionList = new List<float>();
             float start = 0; float stop = 0; float step = 0;
+  
             int mode = ivTabControl.SelectedIndex;
             string chartName = "";
-            Int32 averageBuffer = 10;
+            string chartTitle = "";
+            bool cancelFlag = false;                // crude task cancellation. Best to use task cancellation token instead
+            Int32 averageBuffer = 1;
 
+            stopwatch.Start();
+
+            string outFileName = "";
             if (averagingCheckBox.Checked)
             {
-                averageBuffer = 32;
+                averageBuffer = 24;
             }
             try
             {
                 if (!fileNameTextBox.Text.EndsWith(".csv"))
                 {
-                    fileNameTextBox.Text += ".csv";
+                    outFileName = fileNameTextBox.Text + ".csv";
                 }
-                outFile = new StreamWriter($"{ fileNameTextBox.Text }");         // auto append .csv if not already present in filename
+                else
+                {
+                    outFileName = fileNameTextBox.Text;
+                }
+                outFile = new StreamWriter($"{outFileName}");         // auto append .csv if not already present in filename
+
+                chartTitle = "I-V plot, Set voltage: " + Path.GetFileNameWithoutExtension(outFileName);
+                chart1.Titles.Clear();
+                chart2.Titles.Clear();
+                chart1.Titles.Add(chartTitle);
+                chart1.Series.Clear();
+                chart2.Titles.Add(chartTitle);
+                chart2.Series.Clear();
             }
             catch (System.ArgumentException)
             {
@@ -358,7 +382,7 @@ namespace VISA
             {
                 MessageBox.Show("File is currently open");
             }
-            
+
             switch (mode)
             {
                 case CR:
@@ -366,103 +390,136 @@ namespace VISA
                     start = float.Parse(startResTextBox.Text);
                     stop = float.Parse(stopResTextBox.Text);
                     step = float.Parse(resStepTextBox.Text);
+                    setModeCR();
                     break;
                 case CC:
                     chartName = "CC";
                     start = float.Parse(startCurrentTextBox.Text);
                     stop = float.Parse(stopCurrentTextBox.Text);
                     step = float.Parse(curStepTextBox.Text);
+                    setModeCC();
                     break;
                 case CV:
                     chartName = "CV";
                     start = float.Parse(startVoltageTextBox.Text);
                     stop = float.Parse(stopVoltageTextBox.Text);
                     step = float.Parse(voltStepTextBox.Text);
+                    setModeCV();
                     break;
             }
             int numSteps = 0;
             for (float value = start; value <= stop; value += step)
             {
                 numSteps++;
-                conditionList.Enqueue(value);
+                conditionList.Add(value);
             }
 
             chart1.Series.Clear();
             chart1.Series.Add(chartName);
             chart1.Series[chartName].ChartType = SeriesChartType.Line;
+            chart2.Series.Clear();
+            chart2.Series.Add(chartName);
+            chart2.Series[chartName].ChartType = SeriesChartType.Line;
 
             testInProgress = true;
             outFile.WriteLine($"{chartName},Volts,Amps");
-            foreach(float value in conditionList)
+            foreach (float value in conditionList)
             {
                 numSteps--;
                 testProgressTextBox.Text = $"Steps remaining: {numSteps}";
 
-                switch (mode)
+                try
                 {
-                    case CR:
-                        setLoadRes(value);
-                        break;
-                    case CC:
-                        setLoadCurr(value);
-                        break;
-                    case CV:
-                        setLoadVolts(value);
-                        break;
+                    switch (mode)
+                    {
+                        case CR:
+                            setLoadRes(value);
+                            break;
+                        case CC:
+                            setLoadCurr(value);
+                            break;
+                        case CV:
+                            setLoadVolts(value);
+                            break;
+                    }
                 }
-
+                catch (Exception exp)
+                {
+                    cancelFlag = true;
+                    break;         
+                }
+            
                 loadOn();
-                await Task.Delay(int.Parse(stepTimeTextBox.Text.ToString()) * 1000);     // ivStepTime [s] * 1000 ms/s
+                await Task.Delay((int)(float.Parse(stepTimeTextBox.Text.ToString()) * 1000));     // ivStepTime [s] * 1000 ms/s
 
                 float volts = 0; float amps = 0;
                 for (int i = 0; i < averageBuffer; i++)
                 {
                     // if no external DAQ selected, use the load measurements
-                    if(ivTargetDaqIndex == -1)
-                    { 
-                        volts += float.Parse(query("MEAS:VOLT?\n", ivTargetLoadIndex));
-                        amps += float.Parse(query("MEAS:CURR?\n", ivTargetLoadIndex));
-                        await Task.Delay(50);
-                    }
-                    // else use the external DAQ measurements
-                    else
+                    try
                     {
-                        volts += float.Parse(query("MEAS:VOLT:DC? (@101)\n", ivTargetDaqIndex));
-                        float shuntVolts = float.Parse(query("MEAS:VOLT:DC? (@102)\n", ivTargetDaqIndex));
-                        amps += shuntVolts * 200;
-                        await Task.Delay(20);              // basic delay between averaging readings
+                        if(ivTargetDaqIndex == -1)
+                        { 
+                            volts += float.Parse(query("MEAS:VOLT?\n", ivTargetLoadIndex));
+                            amps += float.Parse(query("MEAS:CURR?\n", ivTargetLoadIndex));
+                            await Task.Delay(100);
+                        }
+                        // else use the external DAQ measurements
+                        else
+                        {
+                            volts += float.Parse(query("MEAS:VOLT:DC? (@101)\n", ivTargetDaqIndex));
+                            float shuntVolts = float.Parse(query("MEAS:VOLT:DC? (@102)\n", ivTargetDaqIndex));
+                            amps += shuntVolts * 200;           // specific shunt factor
+                        }
                     }
-
-                    
+                    catch(Exception exp)
+                    {
+                        cancelFlag = true;
+                        break;
+                    }
                 }
+
+                if(cancelFlag || !testInProgress)           // either instrument disconnected, or the test was aborted
+                {
+                    break;
+                }
+
                 volts /= (float)averageBuffer;
                 amps /= (float)averageBuffer;
 
                 chart1.Series[chartName].Points.AddXY(volts, amps);
+                chart2.Series[chartName].Points.AddXY(volts, amps);
 
                 outFile.WriteLine($"{value.ToString()}, {volts.ToString()}, {amps.ToString()}");
             }
 
             loadOff();
+
+            // horrible workaround to save a larger image of the chart. We make a copy which is large and invisible, chart2. Then save chart2.
+            chart2.SaveImage($"{outFileName.Replace(".csv","")}.png", ChartImageFormat.Png);
+
             outFile.Close();
             testInProgress = false;
+
+            stopwatch.Stop();
+            Console.WriteLine("Elapsed time: {0} ms", stopwatch.ElapsedMilliseconds);
         }
 
-        private void setLoadCR()
+        private void setModeCR()
         {
             openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("MODE CRL\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("RES 0\n");
         }
 
-        private void setLoadCC()
+        private void setModeCC()
         {
             openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("MODE CCH\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("CURR:STAT 0\n");
         }
 
-        private void setLoadCV()
+        private void setModeCV()
         {
             openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("MODE CVH\n");
@@ -472,7 +529,7 @@ namespace VISA
 
         private void setLoadRes(float res)
         {
-            setLoadCR();
+            //setModeCR();
             string resString = res.ToString();
             openSessionList[ivTargetLoadIndex].RawIO.Write($"RES:L1 {resString} OHM\n");
             Console.WriteLine($"Setting L1 CR to: {resString}");
@@ -480,7 +537,7 @@ namespace VISA
         
         private void setLoadCurr(float curr)
         {
-            setLoadCC();
+            //setModeCC();
             string currString = curr.ToString();
             openSessionList[ivTargetLoadIndex].RawIO.Write($"CURR:STAT:L1 {currString}\n");
             Console.WriteLine($"Setting L1 CC to: {currString}");
@@ -488,7 +545,7 @@ namespace VISA
 
         private void setLoadVolts(float volts)
         {
-            setLoadCV();
+            //setModeCV();
             string voltsString = volts.ToString();
             openSessionList[ivTargetLoadIndex].RawIO.Write($"VOLT:L1 {voltsString}\n");
             Console.WriteLine($"Setting L1 CV to: {voltsString}");
@@ -522,12 +579,8 @@ namespace VISA
         private void cancelButton_MouseClick(object sender, MouseEventArgs e)
         {
             loadOff();
-            openSessionList.Clear();
             Console.WriteLine("Test aborted");
             testInProgress = false;
-            
-            // todo: this allows the window to be safely closed if you need to change the setup. However, this is not elegant and means if you cancel the test, you need to relaunch the form. 
-            // Needs adjustment to elegantly cancel test without needing to relaunch
         }
 
         private void queryIDShortcutButton_MouseClick(object sender, MouseEventArgs e)
