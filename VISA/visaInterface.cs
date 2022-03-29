@@ -17,19 +17,16 @@ namespace VISA
 {
     public partial class visaInterface : Form
     {
-        const int CR = 0; const int CC = 1; const int CV = 2;
-        StreamWriter outFile;
+        List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // the key data structure of the program. this is a list of open VISA sessions.
 
-        List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // i will declare an array here 
-
-        // I-V test state
-        bool testInProgress = false;
+        // I-V test globals
+        StreamWriter outFile;                                                                 // output file writer initialization
+        bool testInProgress = false;                                                          // state variable used to cancel the test
+        const int CR = 0; const int CC = 1; const int CV = 2;                                 // enumerating modes for the I-V test 
 
         public visaInterface()
         {
             InitializeComponent();
-
-            // initialization code
 
             ChartArea ca = chart1.ChartAreas[0];
             ca.AxisX.LabelStyle.Format = "0.00";
@@ -44,8 +41,9 @@ namespace VISA
             stepTimeTextBox.Text = "0.5";
 
             SetupControlStateMaster();
-            setupIVControlState();
+            SetupIVControlState();
         }
+
         public string ResourceName
         {
             get
@@ -71,6 +69,8 @@ namespace VISA
             }
         }
 
+
+        // Target session indices
         public int selectedOpenSessionIndex
         {
             get
@@ -78,6 +78,22 @@ namespace VISA
                 return openResourcesListBox.SelectedIndex;
             }
         }
+        public int ivTargetLoadIndex
+        {
+            get
+            {
+                return ivTargetLoadNameDropdown.SelectedIndex;
+            }
+        }
+
+        public int ivTargetDaqIndex
+        {
+            get
+            {
+                return ivTargetDaqNameDropdown.SelectedIndex;
+            }
+        }
+
 
         private void findResourceButton_Click(object sender, EventArgs e)
         {
@@ -117,8 +133,7 @@ namespace VISA
             {
                 try
                 {
-                    openSessionList.Add((MessageBasedSession)rmSession.Open(ResourceName));          // initialize the VISA session
-                    
+                    openSessionList.Add((MessageBasedSession)rmSession.Open(ResourceName));          // initialize the VISA session and add it to the list of open sessions
                     SetupControlStateMaster();
                 }
                 catch (InvalidCastException)
@@ -140,10 +155,14 @@ namespace VISA
         private void queryButton_MouseClick(object sender, MouseEventArgs e)
         {
             readTextBox.Text = String.Empty;
-            this.Cursor = Cursors.WaitCursor;     // makes sense in manual entry, not so much in automated mode
+            this.Cursor = Cursors.WaitCursor;     
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
+                if (appendLfCheckBox.Checked && !textToWrite.EndsWith("\n"))
+                {
+                    textToWrite += "\n";
+                }
                 openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
                 readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
             }
@@ -162,6 +181,10 @@ namespace VISA
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
+                if (appendLfCheckBox.Checked && !textToWrite.EndsWith("\n"))
+                {
+                    textToWrite += "\n";
+                }
                 openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
             }
             catch (Exception exp)
@@ -172,20 +195,7 @@ namespace VISA
 
         private void readButton_MouseClick(object sender, MouseEventArgs e)
         {
-            readTextBox.Text = String.Empty;
-            //this.Cursor = Cursors.WaitCursor;     // use for manual entry
-            try
-            {
-                readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
-            }
-            catch (Exception exp)
-            {
-                MessageBox.Show(exp.Message);
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
+            read();
         }
 
         private void clearButton_MouseClick(object sender, MouseEventArgs e)
@@ -204,8 +214,7 @@ namespace VISA
         }
 
         /*
-         * State function.
-         * Controls the greying out of buttons - carried over from old code
+         * Controls the greying out of buttons in the Session control and Read/Write sections
          * Controls the updating of the list of active resources and the selected resource
          */
         private void SetupControlStateMaster()
@@ -247,7 +256,10 @@ namespace VISA
             closeSessionButton.Enabled = isSessionOpen;
         }
 
-        private void setupIVControlState()
+        /* 
+         * Controls the greying out of buttons in the IV section
+         */
+        private void SetupIVControlState()
         {
             bool isLoadSelected = false;
             if (ivTargetLoadIndex != -1)
@@ -265,6 +277,7 @@ namespace VISA
             this.Cursor = Cursors.WaitCursor;
             int selectedOpenSessionToClose = -1;
 
+            // clumsy foreach to locate the index of the currently selected Resource
             foreach (MessageBasedSession mb in openSessionList)
             {
                 if (!mb.IsDisposed && mb.ResourceName.Equals(this.ResourceName))
@@ -275,7 +288,6 @@ namespace VISA
             try
             {
                 openSessionList[selectedOpenSessionToClose].Dispose();
-                
                 openSessionList.RemoveAt(selectedOpenSessionToClose);
                 SetupControlStateMaster();
             }
@@ -289,19 +301,20 @@ namespace VISA
             }
         }
 
+
+        // automatic query method 
         private string query(string queryString, int openSessionIndex)
         {
             readTextBox.Text = String.Empty;
             try
             {
                 string textToWrite = ReplaceCommonEscapeSequences(queryString);
-                writeTextBox.Text = textToWrite;
-
+                Console.WriteLine(textToWrite);
                 openSessionList[openSessionIndex].RawIO.Write(textToWrite);
-                
-                readTextBox.Text = openSessionList[openSessionIndex].RawIO.ReadString();
-                 Console.WriteLine(readTextBox.Text);
-                return readTextBox.Text.ToString();
+  
+                string response = openSessionList[openSessionIndex].RawIO.ReadString();
+                Console.WriteLine("Response: " + response);
+                return response;
             }
             catch (Exception exp)
             {
@@ -319,41 +332,26 @@ namespace VISA
             runIVTest();
         }
 
-        public int ivTargetLoadIndex
-        {
-            get
-            {
-                return ivTargetLoadNameDropdown.SelectedIndex;        
-            }
-        }
-
-        public int ivTargetDaqIndex
-        {
-            get
-            {
-                return ivTargetDaqNameDropdown.SelectedIndex;
-            }
-        }
-
         private async void runIVTest()
         {
             Stopwatch stopwatch = new Stopwatch();
-            List<float> conditionList = new List<float>();
+            stopwatch.Start();
+            
+            bool cancelFlag = false;                                                              // crude task cancellation. Best to use task cancellation token instead
+            List<float> loadConditionList = new List<float>();                                        // list of test condition values for the DC load
             float start = 0; float stop = 0; float step = 0;
   
-            int mode = ivTabControl.SelectedIndex;
+            int mode = ivTabControl.SelectedIndex;                                               // Using the enumeration declared earlier, tab 0 = CR, tab 1 = CC, tab 2 = CV
             string chartName = "";
             string chartTitle = "";
-            bool cancelFlag = false;                // crude task cancellation. Best to use task cancellation token instead
-            Int32 averageBuffer = 1;
-
-            stopwatch.Start();
-
             string outFileName = "";
+
+            Int32 averageBuffer = 1;
             if (averagingCheckBox.Checked)
             {
                 averageBuffer = 24;
             }
+
             try
             {
                 if (!fileNameTextBox.Text.EndsWith(".csv"))
@@ -411,7 +409,7 @@ namespace VISA
             for (float value = start; value <= stop; value += step)
             {
                 numSteps++;
-                conditionList.Add(value);
+                loadConditionList.Add(value);
             }
 
             chart1.Series.Clear();
@@ -423,11 +421,10 @@ namespace VISA
 
             testInProgress = true;
             outFile.WriteLine($"{chartName},Volts,Amps");
-            foreach (float value in conditionList)
+            foreach (float value in loadConditionList)
             {
                 numSteps--;
                 testProgressTextBox.Text = $"Steps remaining: {numSteps}";
-
                 try
                 {
                     switch (mode)
@@ -448,7 +445,6 @@ namespace VISA
                     cancelFlag = true;
                     break;         
                 }
-            
                 loadOn();
                 await Task.Delay((int)(float.Parse(stepTimeTextBox.Text.ToString()) * 1000));     // ivStepTime [s] * 1000 ms/s
 
@@ -492,17 +488,15 @@ namespace VISA
 
                 outFile.WriteLine($"{value.ToString()}, {volts.ToString()}, {amps.ToString()}");
             }
-
             loadOff();
 
             // horrible workaround to save a larger image of the chart. We make a copy which is large and invisible, chart2. Then save chart2.
-            chart2.SaveImage($"{outFileName.Replace(".csv","")}.png", ChartImageFormat.Png);
+            chart2.SaveImage($"{outFileName.Replace(".csv", "")}.png", ChartImageFormat.Png);
 
             outFile.Close();
-            testInProgress = false;
-
             stopwatch.Stop();
-            Console.WriteLine("Elapsed time: {0} ms", stopwatch.ElapsedMilliseconds);
+            Console.WriteLine("Elapsed time: {0} ms", stopwatch.ElapsedMilliseconds); 
+            testInProgress = false;
         }
 
         private void setModeCR()
@@ -529,7 +523,6 @@ namespace VISA
 
         private void setLoadRes(float res)
         {
-            //setModeCR();
             string resString = res.ToString();
             openSessionList[ivTargetLoadIndex].RawIO.Write($"RES:L1 {resString} OHM\n");
             Console.WriteLine($"Setting L1 CR to: {resString}");
@@ -537,7 +530,6 @@ namespace VISA
         
         private void setLoadCurr(float curr)
         {
-            //setModeCC();
             string currString = curr.ToString();
             openSessionList[ivTargetLoadIndex].RawIO.Write($"CURR:STAT:L1 {currString}\n");
             Console.WriteLine($"Setting L1 CC to: {currString}");
@@ -545,7 +537,6 @@ namespace VISA
 
         private void setLoadVolts(float volts)
         {
-            //setModeCV();
             string voltsString = volts.ToString();
             openSessionList[ivTargetLoadIndex].RawIO.Write($"VOLT:L1 {voltsString}\n");
             Console.WriteLine($"Setting L1 CV to: {voltsString}");
@@ -568,14 +559,6 @@ namespace VISA
             fileNameTextBox.Text = saveFileDialog1.FileName;
         }
 
-        private string stripFloatTerminators(string s)
-        {
-            s.Replace("\n", ""); 
-            s.Replace("\n", "");
-
-            return s;
-        }
-
         private void cancelButton_MouseClick(object sender, MouseEventArgs e)
         {
             loadOff();
@@ -585,8 +568,10 @@ namespace VISA
 
         private void queryIDShortcutButton_MouseClick(object sender, MouseEventArgs e)
         {
-            writeTextBox.Text = @"*IDN?\n";
-            query(writeTextBox.Text.ToString(), selectedOpenSessionIndex);
+            writeTextBox.Text = "*IDN?\n";
+            openSessionList[selectedOpenSessionIndex].RawIO.Write(writeTextBox.Text);
+
+            read();
         }
 
         private void activeResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -597,13 +582,31 @@ namespace VISA
 
         private void targetLoadNameDropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
-            setupIVControlState();
+            SetupIVControlState();
         }
 
         private void clearIVTargetSelectionButton_MouseClick(object sender, MouseEventArgs e)
         {
             ivTargetDaqNameDropdown.SelectedIndex = -1;
             ivTargetLoadNameDropdown.SelectedIndex = -1;
+        }
+
+        private void read()
+        {
+            readTextBox.Text = String.Empty;
+            //this.Cursor = Cursors.WaitCursor;     // use for manual entry
+            try
+            {
+                readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
         }
     }
 

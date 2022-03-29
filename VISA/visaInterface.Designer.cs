@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.openSessionButton = new System.Windows.Forms.Button();
             this.closeSessionButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -99,6 +99,7 @@
             this.queryIDShortcutButton = new System.Windows.Forms.Button();
             this.selectedTargetResourceTextBox = new System.Windows.Forms.TextBox();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.appendLfCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.ivTabControl.SuspendLayout();
@@ -135,7 +136,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(20, 148);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(74, 13);
+            this.label1.Size = new System.Drawing.Size(84, 15);
             this.label1.TabIndex = 2;
             this.label1.Text = "String to write:";
             // 
@@ -148,9 +149,9 @@
             // 
             // queryButton
             // 
-            this.queryButton.Location = new System.Drawing.Point(17, 192);
+            this.queryButton.Location = new System.Drawing.Point(16, 217);
             this.queryButton.Name = "queryButton";
-            this.queryButton.Size = new System.Drawing.Size(71, 24);
+            this.queryButton.Size = new System.Drawing.Size(71, 25);
             this.queryButton.TabIndex = 4;
             this.queryButton.Text = "Query";
             this.queryButton.UseVisualStyleBackColor = true;
@@ -158,7 +159,7 @@
             // 
             // writeButton
             // 
-            this.writeButton.Location = new System.Drawing.Point(94, 192);
+            this.writeButton.Location = new System.Drawing.Point(93, 217);
             this.writeButton.Name = "writeButton";
             this.writeButton.Size = new System.Drawing.Size(80, 25);
             this.writeButton.TabIndex = 5;
@@ -168,9 +169,9 @@
             // 
             // readButton
             // 
-            this.readButton.Location = new System.Drawing.Point(180, 192);
+            this.readButton.Location = new System.Drawing.Point(179, 217);
             this.readButton.Name = "readButton";
-            this.readButton.Size = new System.Drawing.Size(75, 24);
+            this.readButton.Size = new System.Drawing.Size(75, 25);
             this.readButton.TabIndex = 6;
             this.readButton.Text = "Read";
             this.readButton.UseVisualStyleBackColor = true;
@@ -179,15 +180,15 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(20, 262);
+            this.label2.Location = new System.Drawing.Point(14, 332);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(61, 13);
+            this.label2.Size = new System.Drawing.Size(70, 15);
             this.label2.TabIndex = 7;
             this.label2.Text = "String read:";
             // 
             // readTextBox
             // 
-            this.readTextBox.Location = new System.Drawing.Point(18, 284);
+            this.readTextBox.Location = new System.Drawing.Point(18, 350);
             this.readTextBox.Multiline = true;
             this.readTextBox.Name = "readTextBox";
             this.readTextBox.Size = new System.Drawing.Size(237, 54);
@@ -195,7 +196,7 @@
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(17, 344);
+            this.clearButton.Location = new System.Drawing.Point(17, 410);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(238, 30);
             this.clearButton.TabIndex = 9;
@@ -242,7 +243,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(4, 118);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(84, 13);
+            this.label4.Size = new System.Drawing.Size(96, 15);
             this.label4.TabIndex = 5;
             this.label4.Text = "Resource string:";
             // 
@@ -251,7 +252,7 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(6, 43);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(102, 13);
+            this.label3.Size = new System.Drawing.Size(116, 15);
             this.label3.TabIndex = 4;
             this.label3.Text = "Available resources:";
             // 
@@ -271,7 +272,7 @@
             this.label12.Location = new System.Drawing.Point(15, 96);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(126, 13);
+            this.label12.Size = new System.Drawing.Size(143, 15);
             this.label12.TabIndex = 13;
             this.label12.Text = "Selected target resource:";
             // 
@@ -280,7 +281,7 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(15, 19);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 13);
+            this.label5.Size = new System.Drawing.Size(98, 15);
             this.label5.TabIndex = 10;
             this.label5.Text = "Active resources:";
             // 
@@ -344,7 +345,7 @@
             this.label20.Location = new System.Drawing.Point(16, 47);
             this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(67, 13);
+            this.label20.Size = new System.Drawing.Size(73, 15);
             this.label20.TabIndex = 20;
             this.label20.Text = "Target DAQ:";
             // 
@@ -354,7 +355,7 @@
             this.label19.Location = new System.Drawing.Point(16, 24);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(68, 13);
+            this.label19.Size = new System.Drawing.Size(76, 15);
             this.label19.TabIndex = 19;
             this.label19.Text = "Target Load:";
             // 
@@ -374,7 +375,7 @@
             this.averagingCheckBox.Location = new System.Drawing.Point(158, 241);
             this.averagingCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.averagingCheckBox.Name = "averagingCheckBox";
-            this.averagingCheckBox.Size = new System.Drawing.Size(74, 17);
+            this.averagingCheckBox.Size = new System.Drawing.Size(83, 19);
             this.averagingCheckBox.TabIndex = 17;
             this.averagingCheckBox.Text = "Averaging";
             this.averagingCheckBox.UseVisualStyleBackColor = true;
@@ -413,7 +414,7 @@
             this.label8.AutoSize = true;
             this.label8.Location = new System.Drawing.Point(8, 34);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(100, 13);
+            this.label8.Size = new System.Drawing.Size(112, 15);
             this.label8.TabIndex = 4;
             this.label8.Text = "Stop resistance [R]:";
             // 
@@ -423,7 +424,7 @@
             this.label7.Location = new System.Drawing.Point(3, 9);
             this.label7.Name = "label7";
             this.label7.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label7.Size = new System.Drawing.Size(100, 13);
+            this.label7.Size = new System.Drawing.Size(112, 15);
             this.label7.TabIndex = 3;
             this.label7.Text = "Start resistance [R]:";
             // 
@@ -453,7 +454,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(5, 61);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(103, 13);
+            this.label6.Size = new System.Drawing.Size(115, 15);
             this.label6.TabIndex = 2;
             this.label6.Text = "Resistance step [R]:";
             // 
@@ -479,7 +480,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(16, 38);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(84, 13);
+            this.label13.Size = new System.Drawing.Size(92, 15);
             this.label13.TabIndex = 10;
             this.label13.Text = "Stop current [A]:";
             // 
@@ -489,7 +490,7 @@
             this.label14.Location = new System.Drawing.Point(16, 12);
             this.label14.Name = "label14";
             this.label14.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label14.Size = new System.Drawing.Size(84, 13);
+            this.label14.Size = new System.Drawing.Size(92, 15);
             this.label14.TabIndex = 9;
             this.label14.Text = "Start current [A]:";
             // 
@@ -519,7 +520,7 @@
             this.label15.AutoSize = true;
             this.label15.Location = new System.Drawing.Point(16, 65);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(83, 13);
+            this.label15.Size = new System.Drawing.Size(92, 15);
             this.label15.TabIndex = 8;
             this.label15.Text = "Current step [A]:";
             // 
@@ -545,7 +546,7 @@
             this.label16.AutoSize = true;
             this.label16.Location = new System.Drawing.Point(19, 34);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(86, 13);
+            this.label16.Size = new System.Drawing.Size(93, 15);
             this.label16.TabIndex = 16;
             this.label16.Text = "Stop voltage [V]:";
             // 
@@ -555,7 +556,7 @@
             this.label17.Location = new System.Drawing.Point(20, 12);
             this.label17.Name = "label17";
             this.label17.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label17.Size = new System.Drawing.Size(86, 13);
+            this.label17.Size = new System.Drawing.Size(93, 15);
             this.label17.TabIndex = 15;
             this.label17.Text = "Start voltage [V]:";
             // 
@@ -585,7 +586,7 @@
             this.label18.AutoSize = true;
             this.label18.Location = new System.Drawing.Point(19, 58);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(85, 13);
+            this.label18.Size = new System.Drawing.Size(93, 15);
             this.label18.TabIndex = 14;
             this.label18.Text = "Voltage step [V]:";
             // 
@@ -594,7 +595,7 @@
             this.label11.AutoSize = true;
             this.label11.Location = new System.Drawing.Point(391, 344);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(74, 13);
+            this.label11.Size = new System.Drawing.Size(84, 15);
             this.label11.TabIndex = 15;
             this.label11.Text = "Test progress:";
             // 
@@ -630,7 +631,7 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(16, 240);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(68, 13);
+            this.label10.Size = new System.Drawing.Size(77, 15);
             this.label10.TabIndex = 12;
             this.label10.Text = "Step time [s]:";
             // 
@@ -639,7 +640,7 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(24, 303);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(63, 13);
+            this.label9.Size = new System.Drawing.Size(69, 15);
             this.label9.TabIndex = 9;
             this.label9.Text = "Save to file:";
             // 
@@ -661,16 +662,16 @@
             // chart1
             // 
             this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            chartArea7.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea7);
+            legend7.Name = "Legend1";
+            this.chart1.Legends.Add(legend7);
             this.chart1.Location = new System.Drawing.Point(251, 18);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
+            series7.ChartArea = "ChartArea1";
+            series7.Legend = "Legend1";
+            series7.Name = "Series1";
+            this.chart1.Series.Add(series7);
             this.chart1.Size = new System.Drawing.Size(346, 310);
             this.chart1.TabIndex = 7;
             this.chart1.Text = "chart1";
@@ -687,6 +688,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.appendLfCheckBox);
             this.groupBox3.Controls.Add(this.openResourcesListBox);
             this.groupBox3.Controls.Add(this.label5);
             this.groupBox3.Controls.Add(this.queryIDShortcutButton);
@@ -704,17 +706,17 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox3.Size = new System.Drawing.Size(273, 382);
+            this.groupBox3.Size = new System.Drawing.Size(273, 453);
             this.groupBox3.TabIndex = 12;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Manual read/write";
             // 
             // queryIDShortcutButton
             // 
-            this.queryIDShortcutButton.Location = new System.Drawing.Point(17, 222);
+            this.queryIDShortcutButton.Location = new System.Drawing.Point(16, 247);
             this.queryIDShortcutButton.Margin = new System.Windows.Forms.Padding(2);
             this.queryIDShortcutButton.Name = "queryIDShortcutButton";
-            this.queryIDShortcutButton.Size = new System.Drawing.Size(238, 28);
+            this.queryIDShortcutButton.Size = new System.Drawing.Size(237, 28);
             this.queryIDShortcutButton.TabIndex = 10;
             this.queryIDShortcutButton.Text = "Query *ID?\\n";
             this.queryIDShortcutButton.UseVisualStyleBackColor = true;
@@ -730,26 +732,36 @@
             // 
             // chart2
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart2.Legends.Add(legend2);
+            chartArea8.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea8);
+            legend8.Name = "Legend1";
+            this.chart2.Legends.Add(legend8);
             this.chart2.Location = new System.Drawing.Point(1200, 0);
             this.chart2.Name = "chart2";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart2.Series.Add(series2);
+            series8.ChartArea = "ChartArea1";
+            series8.Legend = "Legend1";
+            series8.Name = "Series1";
+            this.chart2.Series.Add(series8);
             this.chart2.Size = new System.Drawing.Size(1600, 800);
             this.chart2.TabIndex = 13;
             this.chart2.Text = "chart2";
             this.chart2.Visible = false;
             // 
+            // appendLfCheckBox
+            // 
+            this.appendLfCheckBox.AutoSize = true;
+            this.appendLfCheckBox.Location = new System.Drawing.Point(16, 192);
+            this.appendLfCheckBox.Name = "appendLfCheckBox";
+            this.appendLfCheckBox.Size = new System.Drawing.Size(88, 19);
+            this.appendLfCheckBox.TabIndex = 14;
+            this.appendLfCheckBox.Text = "Append LF";
+            this.appendLfCheckBox.UseVisualStyleBackColor = true;
+            // 
             // visaInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1199, 454);
+            this.ClientSize = new System.Drawing.Size(1199, 476);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -841,6 +853,7 @@
         private System.Windows.Forms.ComboBox ivTargetLoadNameDropdown;
         private System.Windows.Forms.Button clearIVTargetSelectionButton;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+        private System.Windows.Forms.CheckBox appendLfCheckBox;
     }
 }
 
