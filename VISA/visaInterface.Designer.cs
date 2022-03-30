@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea7 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend7 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea8 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend8 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.openSessionButton = new System.Windows.Forms.Button();
             this.closeSessionButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -145,7 +145,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 229);
+            this.label1.Location = new System.Drawing.Point(8, 227);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(84, 15);
             this.label1.TabIndex = 2;
@@ -153,14 +153,14 @@
             // 
             // writeTextBox
             // 
-            this.writeTextBox.Location = new System.Drawing.Point(11, 247);
+            this.writeTextBox.Location = new System.Drawing.Point(11, 245);
             this.writeTextBox.Name = "writeTextBox";
             this.writeTextBox.Size = new System.Drawing.Size(475, 20);
             this.writeTextBox.TabIndex = 3;
             // 
             // queryButton
             // 
-            this.queryButton.Location = new System.Drawing.Point(10, 298);
+            this.queryButton.Location = new System.Drawing.Point(10, 296);
             this.queryButton.Name = "queryButton";
             this.queryButton.Size = new System.Drawing.Size(143, 25);
             this.queryButton.TabIndex = 4;
@@ -170,7 +170,7 @@
             // 
             // writeButton
             // 
-            this.writeButton.Location = new System.Drawing.Point(159, 298);
+            this.writeButton.Location = new System.Drawing.Point(159, 296);
             this.writeButton.Name = "writeButton";
             this.writeButton.Size = new System.Drawing.Size(166, 25);
             this.writeButton.TabIndex = 5;
@@ -180,7 +180,7 @@
             // 
             // readButton
             // 
-            this.readButton.Location = new System.Drawing.Point(331, 298);
+            this.readButton.Location = new System.Drawing.Point(331, 296);
             this.readButton.Name = "readButton";
             this.readButton.Size = new System.Drawing.Size(155, 25);
             this.readButton.TabIndex = 6;
@@ -191,7 +191,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 386);
+            this.label2.Location = new System.Drawing.Point(5, 367);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(70, 15);
             this.label2.TabIndex = 7;
@@ -199,15 +199,15 @@
             // 
             // readTextBox
             // 
-            this.readTextBox.Location = new System.Drawing.Point(7, 404);
+            this.readTextBox.Location = new System.Drawing.Point(5, 385);
             this.readTextBox.Multiline = true;
             this.readTextBox.Name = "readTextBox";
-            this.readTextBox.Size = new System.Drawing.Size(479, 68);
+            this.readTextBox.Size = new System.Drawing.Size(479, 51);
             this.readTextBox.TabIndex = 8;
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(7, 478);
+            this.clearButton.Location = new System.Drawing.Point(5, 442);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(479, 30);
             this.clearButton.TabIndex = 9;
@@ -278,7 +278,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(7, 185);
+            this.label12.Location = new System.Drawing.Point(8, 171);
             this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(143, 15);
@@ -326,7 +326,7 @@
             this.ivGroupBox.Controls.Add(this.ivStartButton);
             this.ivGroupBox.Location = new System.Drawing.Point(528, 34);
             this.ivGroupBox.Name = "ivGroupBox";
-            this.ivGroupBox.Size = new System.Drawing.Size(719, 487);
+            this.ivGroupBox.Size = new System.Drawing.Size(719, 492);
             this.ivGroupBox.TabIndex = 11;
             this.ivGroupBox.TabStop = false;
             this.ivGroupBox.Text = "IV curve plotter";
@@ -664,16 +664,16 @@
             // chart1
             // 
             this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            chartArea7.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea7);
+            legend7.Name = "Legend1";
+            this.chart1.Legends.Add(legend7);
             this.chart1.Location = new System.Drawing.Point(266, 18);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
+            series7.ChartArea = "ChartArea1";
+            series7.Legend = "Legend1";
+            series7.Name = "Series1";
+            this.chart1.Series.Add(series7);
             this.chart1.Size = new System.Drawing.Size(447, 366);
             this.chart1.TabIndex = 7;
             this.chart1.Text = "chart1";
@@ -711,14 +711,14 @@
             this.manualReadWriteGroupBox.Margin = new System.Windows.Forms.Padding(2);
             this.manualReadWriteGroupBox.Name = "manualReadWriteGroupBox";
             this.manualReadWriteGroupBox.Padding = new System.Windows.Forms.Padding(2);
-            this.manualReadWriteGroupBox.Size = new System.Drawing.Size(489, 517);
+            this.manualReadWriteGroupBox.Size = new System.Drawing.Size(489, 485);
             this.manualReadWriteGroupBox.TabIndex = 12;
             this.manualReadWriteGroupBox.TabStop = false;
             // 
             // appendLfCheckBox
             // 
             this.appendLfCheckBox.AutoSize = true;
-            this.appendLfCheckBox.Location = new System.Drawing.Point(17, 273);
+            this.appendLfCheckBox.Location = new System.Drawing.Point(10, 271);
             this.appendLfCheckBox.Name = "appendLfCheckBox";
             this.appendLfCheckBox.Size = new System.Drawing.Size(88, 19);
             this.appendLfCheckBox.TabIndex = 14;
@@ -727,7 +727,7 @@
             // 
             // queryIDShortcutButton
             // 
-            this.queryIDShortcutButton.Location = new System.Drawing.Point(10, 328);
+            this.queryIDShortcutButton.Location = new System.Drawing.Point(10, 326);
             this.queryIDShortcutButton.Margin = new System.Windows.Forms.Padding(2);
             this.queryIDShortcutButton.Name = "queryIDShortcutButton";
             this.queryIDShortcutButton.Size = new System.Drawing.Size(143, 26);
@@ -738,7 +738,7 @@
             // 
             // selectedTargetResourceTextBox
             // 
-            this.selectedTargetResourceTextBox.Location = new System.Drawing.Point(10, 201);
+            this.selectedTargetResourceTextBox.Location = new System.Drawing.Point(10, 188);
             this.selectedTargetResourceTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.selectedTargetResourceTextBox.Name = "selectedTargetResourceTextBox";
             this.selectedTargetResourceTextBox.Size = new System.Drawing.Size(476, 20);
@@ -746,16 +746,16 @@
             // 
             // chart2
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart2.Legends.Add(legend2);
+            chartArea8.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea8);
+            legend8.Name = "Legend1";
+            this.chart2.Legends.Add(legend8);
             this.chart2.Location = new System.Drawing.Point(1500, 0);
             this.chart2.Name = "chart2";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart2.Series.Add(series2);
+            series8.ChartArea = "ChartArea1";
+            series8.Legend = "Legend1";
+            series8.Name = "Series1";
+            this.chart2.Series.Add(series8);
             this.chart2.Size = new System.Drawing.Size(1600, 800);
             this.chart2.TabIndex = 13;
             this.chart2.Text = "chart2";
@@ -785,7 +785,7 @@
             this.tabControl1.Location = new System.Drawing.Point(12, 12);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(508, 550);
+            this.tabControl1.Size = new System.Drawing.Size(508, 518);
             this.tabControl1.TabIndex = 14;
             // 
             // tabPage1
@@ -794,7 +794,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(500, 524);
+            this.tabPage1.Size = new System.Drawing.Size(500, 492);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "VISA session control";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -805,7 +805,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(500, 524);
+            this.tabPage2.Size = new System.Drawing.Size(500, 492);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Manual read/write";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -833,13 +833,13 @@
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(239, 15);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(107, 15);
+            this.label22.Size = new System.Drawing.Size(109, 15);
             this.label22.TabIndex = 16;
-            this.label22.Text = "Active resource ID:";
+            this.label22.Text = "Open resource IDs";
             // 
             // scanResourceIDsButton
             // 
-            this.scanResourceIDsButton.Location = new System.Drawing.Point(273, 150);
+            this.scanResourceIDsButton.Location = new System.Drawing.Point(281, 147);
             this.scanResourceIDsButton.Name = "scanResourceIDsButton";
             this.scanResourceIDsButton.Size = new System.Drawing.Size(164, 22);
             this.scanResourceIDsButton.TabIndex = 17;
@@ -851,7 +851,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1259, 574);
+            this.ClientSize = new System.Drawing.Size(1259, 535);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.ivGroupBox);
