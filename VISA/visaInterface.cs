@@ -112,12 +112,6 @@ namespace VISA
             }
         }
 
-        private void availableResourcesListBox_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            string selectedString = (string)availableResourcesListBox.SelectedItem;
-            ResourceName = selectedString;
-        }
-
         private void availableResourcesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             string selectedString = (string)availableResourcesListBox.SelectedItem;
@@ -215,7 +209,9 @@ namespace VISA
 
         /*
          * Controls the greying out of buttons in the Session control and Read/Write sections
-         * Controls the updating of the list of active resources and the selected resource
+         * Controls the updating of the list of active resources and the selected resource 
+         * 
+         * call whenever resources are added or removed
          */
         private void SetupControlStateMaster()
         {
@@ -224,6 +220,7 @@ namespace VISA
             ivTargetDaqNameDropdown.Items.Clear();
             ivTargetLoadNameDropdown.Items.Clear();
 
+            // fill out the listboxes
             foreach (MessageBasedSession mb in openSessionList)
             {
                 if (mb != null && !mb.IsDisposed)      // possibly redundant. There are only open sessions in the openSessionList
@@ -254,6 +251,8 @@ namespace VISA
 
             openSessionButton.Enabled = !isSessionOpen;
             closeSessionButton.Enabled = isSessionOpen;
+
+            openResourcesIDListBox.Items.Clear();
         }
 
         /* 
@@ -267,10 +266,27 @@ namespace VISA
                 isLoadSelected = true;
             }
 
-            ivStartButton.Enabled = isLoadSelected;
+            ivStartButton.Enabled = isLoadSelected && !testInProgress;
             cancelButton.Enabled = isLoadSelected;
+
         }
 
+        private void scanResourceIDs()
+        {
+            openResourcesIDListBox.Items.Clear();
+            foreach (MessageBasedSession mb in openSessionList)
+            {
+                try
+                { 
+                    string resourceID = query("*IDN?\n", openSessionList.IndexOf(mb));
+                    openResourcesIDListBox.Items.Add(resourceID);
+                }
+                catch (Ivi.Visa.IOTimeoutException)
+                {
+                    openResourcesIDListBox.Items.Add("Unrecognized instrument");
+                }
+            }
+        }
 
         private void closeSessionButton_MouseClick(object sender, MouseEventArgs e)
         {
@@ -334,8 +350,13 @@ namespace VISA
 
         private async void runIVTest()
         {
+            testInProgress = true;
+            SetupIVControlState();
+
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+
+            testRunningIndicatorTextBox.BackColor = Color.Red;
             
             bool cancelFlag = false;                                                              // crude task cancellation. Best to use task cancellation token instead
             List<float> loadConditionList = new List<float>();                                        // list of test condition values for the DC load
@@ -495,8 +516,11 @@ namespace VISA
 
             outFile.Close();
             stopwatch.Stop();
-            Console.WriteLine("Elapsed time: {0} ms", stopwatch.ElapsedMilliseconds); 
+            Console.WriteLine("Elapsed time: {0} ms", stopwatch.ElapsedMilliseconds);
+            testRunningIndicatorTextBox.BackColor = Color.White;
+
             testInProgress = false;
+            SetupIVControlState();
         }
 
         private void setModeCR()
@@ -563,7 +587,12 @@ namespace VISA
         {
             loadOff();
             Console.WriteLine("Test aborted");
+            testProgressTextBox.Clear();                // clear this so it's clear the test is canceled
+
+            testRunningIndicatorTextBox.BackColor = Color.White;
+
             testInProgress = false;
+            SetupIVControlState();
         }
 
         private void queryIDShortcutButton_MouseClick(object sender, MouseEventArgs e)
@@ -576,6 +605,7 @@ namespace VISA
 
         private void activeResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            // fix this: refer directly to the OpenSessionList indices instead of the extracted string in the openResourcesListBox
             string target = openResourcesListBox.SelectedItem.ToString();
             targetName = target;
         }
@@ -607,6 +637,11 @@ namespace VISA
             {
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void scanResourceIDsButton_Click(object sender, EventArgs e)
+        {
+            scanResourceIDs();
         }
     }
 
