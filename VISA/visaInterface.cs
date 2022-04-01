@@ -12,6 +12,7 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
+using System.Threading;
 
 namespace VISA
 {
@@ -269,6 +270,14 @@ namespace VISA
             ivStartButton.Enabled = isLoadSelected && !testInProgress;
             cancelButton.Enabled = isLoadSelected;
 
+            stepTimeTextBox.Enabled = !testInProgress;
+            ivTabControl.Enabled = !testInProgress;
+            clearIVTargetSelectionButton.Enabled = !testInProgress;
+            ivTargetDaqNameDropdown.Enabled = !testInProgress;
+            ivTargetLoadNameDropdown.Enabled = !testInProgress;
+
+            averagingCheckBox.Enabled = !testInProgress;
+            selectFileButton.Enabled = !testInProgress;
         }
 
         private void scanResourceIDs()
@@ -277,7 +286,7 @@ namespace VISA
             foreach (MessageBasedSession mb in openSessionList)
             {
                 try
-                { 
+                {
                     string resourceID = query("*IDN?\n", openSessionList.IndexOf(mb));
                     openResourcesIDListBox.Items.Add(resourceID);
                 }
@@ -348,6 +357,7 @@ namespace VISA
             runIVTest();
         }
 
+        // For responsive UI: async and await instead of blocking.
         private async void runIVTest()
         {
             testInProgress = true;
@@ -373,6 +383,34 @@ namespace VISA
                 averageBuffer = 24;
             }
 
+            openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");      
+            switch (mode)
+            {
+                case CR:
+                    chartName = "CR";
+                    start = float.Parse(startResTextBox.Text);
+                    stop = float.Parse(stopResTextBox.Text);
+                    step = float.Parse(resStepTextBox.Text);
+                    setModeCR();
+                    break;
+                case CC:
+                    chartName = "CC";
+                    start = float.Parse(startCurrentTextBox.Text);
+                    stop = float.Parse(stopCurrentTextBox.Text);
+                    step = float.Parse(curStepTextBox.Text);
+                    setModeCC();
+                    break;
+                case CV:
+                    chartName = "CV";
+                    start = float.Parse(startVoltageTextBox.Text);
+                    stop = float.Parse(stopVoltageTextBox.Text);
+                    step = float.Parse(voltStepTextBox.Text);
+                    setModeCV();
+                    break;
+            }
+
+
+            // should maybe add indicator of CC/CR/CV mode in the file name
             try
             {
                 if (!fileNameTextBox.Text.EndsWith(".csv"))
@@ -402,30 +440,7 @@ namespace VISA
                 MessageBox.Show("File is currently open");
             }
 
-            switch (mode)
-            {
-                case CR:
-                    chartName = "CR";
-                    start = float.Parse(startResTextBox.Text);
-                    stop = float.Parse(stopResTextBox.Text);
-                    step = float.Parse(resStepTextBox.Text);
-                    setModeCR();
-                    break;
-                case CC:
-                    chartName = "CC";
-                    start = float.Parse(startCurrentTextBox.Text);
-                    stop = float.Parse(stopCurrentTextBox.Text);
-                    step = float.Parse(curStepTextBox.Text);
-                    setModeCC();
-                    break;
-                case CV:
-                    chartName = "CV";
-                    start = float.Parse(startVoltageTextBox.Text);
-                    stop = float.Parse(stopVoltageTextBox.Text);
-                    step = float.Parse(voltStepTextBox.Text);
-                    setModeCV();
-                    break;
-            }
+
             int numSteps = 0;
             for (float value = start; value <= stop; value += step)
             {
@@ -466,15 +481,16 @@ namespace VISA
                     cancelFlag = true;
                     break;         
                 }
+                await Task.Delay(50);
                 loadOn();
                 await Task.Delay((int)(float.Parse(stepTimeTextBox.Text.ToString()) * 1000));     // ivStepTime [s] * 1000 ms/s
 
                 float volts = 0; float amps = 0;
                 for (int i = 0; i < averageBuffer; i++)
                 {
-                    // if no external DAQ selected, use the load measurements
                     try
-                    {
+                    { 
+                        // if no external DAQ selected, use the load measurements
                         if(ivTargetDaqIndex == -1)
                         { 
                             volts += float.Parse(query("MEAS:VOLT?\n", ivTargetLoadIndex));
@@ -486,7 +502,7 @@ namespace VISA
                         {
                             volts += float.Parse(query("MEAS:VOLT:DC? (@101)\n", ivTargetDaqIndex));
                             float shuntVolts = float.Parse(query("MEAS:VOLT:DC? (@102)\n", ivTargetDaqIndex));
-                            amps += shuntVolts * 200;           // specific shunt factor
+                            amps += shuntVolts * 200;           // shunt resistance factor = 1/R
                         }
                     }
                     catch(Exception exp)
@@ -525,21 +541,18 @@ namespace VISA
 
         private void setModeCR()
         {
-            openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("MODE CRL\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("RES 0\n");
         }
 
         private void setModeCC()
         {
-            openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("MODE CCH\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("CURR:STAT 0\n");
         }
 
         private void setModeCV()
-        {
-            openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");
+        { 
             openSessionList[ivTargetLoadIndex].RawIO.Write("MODE CVH\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("VOLT 0\n");
         }
@@ -587,7 +600,7 @@ namespace VISA
         {
             loadOff();
             Console.WriteLine("Test aborted");
-            testProgressTextBox.Clear();                // clear this so it's clear the test is canceled
+            testProgressTextBox.Clear();                // clear this so it's evident the test is canceled
 
             testRunningIndicatorTextBox.BackColor = Color.White;
 
@@ -605,7 +618,7 @@ namespace VISA
 
         private void activeResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // fix this: refer directly to the OpenSessionList indices instead of the extracted string in the openResourcesListBox
+            // FIX: you should refer directly to the OpenSessionList indices instead of the extracted string in the openResourcesListBox
             string target = openResourcesListBox.SelectedItem.ToString();
             targetName = target;
         }
@@ -642,6 +655,16 @@ namespace VISA
         private void scanResourceIDsButton_Click(object sender, EventArgs e)
         {
             scanResourceIDs();
+        }
+
+        // this seems to prevent the DC Load from hanging on the next boot. the rest of them don't seem to mind
+        private void visaInterface_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            foreach(MessageBasedSession mb in openSessionList)
+            {
+                mb.Dispose();
+            }
+            openSessionList.Clear();
         }
     }
 
