@@ -300,16 +300,7 @@ namespace VISA
         private void closeSessionButton_MouseClick(object sender, MouseEventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            int selectedOpenSessionToClose = -1;
-
-            // clumsy foreach to locate the index of the currently selected Resource
-            foreach (MessageBasedSession mb in openSessionList)
-            {
-                if (!mb.IsDisposed && mb.ResourceName.Equals(this.ResourceName))
-                {
-                    selectedOpenSessionToClose = openSessionList.IndexOf(mb);
-                }
-            }
+            int selectedOpenSessionToClose = availableResourcesListBox.SelectedIndex;
             try
             {
                 openSessionList[selectedOpenSessionToClose].Dispose();
@@ -423,7 +414,7 @@ namespace VISA
                 }
                 outFile = new StreamWriter($"{outFileName}");         // auto append .csv if not already present in filename
 
-                chartTitle = "I-V plot, Set voltage: " + Path.GetFileNameWithoutExtension(outFileName);
+                chartTitle = "Current[A] vs voltage[V], file: " + Path.GetFileNameWithoutExtension(outFileName);
                 chart1.Titles.Clear();
                 chart2.Titles.Clear();
                 chart1.Titles.Add(chartTitle);
@@ -456,7 +447,7 @@ namespace VISA
             chart2.Series[chartName].ChartType = SeriesChartType.Line;
 
             testInProgress = true;
-            outFile.WriteLine($"{chartName},Volts,Amps");
+            outFile.WriteLine($"{chartName},Volts,Amps,Power");
             foreach (float value in loadConditionList)
             {
                 numSteps--;
@@ -485,7 +476,7 @@ namespace VISA
                 loadOn();
                 await Task.Delay((int)(float.Parse(stepTimeTextBox.Text.ToString()) * 1000));     // ivStepTime [s] * 1000 ms/s
 
-                float volts = 0; float amps = 0;
+                float volts = 0; float amps = 0; float power = 0;
                 for (int i = 0; i < averageBuffer; i++)
                 {
                     try
@@ -519,11 +510,12 @@ namespace VISA
 
                 volts /= (float)averageBuffer;
                 amps /= (float)averageBuffer;
+                power = volts * amps;
 
                 chart1.Series[chartName].Points.AddXY(volts, amps);
                 chart2.Series[chartName].Points.AddXY(volts, amps);
 
-                outFile.WriteLine($"{value.ToString()}, {volts.ToString()}, {amps.ToString()}");
+                outFile.WriteLine($"{value.ToString()},{volts.ToString()},{amps.ToString()},{power.ToString()}");
             }
             loadOff();
 
@@ -616,13 +608,6 @@ namespace VISA
             read();
         }
 
-        private void activeResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            // FIX: you should refer directly to the OpenSessionList indices instead of the extracted string in the openResourcesListBox
-            string target = openResourcesListBox.SelectedItem.ToString();
-            targetName = target;
-        }
-
         private void targetLoadNameDropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetupIVControlState();
@@ -665,6 +650,11 @@ namespace VISA
                 mb.Dispose();
             }
             openSessionList.Clear();
+        }
+
+        private void openResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedTargetResourceTextBox.Text = openResourcesListBox.SelectedItem.ToString();
         }
     }
 
