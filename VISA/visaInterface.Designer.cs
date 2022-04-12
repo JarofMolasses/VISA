@@ -124,8 +124,8 @@
             // 
             // openSessionButton
             // 
-            this.openSessionButton.Location = new System.Drawing.Point(8, 338);
-            this.openSessionButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.openSessionButton.Location = new System.Drawing.Point(173, 339);
+            this.openSessionButton.Margin = new System.Windows.Forms.Padding(4);
             this.openSessionButton.Name = "openSessionButton";
             this.openSessionButton.Size = new System.Drawing.Size(312, 28);
             this.openSessionButton.TabIndex = 0;
@@ -135,12 +135,12 @@
             // 
             // closeSessionButton
             // 
-            this.closeSessionButton.Location = new System.Drawing.Point(328, 338);
-            this.closeSessionButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.closeSessionButton.Location = new System.Drawing.Point(35, 181);
+            this.closeSessionButton.Margin = new System.Windows.Forms.Padding(4);
             this.closeSessionButton.Name = "closeSessionButton";
-            this.closeSessionButton.Size = new System.Drawing.Size(315, 28);
+            this.closeSessionButton.Size = new System.Drawing.Size(229, 27);
             this.closeSessionButton.TabIndex = 1;
-            this.closeSessionButton.Text = "Close session";
+            this.closeSessionButton.Text = "Close target session";
             this.closeSessionButton.UseVisualStyleBackColor = true;
             this.closeSessionButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.closeSessionButton_MouseClick);
             // 
@@ -157,7 +157,7 @@
             // writeTextBox
             // 
             this.writeTextBox.Location = new System.Drawing.Point(15, 302);
-            this.writeTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.writeTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.writeTextBox.Name = "writeTextBox";
             this.writeTextBox.Size = new System.Drawing.Size(632, 22);
             this.writeTextBox.TabIndex = 3;
@@ -165,7 +165,7 @@
             // queryButton
             // 
             this.queryButton.Location = new System.Drawing.Point(13, 364);
-            this.queryButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.queryButton.Margin = new System.Windows.Forms.Padding(4);
             this.queryButton.Name = "queryButton";
             this.queryButton.Size = new System.Drawing.Size(191, 31);
             this.queryButton.TabIndex = 4;
@@ -176,7 +176,7 @@
             // writeButton
             // 
             this.writeButton.Location = new System.Drawing.Point(212, 364);
-            this.writeButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.writeButton.Margin = new System.Windows.Forms.Padding(4);
             this.writeButton.Name = "writeButton";
             this.writeButton.Size = new System.Drawing.Size(221, 31);
             this.writeButton.TabIndex = 5;
@@ -187,7 +187,7 @@
             // readButton
             // 
             this.readButton.Location = new System.Drawing.Point(441, 364);
-            this.readButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.readButton.Margin = new System.Windows.Forms.Padding(4);
             this.readButton.Name = "readButton";
             this.readButton.Size = new System.Drawing.Size(207, 31);
             this.readButton.TabIndex = 6;
@@ -208,7 +208,7 @@
             // readTextBox
             // 
             this.readTextBox.Location = new System.Drawing.Point(7, 474);
-            this.readTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.readTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.readTextBox.Multiline = true;
             this.readTextBox.Name = "readTextBox";
             this.readTextBox.Size = new System.Drawing.Size(637, 62);
@@ -217,7 +217,7 @@
             // clearButton
             // 
             this.clearButton.Location = new System.Drawing.Point(7, 544);
-            this.clearButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.clearButton.Margin = new System.Windows.Forms.Padding(4);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(639, 37);
             this.clearButton.TabIndex = 9;
@@ -232,12 +232,11 @@
             this.visaSessionGroupBox.Controls.Add(this.label4);
             this.visaSessionGroupBox.Controls.Add(this.label3);
             this.visaSessionGroupBox.Controls.Add(this.availableResourcesListBox);
-            this.visaSessionGroupBox.Controls.Add(this.closeSessionButton);
             this.visaSessionGroupBox.Controls.Add(this.openSessionButton);
             this.visaSessionGroupBox.Location = new System.Drawing.Point(8, 7);
-            this.visaSessionGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.visaSessionGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.visaSessionGroupBox.Name = "visaSessionGroupBox";
-            this.visaSessionGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.visaSessionGroupBox.Padding = new System.Windows.Forms.Padding(4);
             this.visaSessionGroupBox.Size = new System.Drawing.Size(651, 380);
             this.visaSessionGroupBox.TabIndex = 10;
             this.visaSessionGroupBox.TabStop = false;
@@ -246,7 +245,7 @@
             // 
             this.findResourceButton.AutoEllipsis = true;
             this.findResourceButton.Location = new System.Drawing.Point(8, 23);
-            this.findResourceButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.findResourceButton.Margin = new System.Windows.Forms.Padding(4);
             this.findResourceButton.Name = "findResourceButton";
             this.findResourceButton.Size = new System.Drawing.Size(635, 26);
             this.findResourceButton.TabIndex = 8;
@@ -257,7 +256,7 @@
             // visaResourceNameTextBox
             // 
             this.visaResourceNameTextBox.Location = new System.Drawing.Point(9, 309);
-            this.visaResourceNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.visaResourceNameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.visaResourceNameTextBox.Name = "visaResourceNameTextBox";
             this.visaResourceNameTextBox.Size = new System.Drawing.Size(632, 22);
             this.visaResourceNameTextBox.TabIndex = 6;
@@ -287,7 +286,7 @@
             this.availableResourcesListBox.FormattingEnabled = true;
             this.availableResourcesListBox.ItemHeight = 16;
             this.availableResourcesListBox.Location = new System.Drawing.Point(8, 73);
-            this.availableResourcesListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.availableResourcesListBox.Margin = new System.Windows.Forms.Padding(4);
             this.availableResourcesListBox.Name = "availableResourcesListBox";
             this.availableResourcesListBox.Size = new System.Drawing.Size(633, 164);
             this.availableResourcesListBox.TabIndex = 3;
@@ -296,7 +295,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 210);
+            this.label12.Location = new System.Drawing.Point(12, 222);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(157, 16);
             this.label12.TabIndex = 13;
@@ -317,7 +316,7 @@
             this.openResourcesListBox.FormattingEnabled = true;
             this.openResourcesListBox.ItemHeight = 16;
             this.openResourcesListBox.Location = new System.Drawing.Point(7, 41);
-            this.openResourcesListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.openResourcesListBox.Margin = new System.Windows.Forms.Padding(4);
             this.openResourcesListBox.Name = "openResourcesListBox";
             this.openResourcesListBox.Size = new System.Drawing.Size(307, 132);
             this.openResourcesListBox.TabIndex = 9;
@@ -345,9 +344,9 @@
             this.ivGroupBox.Controls.Add(this.chart1);
             this.ivGroupBox.Controls.Add(this.ivStartButton);
             this.ivGroupBox.Location = new System.Drawing.Point(704, 42);
-            this.ivGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ivGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.ivGroupBox.Name = "ivGroupBox";
-            this.ivGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ivGroupBox.Padding = new System.Windows.Forms.Padding(4);
             this.ivGroupBox.Size = new System.Drawing.Size(959, 606);
             this.ivGroupBox.TabIndex = 11;
             this.ivGroupBox.TabStop = false;
@@ -366,7 +365,7 @@
             // testRunningIndicatorTextBox
             // 
             this.testRunningIndicatorTextBox.Location = new System.Drawing.Point(444, 486);
-            this.testRunningIndicatorTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.testRunningIndicatorTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.testRunningIndicatorTextBox.Name = "testRunningIndicatorTextBox";
             this.testRunningIndicatorTextBox.ReadOnly = true;
             this.testRunningIndicatorTextBox.Size = new System.Drawing.Size(27, 22);
@@ -385,7 +384,7 @@
             // clearIVTargetSelectionButton
             // 
             this.clearIVTargetSelectionButton.Location = new System.Drawing.Point(124, 90);
-            this.clearIVTargetSelectionButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.clearIVTargetSelectionButton.Margin = new System.Windows.Forms.Padding(4);
             this.clearIVTargetSelectionButton.Name = "clearIVTargetSelectionButton";
             this.clearIVTargetSelectionButton.Size = new System.Drawing.Size(195, 36);
             this.clearIVTargetSelectionButton.TabIndex = 22;
@@ -436,7 +435,7 @@
             this.averagingCheckBox.Location = new System.Drawing.Point(208, 298);
             this.averagingCheckBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.averagingCheckBox.Name = "averagingCheckBox";
-            this.averagingCheckBox.Size = new System.Drawing.Size(91, 20);
+            this.averagingCheckBox.Size = new System.Drawing.Size(88, 20);
             this.averagingCheckBox.TabIndex = 17;
             this.averagingCheckBox.Text = "Averaging";
             this.averagingCheckBox.UseVisualStyleBackColor = true;
@@ -494,7 +493,7 @@
             // startResTextBox
             // 
             this.startResTextBox.Location = new System.Drawing.Point(163, 7);
-            this.startResTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.startResTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.startResTextBox.Name = "startResTextBox";
             this.startResTextBox.Size = new System.Drawing.Size(65, 22);
             this.startResTextBox.TabIndex = 6;
@@ -502,7 +501,7 @@
             // resStepTextBox
             // 
             this.resStepTextBox.Location = new System.Drawing.Point(163, 75);
-            this.resStepTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.resStepTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.resStepTextBox.Name = "resStepTextBox";
             this.resStepTextBox.Size = new System.Drawing.Size(65, 22);
             this.resStepTextBox.TabIndex = 1;
@@ -510,7 +509,7 @@
             // stopResTextBox
             // 
             this.stopResTextBox.Location = new System.Drawing.Point(163, 42);
-            this.stopResTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.stopResTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.stopResTextBox.Name = "stopResTextBox";
             this.stopResTextBox.Size = new System.Drawing.Size(65, 22);
             this.stopResTextBox.TabIndex = 5;
@@ -566,7 +565,7 @@
             // startCurrentTextBox
             // 
             this.startCurrentTextBox.Location = new System.Drawing.Point(156, 7);
-            this.startCurrentTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.startCurrentTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.startCurrentTextBox.Name = "startCurrentTextBox";
             this.startCurrentTextBox.Size = new System.Drawing.Size(65, 22);
             this.startCurrentTextBox.TabIndex = 12;
@@ -574,7 +573,7 @@
             // curStepTextBox
             // 
             this.curStepTextBox.Location = new System.Drawing.Point(156, 71);
-            this.curStepTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.curStepTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.curStepTextBox.Name = "curStepTextBox";
             this.curStepTextBox.Size = new System.Drawing.Size(65, 22);
             this.curStepTextBox.TabIndex = 7;
@@ -582,7 +581,7 @@
             // stopCurrentTextBox
             // 
             this.stopCurrentTextBox.Location = new System.Drawing.Point(156, 39);
-            this.stopCurrentTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.stopCurrentTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.stopCurrentTextBox.Name = "stopCurrentTextBox";
             this.stopCurrentTextBox.Size = new System.Drawing.Size(65, 22);
             this.stopCurrentTextBox.TabIndex = 11;
@@ -638,7 +637,7 @@
             // startVoltageTextBox
             // 
             this.startVoltageTextBox.Location = new System.Drawing.Point(156, 12);
-            this.startVoltageTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.startVoltageTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.startVoltageTextBox.Name = "startVoltageTextBox";
             this.startVoltageTextBox.Size = new System.Drawing.Size(65, 22);
             this.startVoltageTextBox.TabIndex = 18;
@@ -646,7 +645,7 @@
             // voltStepTextBox
             // 
             this.voltStepTextBox.Location = new System.Drawing.Point(156, 75);
-            this.voltStepTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.voltStepTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.voltStepTextBox.Name = "voltStepTextBox";
             this.voltStepTextBox.Size = new System.Drawing.Size(65, 22);
             this.voltStepTextBox.TabIndex = 13;
@@ -654,7 +653,7 @@
             // stopVoltageTextBox
             // 
             this.stopVoltageTextBox.Location = new System.Drawing.Point(156, 42);
-            this.stopVoltageTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.stopVoltageTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.stopVoltageTextBox.Name = "stopVoltageTextBox";
             this.stopVoltageTextBox.Size = new System.Drawing.Size(65, 22);
             this.stopVoltageTextBox.TabIndex = 17;
@@ -672,7 +671,7 @@
             // testProgressTextBox
             // 
             this.testProgressTextBox.Location = new System.Drawing.Point(679, 486);
-            this.testProgressTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.testProgressTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.testProgressTextBox.Name = "testProgressTextBox";
             this.testProgressTextBox.Size = new System.Drawing.Size(155, 22);
             this.testProgressTextBox.TabIndex = 14;
@@ -680,7 +679,7 @@
             // cancelButton
             // 
             this.cancelButton.Location = new System.Drawing.Point(188, 521);
-            this.cancelButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cancelButton.Margin = new System.Windows.Forms.Padding(4);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(132, 38);
             this.cancelButton.TabIndex = 11;
@@ -691,7 +690,7 @@
             // selectFileButton
             // 
             this.selectFileButton.Location = new System.Drawing.Point(53, 384);
-            this.selectFileButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.selectFileButton.Margin = new System.Windows.Forms.Padding(4);
             this.selectFileButton.Name = "selectFileButton";
             this.selectFileButton.Size = new System.Drawing.Size(265, 30);
             this.selectFileButton.TabIndex = 10;
@@ -722,7 +721,7 @@
             // stepTimeTextBox
             // 
             this.stepTimeTextBox.Location = new System.Drawing.Point(151, 297);
-            this.stepTimeTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.stepTimeTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.stepTimeTextBox.Name = "stepTimeTextBox";
             this.stepTimeTextBox.Size = new System.Drawing.Size(36, 22);
             this.stepTimeTextBox.TabIndex = 13;
@@ -730,7 +729,7 @@
             // fileNameTextBox
             // 
             this.fileNameTextBox.Location = new System.Drawing.Point(52, 437);
-            this.fileNameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.fileNameTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.fileNameTextBox.Multiline = true;
             this.fileNameTextBox.Name = "fileNameTextBox";
             this.fileNameTextBox.Size = new System.Drawing.Size(265, 75);
@@ -744,7 +743,7 @@
             legend3.Name = "Legend1";
             this.chart1.Legends.Add(legend3);
             this.chart1.Location = new System.Drawing.Point(355, 22);
-            this.chart1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chart1.Margin = new System.Windows.Forms.Padding(4);
             this.chart1.Name = "chart1";
             series3.ChartArea = "ChartArea1";
             series3.Legend = "Legend1";
@@ -757,7 +756,7 @@
             // ivStartButton
             // 
             this.ivStartButton.Location = new System.Drawing.Point(52, 521);
-            this.ivStartButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ivStartButton.Margin = new System.Windows.Forms.Padding(4);
             this.ivStartButton.Name = "ivStartButton";
             this.ivStartButton.Size = new System.Drawing.Size(136, 38);
             this.ivStartButton.TabIndex = 0;
@@ -772,6 +771,7 @@
             this.manualReadWriteGroupBox.Controls.Add(this.openResourcesIDListBox);
             this.manualReadWriteGroupBox.Controls.Add(this.appendLfCheckBox);
             this.manualReadWriteGroupBox.Controls.Add(this.openResourcesListBox);
+            this.manualReadWriteGroupBox.Controls.Add(this.closeSessionButton);
             this.manualReadWriteGroupBox.Controls.Add(this.label5);
             this.manualReadWriteGroupBox.Controls.Add(this.queryIDShortcutButton);
             this.manualReadWriteGroupBox.Controls.Add(this.selectedTargetResourceTextBox);
@@ -795,7 +795,7 @@
             // scanResourceIDsButton
             // 
             this.scanResourceIDsButton.Location = new System.Drawing.Point(375, 181);
-            this.scanResourceIDsButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.scanResourceIDsButton.Margin = new System.Windows.Forms.Padding(4);
             this.scanResourceIDsButton.Name = "scanResourceIDsButton";
             this.scanResourceIDsButton.Size = new System.Drawing.Size(219, 27);
             this.scanResourceIDsButton.TabIndex = 17;
@@ -819,7 +819,7 @@
             this.openResourcesIDListBox.FormattingEnabled = true;
             this.openResourcesIDListBox.ItemHeight = 16;
             this.openResourcesIDListBox.Location = new System.Drawing.Point(323, 41);
-            this.openResourcesIDListBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.openResourcesIDListBox.Margin = new System.Windows.Forms.Padding(4);
             this.openResourcesIDListBox.Name = "openResourcesIDListBox";
             this.openResourcesIDListBox.Size = new System.Drawing.Size(324, 132);
             this.openResourcesIDListBox.TabIndex = 15;
@@ -828,9 +828,9 @@
             // 
             this.appendLfCheckBox.AutoSize = true;
             this.appendLfCheckBox.Location = new System.Drawing.Point(13, 334);
-            this.appendLfCheckBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.appendLfCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.appendLfCheckBox.Name = "appendLfCheckBox";
-            this.appendLfCheckBox.Size = new System.Drawing.Size(95, 20);
+            this.appendLfCheckBox.Size = new System.Drawing.Size(92, 20);
             this.appendLfCheckBox.TabIndex = 14;
             this.appendLfCheckBox.Text = "Append LF";
             this.appendLfCheckBox.UseVisualStyleBackColor = true;
@@ -848,7 +848,7 @@
             // 
             // selectedTargetResourceTextBox
             // 
-            this.selectedTargetResourceTextBox.Location = new System.Drawing.Point(13, 231);
+            this.selectedTargetResourceTextBox.Location = new System.Drawing.Point(14, 243);
             this.selectedTargetResourceTextBox.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.selectedTargetResourceTextBox.Name = "selectedTargetResourceTextBox";
             this.selectedTargetResourceTextBox.Size = new System.Drawing.Size(633, 22);
@@ -861,7 +861,7 @@
             legend4.Name = "Legend1";
             this.chart2.Legends.Add(legend4);
             this.chart2.Location = new System.Drawing.Point(2000, 0);
-            this.chart2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chart2.Margin = new System.Windows.Forms.Padding(4);
             this.chart2.Name = "chart2";
             series4.ChartArea = "ChartArea1";
             series4.Legend = "Legend1";
@@ -877,7 +877,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Location = new System.Drawing.Point(16, 15);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(677, 638);
@@ -887,9 +887,9 @@
             // 
             this.tabPage1.Controls.Add(this.visaSessionGroupBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage1.Size = new System.Drawing.Size(669, 609);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "VISA session control";
@@ -899,9 +899,9 @@
             // 
             this.tabPage2.Controls.Add(this.manualReadWriteGroupBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage2.Size = new System.Drawing.Size(669, 609);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Manual read/write";
@@ -915,7 +915,7 @@
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.ivGroupBox);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "visaInterface";
             this.Text = "VISA interface GUI";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.visaInterface_FormClosing);

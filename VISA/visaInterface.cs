@@ -251,8 +251,17 @@ namespace VISA
             }
 
             openSessionButton.Enabled = !isSessionOpen;
-            closeSessionButton.Enabled = isSessionOpen;
 
+            if (openResourcesListBox.SelectedIndex != -1)
+            {
+                closeSessionButton.Enabled = true;      // that's messy. I shouldn't be handling this here, it should be consolidated in setupcontrolstatemaster or something
+            }
+            else
+            {
+                closeSessionButton.Enabled = false;
+            }
+
+            selectedTargetResourceTextBox.Clear();
             openResourcesIDListBox.Items.Clear();
         }
 
@@ -300,7 +309,8 @@ namespace VISA
         private void closeSessionButton_MouseClick(object sender, MouseEventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-            int selectedOpenSessionToClose = availableResourcesListBox.SelectedIndex;
+
+            int selectedOpenSessionToClose = openResourcesListBox.SelectedIndex;
             try
             {
                 openSessionList[selectedOpenSessionToClose].Dispose();
@@ -655,6 +665,15 @@ namespace VISA
         private void openResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectedTargetResourceTextBox.Text = openResourcesListBox.SelectedItem.ToString();
+            if(openResourcesListBox.SelectedIndex != -1)
+            {
+                closeSessionButton.Enabled = true;      
+            }
+            else
+            {
+                closeSessionButton.Enabled = false;
+            }
+            // this should really be consolidated into setupcontrolstatemaster() or something
         }
     }
 
