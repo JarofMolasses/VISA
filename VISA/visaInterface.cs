@@ -13,6 +13,7 @@ using System.IO;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
 using System.Threading;
+using VncSharp;
 
 namespace VISA
 {
@@ -112,7 +113,7 @@ namespace VISA
                 }
             }
         }
-
+            
         private void availableResourcesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             string selectedString = (string)availableResourcesListBox.SelectedItem;
@@ -441,14 +442,24 @@ namespace VISA
                 MessageBox.Show("File is currently open");
             }
 
-
             int numSteps = 0;
-            for (float value = start; value <= stop; value += step)
+            if(proportionalStepsCheckBox.Checked)
             {
-                numSteps++;
-                loadConditionList.Add(value);
+                for (float value = start; value <= stop; value += value * (step/100))       // convert step percent to dimensionless
+                {
+                    numSteps++;
+                    loadConditionList.Add(value);
+                }
             }
-
+            else
+            {
+                for (float value = start; value <= stop; value += step)
+                {
+                    numSteps++;
+                    loadConditionList.Add(value);
+                }
+            }
+            
             chart1.Series.Clear();
             chart1.Series.Add(chartName);
             chart1.Series[chartName].ChartType = SeriesChartType.Line;
@@ -674,6 +685,20 @@ namespace VISA
                 closeSessionButton.Enabled = false;
             }
             // this should really be consolidated into setupcontrolstatemaster() or something
+        }
+
+        private void openRemoteScope_MouseClick(object sender, MouseEventArgs e)
+        {
+            VNCRemoteScope scope = new VNCRemoteScope();
+            scope.Show();
+        }
+
+        private void proportionalStepsCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (proportionalStepsCheckBox.Checked)
+                stepTypeLabel.Text = @"[%]:";
+            else
+                stepTypeLabel.Text = @"[R]:";
         }
     }
 

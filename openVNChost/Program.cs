@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using NationalInstruments.Visa;
 
-namespace VISA
+namespace openVNChost
 {
     internal static class Program
     {
@@ -17,9 +16,7 @@ namespace VISA
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
-
-            Application.Run(new visaInterface());
+            Application.Run(new connectVNChost());
         }
     }
 }
