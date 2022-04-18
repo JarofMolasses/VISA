@@ -21,11 +21,6 @@ namespace VISA
     {
         List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // the key data structure of the program. this is a list of open VISA sessions.
 
-        // I-V test globals
-        StreamWriter outFile;                                                                 // output file writer initialization
-        bool testInProgress = false;                                                          // state variable used to cancel the test
-        const int CR = 0; const int CC = 1; const int CV = 2;                                 // enumerating modes for the I-V test 
-
         public visaInterface()
         {
             InitializeComponent();
@@ -266,30 +261,6 @@ namespace VISA
             openResourcesIDListBox.Items.Clear();
         }
 
-        /* 
-         * Controls the greying out of buttons in the IV section
-         */
-        private void SetupIVControlState()
-        {
-            bool isLoadSelected = false;
-            if (ivTargetLoadIndex != -1)
-            {
-                isLoadSelected = true;
-            }
-
-            ivStartButton.Enabled = isLoadSelected && !testInProgress;
-            cancelButton.Enabled = isLoadSelected;
-
-            stepTimeTextBox.Enabled = !testInProgress;
-            ivTabControl.Enabled = !testInProgress;
-            clearIVTargetSelectionButton.Enabled = !testInProgress;
-            ivTargetDaqNameDropdown.Enabled = !testInProgress;
-            ivTargetLoadNameDropdown.Enabled = !testInProgress;
-
-            averagingCheckBox.Enabled = !testInProgress;
-            selectFileButton.Enabled = !testInProgress;
-        }
-
         private void scanResourceIDs()
         {
             openResourcesIDListBox.Items.Clear();
@@ -354,12 +325,17 @@ namespace VISA
             }
         }
 
+        // I-V test globals
+        StreamWriter outFile;                                                                 // output file writer initialization
+        bool testInProgress = false;                                                          // state variable used to cancel the test
+        const int CR = 0; const int CC = 1; const int CV = 2;                                 // enumerating modes for the I-V test 
+
         private void ivStartButton_Click(object sender, EventArgs e)
         {
             runIVTest();
         }
 
-        // For responsive UI: async and await instead of blocking.
+        // For responsive UI: use async and await instead of blocking.
         private async void runIVTest()
         {
             testInProgress = true;
@@ -371,7 +347,7 @@ namespace VISA
             testRunningIndicatorTextBox.BackColor = Color.Red;
             
             bool cancelFlag = false;                                                              // crude task cancellation. Best to use task cancellation token instead
-            List<float> loadConditionList = new List<float>();                                        // list of test condition values for the DC load
+            List<float> loadConditionList = new List<float>();                                     // list of test condition values for the DC load
             float start = 0; float stop = 0; float step = 0;
   
             int mode = ivTabControl.SelectedIndex;                                               // Using the enumeration declared earlier, tab 0 = CR, tab 1 = CC, tab 2 = CV
@@ -411,8 +387,8 @@ namespace VISA
                     break;
             }
 
-
-            // should maybe add indicator of CC/CR/CV mode in the file name
+            // Generate plot labels and output files
+            // TODO: should maybe add indicator of CC/CR/CV mode in the file name
             try
             {
                 if (!fileNameTextBox.Text.EndsWith(".csv"))
@@ -442,8 +418,10 @@ namespace VISA
                 MessageBox.Show("File is currently open");
             }
 
+
+            // create list of load conditions - if proportional steps option is checked in resistance mode, then increment by percentage instead of fixed step
             int numSteps = 0;
-            if(proportionalStepsCheckBox.Checked)
+            if(mode == CR && proportionalStepsCheckBox.Checked)
             {
                 for (float value = start; value <= stop; value += value * (step/100))       // convert step percent to dimensionless
                 {
@@ -643,7 +621,6 @@ namespace VISA
         private void read()
         {
             readTextBox.Text = String.Empty;
-            //this.Cursor = Cursors.WaitCursor;     // use for manual entry
             try
             {
                 readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
@@ -663,7 +640,7 @@ namespace VISA
             scanResourceIDs();
         }
 
-        // this seems to prevent the DC Load from hanging on the next boot. the rest of them don't seem to mind
+        // Dispose of all sessions on form close. This seems to prevent the DC Load from dropping out and requiring power cycle.
         private void visaInterface_FormClosing(object sender, FormClosingEventArgs e)
         {
             foreach(MessageBasedSession mb in openSessionList)
@@ -671,6 +648,28 @@ namespace VISA
                 mb.Dispose();
             }
             openSessionList.Clear();
+        }
+
+        // Controls the greying out of buttons in the IV section
+        private void SetupIVControlState()
+        {
+            bool isLoadSelected = false;
+            if (ivTargetLoadIndex != -1)
+            {
+                isLoadSelected = true;
+            }
+
+            ivStartButton.Enabled = isLoadSelected && !testInProgress;
+            cancelButton.Enabled = isLoadSelected;
+
+            stepTimeTextBox.Enabled = !testInProgress;
+            ivTabControl.Enabled = !testInProgress;
+            clearIVTargetSelectionButton.Enabled = !testInProgress;
+            ivTargetDaqNameDropdown.Enabled = !testInProgress;
+            ivTargetLoadNameDropdown.Enabled = !testInProgress;
+
+            averagingCheckBox.Enabled = !testInProgress;
+            selectFileButton.Enabled = !testInProgress;
         }
 
         private void openResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -684,13 +683,13 @@ namespace VISA
             {
                 closeSessionButton.Enabled = false;
             }
-            // this should really be consolidated into setupcontrolstatemaster() or something
         }
 
         private void openRemoteScope_MouseClick(object sender, MouseEventArgs e)
         {
             VNCRemoteScope scope = new VNCRemoteScope();
             scope.Show();
+
         }
 
         private void proportionalStepsCheckBox_CheckedChanged(object sender, EventArgs e)

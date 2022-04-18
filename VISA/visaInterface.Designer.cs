@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.openSessionButton = new System.Windows.Forms.Button();
             this.closeSessionButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -66,6 +66,8 @@
             this.averagingCheckBox = new System.Windows.Forms.CheckBox();
             this.ivTabControl = new System.Windows.Forms.TabControl();
             this.ivCRtab = new System.Windows.Forms.TabPage();
+            this.stepTypeLabel = new System.Windows.Forms.Label();
+            this.proportionalStepsCheckBox = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.startResTextBox = new System.Windows.Forms.TextBox();
@@ -74,11 +76,11 @@
             this.label6 = new System.Windows.Forms.Label();
             this.ivCCtab = new System.Windows.Forms.TabPage();
             this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.startCurrentTextBox = new System.Windows.Forms.TextBox();
-            this.curStepTextBox = new System.Windows.Forms.TextBox();
             this.stopCurrentTextBox = new System.Windows.Forms.TextBox();
             this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.curStepTextBox = new System.Windows.Forms.TextBox();
+            this.startCurrentTextBox = new System.Windows.Forms.TextBox();
             this.ivCVtab = new System.Windows.Forms.TabPage();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -109,8 +111,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.openRemoteScope = new System.Windows.Forms.Button();
-            this.proportionalStepsCheckBox = new System.Windows.Forms.CheckBox();
-            this.stepTypeLabel = new System.Windows.Forms.Label();
             this.visaSessionGroupBox.SuspendLayout();
             this.ivGroupBox.SuspendLayout();
             this.ivTabControl.SuspendLayout();
@@ -373,7 +373,7 @@
             // 
             this.ivTargetDaqNameDropdown.FormattingEnabled = true;
             this.ivTargetDaqNameDropdown.Location = new System.Drawing.Point(94, 47);
-            this.ivTargetDaqNameDropdown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivTargetDaqNameDropdown.Margin = new System.Windows.Forms.Padding(2);
             this.ivTargetDaqNameDropdown.Name = "ivTargetDaqNameDropdown";
             this.ivTargetDaqNameDropdown.Size = new System.Drawing.Size(145, 21);
             this.ivTargetDaqNameDropdown.TabIndex = 21;
@@ -402,7 +402,7 @@
             // 
             this.ivTargetLoadNameDropdown.FormattingEnabled = true;
             this.ivTargetLoadNameDropdown.Location = new System.Drawing.Point(94, 18);
-            this.ivTargetLoadNameDropdown.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivTargetLoadNameDropdown.Margin = new System.Windows.Forms.Padding(2);
             this.ivTargetLoadNameDropdown.Name = "ivTargetLoadNameDropdown";
             this.ivTargetLoadNameDropdown.Size = new System.Drawing.Size(145, 21);
             this.ivTargetLoadNameDropdown.TabIndex = 18;
@@ -412,7 +412,7 @@
             // 
             this.averagingCheckBox.AutoSize = true;
             this.averagingCheckBox.Location = new System.Drawing.Point(160, 278);
-            this.averagingCheckBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.averagingCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.averagingCheckBox.Name = "averagingCheckBox";
             this.averagingCheckBox.Size = new System.Drawing.Size(74, 17);
             this.averagingCheckBox.TabIndex = 17;
@@ -425,7 +425,7 @@
             this.ivTabControl.Controls.Add(this.ivCCtab);
             this.ivTabControl.Controls.Add(this.ivCVtab);
             this.ivTabControl.Location = new System.Drawing.Point(39, 121);
-            this.ivTabControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivTabControl.Margin = new System.Windows.Forms.Padding(2);
             this.ivTabControl.Name = "ivTabControl";
             this.ivTabControl.SelectedIndex = 0;
             this.ivTabControl.Size = new System.Drawing.Size(200, 146);
@@ -442,13 +442,33 @@
             this.ivCRtab.Controls.Add(this.stopResTextBox);
             this.ivCRtab.Controls.Add(this.label6);
             this.ivCRtab.Location = new System.Drawing.Point(4, 22);
-            this.ivCRtab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivCRtab.Margin = new System.Windows.Forms.Padding(2);
             this.ivCRtab.Name = "ivCRtab";
-            this.ivCRtab.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivCRtab.Padding = new System.Windows.Forms.Padding(2);
             this.ivCRtab.Size = new System.Drawing.Size(192, 120);
             this.ivCRtab.TabIndex = 0;
             this.ivCRtab.Text = "CR mode";
             this.ivCRtab.UseVisualStyleBackColor = true;
+            // 
+            // stepTypeLabel
+            // 
+            this.stepTypeLabel.AutoSize = true;
+            this.stepTypeLabel.Location = new System.Drawing.Point(87, 93);
+            this.stepTypeLabel.Name = "stepTypeLabel";
+            this.stepTypeLabel.Size = new System.Drawing.Size(24, 13);
+            this.stepTypeLabel.TabIndex = 8;
+            this.stepTypeLabel.Text = "[R]:";
+            // 
+            // proportionalStepsCheckBox
+            // 
+            this.proportionalStepsCheckBox.AutoSize = true;
+            this.proportionalStepsCheckBox.Location = new System.Drawing.Point(62, 71);
+            this.proportionalStepsCheckBox.Name = "proportionalStepsCheckBox";
+            this.proportionalStepsCheckBox.Size = new System.Drawing.Size(110, 17);
+            this.proportionalStepsCheckBox.TabIndex = 7;
+            this.proportionalStepsCheckBox.Text = "Proportional steps";
+            this.proportionalStepsCheckBox.UseVisualStyleBackColor = true;
+            this.proportionalStepsCheckBox.CheckedChanged += new System.EventHandler(this.proportionalStepsCheckBox_CheckedChanged);
             // 
             // label8
             // 
@@ -508,9 +528,9 @@
             this.ivCCtab.Controls.Add(this.curStepTextBox);
             this.ivCCtab.Controls.Add(this.startCurrentTextBox);
             this.ivCCtab.Location = new System.Drawing.Point(4, 22);
-            this.ivCCtab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivCCtab.Margin = new System.Windows.Forms.Padding(2);
             this.ivCCtab.Name = "ivCCtab";
-            this.ivCCtab.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivCCtab.Padding = new System.Windows.Forms.Padding(2);
             this.ivCCtab.Size = new System.Drawing.Size(192, 120);
             this.ivCCtab.TabIndex = 1;
             this.ivCCtab.Text = "CC mode";
@@ -524,30 +544,6 @@
             this.label13.Size = new System.Drawing.Size(84, 13);
             this.label13.TabIndex = 10;
             this.label13.Text = "Stop current [A]:";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(27, 11);
-            this.label14.Name = "label14";
-            this.label14.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label14.Size = new System.Drawing.Size(84, 13);
-            this.label14.TabIndex = 9;
-            this.label14.Text = "Start current [A]:";
-            // 
-            // startCurrentTextBox
-            // 
-            this.startCurrentTextBox.Location = new System.Drawing.Point(117, 8);
-            this.startCurrentTextBox.Name = "startCurrentTextBox";
-            this.startCurrentTextBox.Size = new System.Drawing.Size(50, 20);
-            this.startCurrentTextBox.TabIndex = 12;
-            // 
-            // curStepTextBox
-            // 
-            this.curStepTextBox.Location = new System.Drawing.Point(117, 61);
-            this.curStepTextBox.Name = "curStepTextBox";
-            this.curStepTextBox.Size = new System.Drawing.Size(50, 20);
-            this.curStepTextBox.TabIndex = 7;
             // 
             // stopCurrentTextBox
             // 
@@ -565,6 +561,30 @@
             this.label15.TabIndex = 8;
             this.label15.Text = "Current step [A]:";
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(27, 11);
+            this.label14.Name = "label14";
+            this.label14.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label14.Size = new System.Drawing.Size(84, 13);
+            this.label14.TabIndex = 9;
+            this.label14.Text = "Start current [A]:";
+            // 
+            // curStepTextBox
+            // 
+            this.curStepTextBox.Location = new System.Drawing.Point(117, 61);
+            this.curStepTextBox.Name = "curStepTextBox";
+            this.curStepTextBox.Size = new System.Drawing.Size(50, 20);
+            this.curStepTextBox.TabIndex = 7;
+            // 
+            // startCurrentTextBox
+            // 
+            this.startCurrentTextBox.Location = new System.Drawing.Point(117, 8);
+            this.startCurrentTextBox.Name = "startCurrentTextBox";
+            this.startCurrentTextBox.Size = new System.Drawing.Size(50, 20);
+            this.startCurrentTextBox.TabIndex = 12;
+            // 
             // ivCVtab
             // 
             this.ivCVtab.Controls.Add(this.label16);
@@ -574,9 +594,9 @@
             this.ivCVtab.Controls.Add(this.stopVoltageTextBox);
             this.ivCVtab.Controls.Add(this.label18);
             this.ivCVtab.Location = new System.Drawing.Point(4, 22);
-            this.ivCVtab.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivCVtab.Margin = new System.Windows.Forms.Padding(2);
             this.ivCVtab.Name = "ivCVtab";
-            this.ivCVtab.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ivCVtab.Padding = new System.Windows.Forms.Padding(2);
             this.ivCVtab.Size = new System.Drawing.Size(192, 120);
             this.ivCVtab.TabIndex = 2;
             this.ivCVtab.Text = "CV mode";
@@ -694,16 +714,16 @@
             // chart1
             // 
             this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
+            chartArea3.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chart1.Legends.Add(legend3);
             this.chart1.Location = new System.Drawing.Point(266, 18);
             this.chart1.Name = "chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            this.chart1.Series.Add(series1);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart1.Series.Add(series3);
             this.chart1.Size = new System.Drawing.Size(447, 366);
             this.chart1.TabIndex = 7;
             this.chart1.Text = "chart1";
@@ -739,9 +759,9 @@
             this.manualReadWriteGroupBox.Controls.Add(this.writeTextBox);
             this.manualReadWriteGroupBox.Controls.Add(this.label1);
             this.manualReadWriteGroupBox.Location = new System.Drawing.Point(5, 2);
-            this.manualReadWriteGroupBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.manualReadWriteGroupBox.Margin = new System.Windows.Forms.Padding(2);
             this.manualReadWriteGroupBox.Name = "manualReadWriteGroupBox";
-            this.manualReadWriteGroupBox.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.manualReadWriteGroupBox.Padding = new System.Windows.Forms.Padding(2);
             this.manualReadWriteGroupBox.Size = new System.Drawing.Size(489, 485);
             this.manualReadWriteGroupBox.TabIndex = 12;
             this.manualReadWriteGroupBox.TabStop = false;
@@ -787,7 +807,7 @@
             // queryIDShortcutButton
             // 
             this.queryIDShortcutButton.Location = new System.Drawing.Point(10, 326);
-            this.queryIDShortcutButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.queryIDShortcutButton.Margin = new System.Windows.Forms.Padding(2);
             this.queryIDShortcutButton.Name = "queryIDShortcutButton";
             this.queryIDShortcutButton.Size = new System.Drawing.Size(143, 26);
             this.queryIDShortcutButton.TabIndex = 10;
@@ -798,23 +818,23 @@
             // selectedTargetResourceTextBox
             // 
             this.selectedTargetResourceTextBox.Location = new System.Drawing.Point(10, 197);
-            this.selectedTargetResourceTextBox.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.selectedTargetResourceTextBox.Margin = new System.Windows.Forms.Padding(2);
             this.selectedTargetResourceTextBox.Name = "selectedTargetResourceTextBox";
             this.selectedTargetResourceTextBox.Size = new System.Drawing.Size(476, 20);
             this.selectedTargetResourceTextBox.TabIndex = 13;
             // 
             // chart2
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea2);
-            legend2.Name = "Legend1";
-            this.chart2.Legends.Add(legend2);
+            chartArea4.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart2.Legends.Add(legend4);
             this.chart2.Location = new System.Drawing.Point(1500, 0);
             this.chart2.Name = "chart2";
-            series2.ChartArea = "ChartArea1";
-            series2.Legend = "Legend1";
-            series2.Name = "Series1";
-            this.chart2.Series.Add(series2);
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chart2.Series.Add(series4);
             this.chart2.Size = new System.Drawing.Size(1600, 800);
             this.chart2.TabIndex = 13;
             this.chart2.Text = "chart2";
@@ -835,7 +855,7 @@
             this.tabPage1.Controls.Add(this.visaSessionGroupBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(500, 492);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "VISA session control";
@@ -846,7 +866,7 @@
             this.tabPage2.Controls.Add(this.manualReadWriteGroupBox);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(500, 492);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Manual read/write";
@@ -862,31 +882,11 @@
             this.openRemoteScope.UseVisualStyleBackColor = true;
             this.openRemoteScope.MouseClick += new System.Windows.Forms.MouseEventHandler(this.openRemoteScope_MouseClick);
             // 
-            // proportionalStepsCheckBox
-            // 
-            this.proportionalStepsCheckBox.AutoSize = true;
-            this.proportionalStepsCheckBox.Location = new System.Drawing.Point(62, 71);
-            this.proportionalStepsCheckBox.Name = "proportionalStepsCheckBox";
-            this.proportionalStepsCheckBox.Size = new System.Drawing.Size(110, 17);
-            this.proportionalStepsCheckBox.TabIndex = 7;
-            this.proportionalStepsCheckBox.Text = "Proportional steps";
-            this.proportionalStepsCheckBox.UseVisualStyleBackColor = true;
-            this.proportionalStepsCheckBox.CheckedChanged += new System.EventHandler(this.proportionalStepsCheckBox_CheckedChanged);
-            // 
-            // stepTypeLabel
-            // 
-            this.stepTypeLabel.AutoSize = true;
-            this.stepTypeLabel.Location = new System.Drawing.Point(87, 93);
-            this.stepTypeLabel.Name = "stepTypeLabel";
-            this.stepTypeLabel.Size = new System.Drawing.Size(24, 13);
-            this.stepTypeLabel.TabIndex = 8;
-            this.stepTypeLabel.Text = "[R]:";
-            // 
             // visaInterface
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1261, 648);
+            this.ClientSize = new System.Drawing.Size(1261, 591);
             this.Controls.Add(this.openRemoteScope);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.chart2);

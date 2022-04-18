@@ -64,6 +64,12 @@
     <Compile Include="ConnectDialog.Designer.cs">
       <DependentUpon>ConnectDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="IVsweep.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IVsweep.Designer.cs">
+      <DependentUpon>IVsweep.cs</DependentUpon>
+    </Compile>
     <Compile Include="visaInterface.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     </Compile>
     <EmbeddedResource Include="ConnectDialog.resx">
       <DependentUpon>ConnectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IVsweep.resx">
+      <DependentUpon>IVsweep.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="visaInterface.resx">
       <DependentUpon>visaInterface.cs</DependentUpon>

@@ -16,7 +16,7 @@ namespace VISA
         public ConnectDialog()
         {
             InitializeComponent();
-            txtHost.Text = "10.52.52.134";      // hardcoded default to Agilent scope OSC016 
+            txtHost.Text = "10.52.52.134";      // hardcoded default to address of Agilent scope OSC016, change as needed
         }
 
         public string Host
@@ -37,7 +37,7 @@ namespace VISA
                 }
                 else
                 {
-                    // If the user clicks Cancel, return null and not the empty string.
+                    // If the user clicks Cancel, return null
                     return null;
                 }
             }
@@ -53,6 +53,7 @@ namespace VISA
             this.DialogResult = DialogResult.Cancel;
         }
 
+        // allow enter key to submit the Host address
         private void txtHost_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (Char)Keys.Return)
