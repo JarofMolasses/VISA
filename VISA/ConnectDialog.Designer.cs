@@ -31,13 +31,14 @@
             this.txtHost = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // txtHost
             // 
-            this.txtHost.Location = new System.Drawing.Point(12, 22);
+            this.txtHost.Location = new System.Drawing.Point(12, 31);
             this.txtHost.Name = "txtHost";
-            this.txtHost.Size = new System.Drawing.Size(360, 20);
+            this.txtHost.Size = new System.Drawing.Size(360, 22);
             this.txtHost.TabIndex = 0;
             this.txtHost.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtHost_KeyPress);
             // 
@@ -61,16 +62,26 @@
             this.cancelButton.UseVisualStyleBackColor = true;
             this.cancelButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cancelButton_MouseClick);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 12);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(192, 16);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Enter host name or IP address: ";
+            // 
             // ConnectDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(383, 96);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
             this.Controls.Add(this.txtHost);
             this.Name = "ConnectDialog";
-            this.Text = "ConnectDialog";
+            this.Text = "Connect remote front panel";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -81,5 +92,6 @@
         private System.Windows.Forms.TextBox txtHost;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Label label1;
     }
 }

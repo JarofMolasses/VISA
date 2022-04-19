@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VncSharp;
+using System.Drawing.Imaging;
 
 namespace VISA
 {
@@ -55,13 +56,21 @@ namespace VISA
 
 
             // this is using RemoteViewing instead. It works. 
-            vncControl1.Client.Connect(host);
-            
+            if(host != null)
+                vncControl1.Client.Connect(host);
+
+            Console.WriteLine($"IsConnected status: {vncControl1.Client.IsConnected}");
+            //updateClientStatusIndicator();
         }
 
         private void disconnectScopeButton_MouseClick(object sender, MouseEventArgs e)
         {
-            vncControl1.Client.Close();
+            if (vncControl1.Client.IsConnected)
+            {
+                Console.WriteLine($"IsConnected status: {vncControl1.Client.IsConnected}");
+                vncControl1.Client.Close();
+            }
+            //updateClientStatusIndicator();
         }
 
         private void VNCRemoteScope_FormClosing(object sender, FormClosingEventArgs e)
@@ -74,8 +83,42 @@ namespace VISA
 
         private void vncControl1_MouseEnter(object sender, EventArgs e)
         {
-            // this is necessary to show the cursor when the mouse is over the Scope display. Otherwise it is disorienting 
+            // this is necessary to show the cursor when the mouse is over the Scope display. Otherwise the cursor disappears enirely 
             this.Cursor = Cursors.Default;
+        }
+
+        private void scopeScreenShotButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            Bitmap bitmap = new Bitmap(1024, 768);
+            vncControl1.DrawToBitmap(bitmap, new Rectangle(0,0,1024,768));
+
+            saveFileDialog1.ShowDialog();
+            string filename = saveFileDialog1.FileName;
+
+            if(!filename.EndsWith(".png"))
+            {
+                filename += ".png";
+            }
+
+            bitmap.Save(filename, ImageFormat.Png);
+        }
+
+
+        private void updateClientStatusIndicator()
+        {
+            if (vncControl1.Client.IsConnected)
+            {
+                clientStatusTextBox.Text = ("Connected");
+            }
+            else
+            { 
+                clientStatusTextBox.Text = ("Disconnected");
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            updateClientStatusIndicator();
         }
     }
 }
