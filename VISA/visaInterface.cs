@@ -33,7 +33,7 @@ namespace VISA
             ca2.AxisX.LabelStyle.Format = "0.00";
             ca2.AxisY.LabelStyle.Format = "0.00";
 
-            // I-V plot defaults
+            // I-V plot hardcoded defaults
             resStepTextBox.Text = "0.25";
             stepTimeTextBox.Text = "0.5";
 
@@ -67,7 +67,7 @@ namespace VISA
         }
 
 
-        // Target session indices
+        // Get methods for the target session indices
         public int selectedOpenSessionIndex
         {
             get
@@ -188,6 +188,47 @@ namespace VISA
         {
             read();
         }
+        private void read()
+        {
+            readTextBox.Text = String.Empty;
+            try
+            {
+                readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        // Automatic query method 
+        private string query(string queryString, int openSessionIndex)
+        {
+            readTextBox.Text = String.Empty;
+            try
+            {
+                string textToWrite = ReplaceCommonEscapeSequences(queryString);
+                Console.WriteLine(textToWrite);
+                openSessionList[openSessionIndex].RawIO.Write(textToWrite);
+
+                string response = openSessionList[openSessionIndex].RawIO.ReadString();
+                Console.WriteLine("Response: " + response);
+                return response;
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return "";
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
 
         private void clearButton_MouseClick(object sender, MouseEventArgs e)
         {
@@ -206,7 +247,7 @@ namespace VISA
 
         /*
          * Controls the greying out of buttons in the Session control and Read/Write sections
-         * Controls the updating of the list of active resources and the selected resource 
+         * Controls the active resources lists and the selected resource text box
          * 
          * call whenever resources are added or removed
          */
@@ -220,14 +261,15 @@ namespace VISA
             // fill out the listboxes
             foreach (MessageBasedSession mb in openSessionList)
             {
-                if (mb != null && !mb.IsDisposed)      // possibly redundant. There are only open sessions in the openSessionList
+                if (mb != null && !mb.IsDisposed)      
                 {
                     openResourcesListBox.Items.Add(mb.ResourceName.ToString());
                     ivTargetDaqNameDropdown.Items.Add(mb.ResourceName.ToString());
                     ivTargetLoadNameDropdown.Items.Add(mb.ResourceName.ToString());
                 }
             }
-            // Grey out the open/close buttons based on selected session from all available sessions
+
+            // Grey out the session open/close buttons based on selected session from all available sessions
             bool isSessionOpen = false;
             int selectedSessionIndex = -1;
 
@@ -238,19 +280,18 @@ namespace VISA
                     selectedSessionIndex = openSessionList.IndexOf(mb);
                 }
             }
-
             if (selectedSessionIndex != -1 && !openSessionList[selectedSessionIndex].IsDisposed)
             {
                 isSessionOpen = true;
                 readTextBox.Text = String.Empty;
                 writeTextBox.Focus();
             }
-
             openSessionButton.Enabled = !isSessionOpen;
 
+            // If there is currently an open resource selected, then allow the close button to be accessible
             if (openResourcesListBox.SelectedIndex != -1)
             {
-                closeSessionButton.Enabled = true;      // that's messy. I shouldn't be handling this here, it should be consolidated in setupcontrolstatemaster or something
+                closeSessionButton.Enabled = true;     
             }
             else
             {
@@ -261,6 +302,10 @@ namespace VISA
             openResourcesIDListBox.Items.Clear();
         }
 
+        private void scanResourceIDsButton_Click(object sender, EventArgs e)
+        {
+            scanResourceIDs();
+        }
         private void scanResourceIDs()
         {
             openResourcesIDListBox.Items.Clear();
@@ -273,7 +318,7 @@ namespace VISA
                 }
                 catch (Ivi.Visa.IOTimeoutException)
                 {
-                    openResourcesIDListBox.Items.Add("Unrecognized instrument");
+                    openResourcesIDListBox.Items.Add("Unrecognized instrument");            // ... I don't think this actually works, it just leaves a blank
                 }
             }
         }
@@ -281,7 +326,6 @@ namespace VISA
         private void closeSessionButton_MouseClick(object sender, MouseEventArgs e)
         {
             this.Cursor = Cursors.WaitCursor;
-
             int selectedOpenSessionToClose = openResourcesListBox.SelectedIndex;
             try
             {
@@ -299,69 +343,79 @@ namespace VISA
             }
         }
 
-
-        // automatic query method 
-        private string query(string queryString, int openSessionIndex)
+        // Dispose of all sessions on form close. This seems to prevent the DC Load from dropping out and requiring power cycle.
+        private void visaInterface_FormClosing(object sender, FormClosingEventArgs e)
         {
-            readTextBox.Text = String.Empty;
-            try
+            foreach (MessageBasedSession mb in openSessionList)
             {
-                string textToWrite = ReplaceCommonEscapeSequences(queryString);
-                Console.WriteLine(textToWrite);
-                openSessionList[openSessionIndex].RawIO.Write(textToWrite);
-  
-                string response = openSessionList[openSessionIndex].RawIO.ReadString();
-                Console.WriteLine("Response: " + response);
-                return response;
+                mb.Dispose();
             }
-            catch (Exception exp)
+            openSessionList.Clear();
+        }
+
+        private void queryIDShortcutButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            writeTextBox.Text = "*IDN?\n";
+            openSessionList[selectedOpenSessionIndex].RawIO.Write(writeTextBox.Text);
+
+            read();
+        }
+        private void openResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedTargetResourceTextBox.Text = openResourcesListBox.SelectedItem.ToString();
+            if (openResourcesListBox.SelectedIndex != -1)
             {
-                MessageBox.Show(exp.Message);
-                return "";
+                closeSessionButton.Enabled = true;
             }
-            finally
+            else
             {
-                this.Cursor = Cursors.Default;
+                closeSessionButton.Enabled = false;
             }
         }
 
-        // I-V test globals
+
+
+        /* I-V test
+         * (I'm given to understand global variables are generally not a good idea)
+         */
+
         StreamWriter outFile;                                                                 // output file writer initialization
         bool testInProgress = false;                                                          // state variable used to cancel the test
         const int CR = 0; const int CC = 1; const int CV = 2;                                 // enumerating modes for the I-V test 
 
+
+        // For responsive UI: use async and await instead of blocking for the time delays.
         private void ivStartButton_Click(object sender, EventArgs e)
         {
             runIVTest();
         }
-
-        // For responsive UI: use async and await instead of blocking.
         private async void runIVTest()
         {
             testInProgress = true;
-            SetupIVControlState();
+            SetupIVControlState();                                                                // Safety: grey out the buttons which should not be hit
 
-            Stopwatch stopwatch = new Stopwatch();
+            Stopwatch stopwatch = new Stopwatch();                                                // Diagnostic timer
             stopwatch.Start();
 
-            testRunningIndicatorTextBox.BackColor = Color.Red;
+            testRunningIndicatorTextBox.BackColor = Color.Red;                                    // Display indicator for test running
             
-            bool cancelFlag = false;                                                              // crude task cancellation. Best to use task cancellation token instead
-            List<float> loadConditionList = new List<float>();                                     // list of test condition values for the DC load
+            bool cancelFlag = false;                                                              // allows crude task cancellation. Best to use task cancellation token instead
+            List<float> loadConditionList = new List<float>();                                    // list of test condition values for the DC load
             float start = 0; float stop = 0; float step = 0;
   
-            int mode = ivTabControl.SelectedIndex;                                               // Using the enumeration declared earlier, tab 0 = CR, tab 1 = CC, tab 2 = CV
-            string chartName = "";
-            string chartTitle = "";
-            string outFileName = "";
+            int mode = ivTabControl.SelectedIndex;                                                // Using the enumeration declared earlier, tab 0 = CR, tab 1 = CC, tab 2 = CV
 
             Int32 averageBuffer = 1;
             if (averagingCheckBox.Checked)
             {
-                averageBuffer = 24;
+                averageBuffer = 32;
             }
 
-            openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");      
+
+            // Parse the input parameters 
+            string chartName = "";
+            string chartTitle = "";
+            string outFileName = "";
             switch (mode)
             {
                 case CR:
@@ -418,8 +472,7 @@ namespace VISA
                 MessageBox.Show("File is currently open");
             }
 
-
-            // create list of load conditions - if proportional steps option is checked in resistance mode, then increment by percentage instead of fixed step
+            // Create list of load conditions - if proportional steps option is checked in resistance mode, then increment by percentage instead of fixed step
             int numSteps = 0;
             if(mode == CR && proportionalStepsCheckBox.Checked)
             {
@@ -438,6 +491,7 @@ namespace VISA
                 }
             }
             
+            // Chart clearing 
             chart1.Series.Clear();
             chart1.Series.Add(chartName);
             chart1.Series[chartName].ChartType = SeriesChartType.Line;
@@ -445,7 +499,10 @@ namespace VISA
             chart2.Series.Add(chartName);
             chart2.Series[chartName].ChartType = SeriesChartType.Line;
 
-            testInProgress = true;
+
+            // I-V test begins here
+            openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");
+            testInProgress = true;                              
             outFile.WriteLine($"{chartName},Volts,Amps,Power");
             foreach (float value in loadConditionList)
             {
@@ -502,7 +559,7 @@ namespace VISA
                     }
                 }
 
-                if(cancelFlag || !testInProgress)           // either instrument disconnected, or the test was aborted
+                if(cancelFlag || !testInProgress)           // cancelFlag is true if either instrument disconnected (communication error), or the test was aborted (cancel button)
                 {
                     break;
                 }
@@ -517,17 +574,16 @@ namespace VISA
                 outFile.WriteLine($"{value.ToString()},{volts.ToString()},{amps.ToString()},{power.ToString()}");
             }
             loadOff();
+            testInProgress = false;                         // End of I-V test
 
-            // horrible workaround to save a larger image of the chart. We make a copy which is large and invisible, chart2. Then save chart2.
-            chart2.SaveImage($"{outFileName.Replace(".csv", "")}.png", ChartImageFormat.Png);
-
+            
+            chart2.SaveImage($"{outFileName.Replace(".csv", "")}.png", ChartImageFormat.Png); // This is a horrible workaround to save a larger image of the chart.
+                                                                                              // We make a copy which is large and invisible, chart2, for example. Then save chart2
             outFile.Close();
             stopwatch.Stop();
             Console.WriteLine("Elapsed time: {0} ms", stopwatch.ElapsedMilliseconds);
             testRunningIndicatorTextBox.BackColor = Color.White;
-
-            testInProgress = false;
-            SetupIVControlState();
+            SetupIVControlState();                                      
         }
 
         private void setModeCR()
@@ -599,14 +655,6 @@ namespace VISA
             SetupIVControlState();
         }
 
-        private void queryIDShortcutButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            writeTextBox.Text = "*IDN?\n";
-            openSessionList[selectedOpenSessionIndex].RawIO.Write(writeTextBox.Text);
-
-            read();
-        }
-
         private void targetLoadNameDropdown_SelectedIndexChanged(object sender, EventArgs e)
         {
             SetupIVControlState();
@@ -618,39 +666,7 @@ namespace VISA
             ivTargetLoadNameDropdown.SelectedIndex = -1;
         }
 
-        private void read()
-        {
-            readTextBox.Text = String.Empty;
-            try
-            {
-                readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
-            }
-            catch (Exception exp)
-            {
-                MessageBox.Show(exp.Message);
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-        }
-
-        private void scanResourceIDsButton_Click(object sender, EventArgs e)
-        {
-            scanResourceIDs();
-        }
-
-        // Dispose of all sessions on form close. This seems to prevent the DC Load from dropping out and requiring power cycle.
-        private void visaInterface_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            foreach(MessageBasedSession mb in openSessionList)
-            {
-                mb.Dispose();
-            }
-            openSessionList.Clear();
-        }
-
-        // Controls the greying out of buttons in the IV section
+        // Controls the greying out of buttons in the IV test section
         private void SetupIVControlState()
         {
             bool isLoadSelected = false;
@@ -672,19 +688,15 @@ namespace VISA
             selectFileButton.Enabled = !testInProgress;
         }
 
-        private void openResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void proportionalStepsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            selectedTargetResourceTextBox.Text = openResourcesListBox.SelectedItem.ToString();
-            if(openResourcesListBox.SelectedIndex != -1)
-            {
-                closeSessionButton.Enabled = true;      
-            }
+            if (proportionalStepsCheckBox.Checked)
+                stepTypeLabel.Text = @"[%]:";
             else
-            {
-                closeSessionButton.Enabled = false;
-            }
+                stepTypeLabel.Text = @"[R]:";
         }
 
+        // VNC remote scope launcher
         private void openRemoteScope_MouseClick(object sender, MouseEventArgs e)
         {
             VNCRemoteScope scope = new VNCRemoteScope();
@@ -692,12 +704,21 @@ namespace VISA
 
         }
 
-        private void proportionalStepsCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void showHideTestPanelButton_MouseClick(object sender, MouseEventArgs e)
         {
-            if (proportionalStepsCheckBox.Checked)
-                stepTypeLabel.Text = @"[%]:";
+            if (testPanelTabControl.Visible)
+            {
+                testPanelTabControl.Visible = false;
+                this.Width = 520;
+                showHideTestPanelButton.Text = "Show test panel";
+            }
             else
-                stepTypeLabel.Text = @"[R]:";
+            {
+                testPanelTabControl.Visible = true;
+                this.Width = 1280;
+                showHideTestPanelButton.Text = "Hide test panel";
+            }
+            
         }
     }
 
