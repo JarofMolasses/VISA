@@ -428,19 +428,17 @@ namespace VISA
             runIVTest();
         }
         private async void runIVTest()
-        {
-            testInProgress = true;
-            SetupIVControlState();                                                                // Safety: grey out the buttons which should not be hit
-
-            Stopwatch stopwatch = new Stopwatch();                                                // Diagnostic timer
+        { 
+            Stopwatch stopwatch = new Stopwatch(); 
             stopwatch.Start();
+            testInProgress = true;
 
+            SetupIVControlState();                                                                                                               
             testRunningIndicatorTextBox.BackColor = Color.Red;                                    // Display indicator for test running
             
-            bool cancelFlag = false;                                                              // allows crude task cancellation. Best to use task cancellation token instead
+            bool cancelFlag = false;                                                              // crude task cancellation. Best to use task cancellation token instead
             List<float> loadConditionList = new List<float>();                                    // list of test condition values for the DC load
             float start = 0; float stop = 0; float step = 0;
-  
             int mode = ivTabControl.SelectedIndex;                                                // Using the enumeration declared earlier, tab 0 = CR, tab 1 = CC, tab 2 = CV
 
             Int32 averageBuffer = 1;
@@ -498,6 +496,10 @@ namespace VISA
                 chart1.Series.Clear();
                 chart2.Titles.Add(chartTitle);
                 chart2.Series.Clear();
+                chart1.Series.Add(chartName);
+                chart1.Series[chartName].ChartType = SeriesChartType.Line;
+                chart2.Series.Add(chartName);
+                chart2.Series[chartName].ChartType = SeriesChartType.Line;
             }
             catch (System.ArgumentException)
             {
@@ -526,14 +528,6 @@ namespace VISA
                     loadConditionList.Add(value);
                 }
             }
-            
-            // Chart clearing 
-            chart1.Series.Clear();
-            chart1.Series.Add(chartName);
-            chart1.Series[chartName].ChartType = SeriesChartType.Line;
-            chart2.Series.Clear();
-            chart2.Series.Add(chartName);
-            chart2.Series[chartName].ChartType = SeriesChartType.Line;
 
 
             // I-V test begins 

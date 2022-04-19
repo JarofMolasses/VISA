@@ -54,23 +54,17 @@ namespace VISA
             }
             */
 
-
             // this is using RemoteViewing instead. It works. 
             if(host != null)
                 vncControl1.Client.Connect(host);
-
-            Console.WriteLine($"IsConnected status: {vncControl1.Client.IsConnected}");
-            //updateClientStatusIndicator();
         }
 
         private void disconnectScopeButton_MouseClick(object sender, MouseEventArgs e)
         {
             if (vncControl1.Client.IsConnected)
             {
-                Console.WriteLine($"IsConnected status: {vncControl1.Client.IsConnected}");
                 vncControl1.Client.Close();
             }
-            //updateClientStatusIndicator();
         }
 
         private void VNCRemoteScope_FormClosing(object sender, FormClosingEventArgs e)
