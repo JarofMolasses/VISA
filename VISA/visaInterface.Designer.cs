@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea9 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend9 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend10 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.openSessionButton = new System.Windows.Forms.Button();
             this.closeSessionButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,69 +64,69 @@
             this.queryIDShortcutButton = new System.Windows.Forms.Button();
             this.selectedTargetResourceTextBox = new System.Windows.Forms.TextBox();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.visaTabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.openRemoteScope = new System.Windows.Forms.Button();
             this.showHideTestPanelButton = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.ivGroupBox = new System.Windows.Forms.GroupBox();
-            this.ivStartButton = new System.Windows.Forms.Button();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.fileNameTextBox = new System.Windows.Forms.TextBox();
-            this.stepTimeTextBox = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.selectFileButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
-            this.testProgressTextBox = new System.Windows.Forms.TextBox();
-            this.ivTabControl = new System.Windows.Forms.TabControl();
-            this.ivCVtab = new System.Windows.Forms.TabPage();
-            this.label18 = new System.Windows.Forms.Label();
-            this.stopVoltageTextBox = new System.Windows.Forms.TextBox();
-            this.voltStepTextBox = new System.Windows.Forms.TextBox();
-            this.startVoltageTextBox = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.ivCCtab = new System.Windows.Forms.TabPage();
-            this.startCurrentTextBox = new System.Windows.Forms.TextBox();
-            this.curStepTextBox = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.stopCurrentTextBox = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.ivCRtab = new System.Windows.Forms.TabPage();
-            this.label6 = new System.Windows.Forms.Label();
-            this.stopResTextBox = new System.Windows.Forms.TextBox();
-            this.resStepTextBox = new System.Windows.Forms.TextBox();
-            this.startResTextBox = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.proportionalStepsCheckBox = new System.Windows.Forms.CheckBox();
-            this.stepTypeLabel = new System.Windows.Forms.Label();
-            this.averagingCheckBox = new System.Windows.Forms.CheckBox();
-            this.ivTargetLoadNameDropdown = new System.Windows.Forms.ComboBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.label20 = new System.Windows.Forms.Label();
-            this.ivTargetDaqNameDropdown = new System.Windows.Forms.ComboBox();
-            this.clearIVTargetSelectionButton = new System.Windows.Forms.Button();
-            this.label11 = new System.Windows.Forms.Label();
-            this.testRunningIndicatorTextBox = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
+            this.testRunningIndicatorTextBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.clearIVTargetSelectionButton = new System.Windows.Forms.Button();
+            this.ivTargetDaqNameDropdown = new System.Windows.Forms.ComboBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.ivTargetLoadNameDropdown = new System.Windows.Forms.ComboBox();
+            this.averagingCheckBox = new System.Windows.Forms.CheckBox();
+            this.ivTabControl = new System.Windows.Forms.TabControl();
+            this.ivCRtab = new System.Windows.Forms.TabPage();
+            this.stepTypeLabel = new System.Windows.Forms.Label();
+            this.proportionalStepsCheckBox = new System.Windows.Forms.CheckBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.startResTextBox = new System.Windows.Forms.TextBox();
+            this.resStepTextBox = new System.Windows.Forms.TextBox();
+            this.stopResTextBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.ivCCtab = new System.Windows.Forms.TabPage();
+            this.label13 = new System.Windows.Forms.Label();
+            this.stopCurrentTextBox = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.curStepTextBox = new System.Windows.Forms.TextBox();
+            this.startCurrentTextBox = new System.Windows.Forms.TextBox();
+            this.ivCVtab = new System.Windows.Forms.TabPage();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.startVoltageTextBox = new System.Windows.Forms.TextBox();
+            this.voltStepTextBox = new System.Windows.Forms.TextBox();
+            this.stopVoltageTextBox = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.testProgressTextBox = new System.Windows.Forms.TextBox();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.selectFileButton = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.stepTimeTextBox = new System.Windows.Forms.TextBox();
+            this.fileNameTextBox = new System.Windows.Forms.TextBox();
+            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.ivStartButton = new System.Windows.Forms.Button();
             this.testPanelTabControl = new System.Windows.Forms.TabControl();
             this.visaSessionGroupBox.SuspendLayout();
             this.manualReadWriteGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
-            this.tabControl1.SuspendLayout();
+            this.visaTabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.ivGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.ivTabControl.SuspendLayout();
-            this.ivCVtab.SuspendLayout();
-            this.ivCCtab.SuspendLayout();
             this.ivCRtab.SuspendLayout();
+            this.ivCCtab.SuspendLayout();
+            this.ivCVtab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.testPanelTabControl.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -397,30 +397,30 @@
             // 
             // chart2
             // 
-            chartArea9.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea9);
-            legend9.Name = "Legend1";
-            this.chart2.Legends.Add(legend9);
+            chartArea3.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.chart2.Legends.Add(legend3);
             this.chart2.Location = new System.Drawing.Point(1500, 0);
             this.chart2.Name = "chart2";
-            series9.ChartArea = "ChartArea1";
-            series9.Legend = "Legend1";
-            series9.Name = "Series1";
-            this.chart2.Series.Add(series9);
+            series3.ChartArea = "ChartArea1";
+            series3.Legend = "Legend1";
+            series3.Name = "Series1";
+            this.chart2.Series.Add(series3);
             this.chart2.Size = new System.Drawing.Size(1600, 800);
             this.chart2.TabIndex = 13;
             this.chart2.Text = "chart2";
             this.chart2.Visible = false;
             // 
-            // tabControl1
+            // visaTabControl
             // 
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(0, 8);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(500, 520);
-            this.tabControl1.TabIndex = 14;
+            this.visaTabControl.Controls.Add(this.tabPage1);
+            this.visaTabControl.Controls.Add(this.tabPage2);
+            this.visaTabControl.Location = new System.Drawing.Point(8, 8);
+            this.visaTabControl.Name = "visaTabControl";
+            this.visaTabControl.SelectedIndex = 0;
+            this.visaTabControl.Size = new System.Drawing.Size(500, 520);
+            this.visaTabControl.TabIndex = 14;
             // 
             // tabPage1
             // 
@@ -498,96 +498,95 @@
             this.ivGroupBox.Controls.Add(this.ivStartButton);
             this.ivGroupBox.Location = new System.Drawing.Point(6, 6);
             this.ivGroupBox.Name = "ivGroupBox";
-            this.ivGroupBox.Size = new System.Drawing.Size(707, 520);
+            this.ivGroupBox.Size = new System.Drawing.Size(707, 484);
             this.ivGroupBox.TabIndex = 11;
             this.ivGroupBox.TabStop = false;
             // 
-            // ivStartButton
+            // label21
             // 
-            this.ivStartButton.Location = new System.Drawing.Point(39, 437);
-            this.ivStartButton.Name = "ivStartButton";
-            this.ivStartButton.Size = new System.Drawing.Size(102, 31);
-            this.ivStartButton.TabIndex = 0;
-            this.ivStartButton.Text = "Start IV test";
-            this.ivStartButton.UseVisualStyleBackColor = true;
-            this.ivStartButton.Click += new System.EventHandler(this.ivStartButton_Click);
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(330, 444);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(327, 16);
+            this.label21.TabIndex = 25;
+            this.label21.Text = "Do not make adjustments to setup while test is running.";
             // 
-            // chart1
+            // testRunningIndicatorTextBox
             // 
-            this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
-            chartArea10.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea10);
-            legend10.Name = "Legend1";
-            this.chart1.Legends.Add(legend10);
-            this.chart1.Location = new System.Drawing.Point(266, 18);
-            this.chart1.Name = "chart1";
-            series10.ChartArea = "ChartArea1";
-            series10.Legend = "Legend1";
-            series10.Name = "Series1";
-            this.chart1.Series.Add(series10);
-            this.chart1.Size = new System.Drawing.Size(447, 366);
-            this.chart1.TabIndex = 7;
-            this.chart1.Text = "chart1";
+            this.testRunningIndicatorTextBox.Location = new System.Drawing.Point(333, 395);
+            this.testRunningIndicatorTextBox.Name = "testRunningIndicatorTextBox";
+            this.testRunningIndicatorTextBox.ReadOnly = true;
+            this.testRunningIndicatorTextBox.Size = new System.Drawing.Size(21, 22);
+            this.testRunningIndicatorTextBox.TabIndex = 24;
             // 
-            // fileNameTextBox
+            // label11
             // 
-            this.fileNameTextBox.Location = new System.Drawing.Point(39, 369);
-            this.fileNameTextBox.Multiline = true;
-            this.fileNameTextBox.Name = "fileNameTextBox";
-            this.fileNameTextBox.Size = new System.Drawing.Size(200, 62);
-            this.fileNameTextBox.TabIndex = 8;
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(360, 398);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(80, 16);
+            this.label11.TabIndex = 23;
+            this.label11.Text = "Test running";
             // 
-            // stepTimeTextBox
+            // clearIVTargetSelectionButton
             // 
-            this.stepTimeTextBox.Location = new System.Drawing.Point(117, 277);
-            this.stepTimeTextBox.Name = "stepTimeTextBox";
-            this.stepTimeTextBox.Size = new System.Drawing.Size(28, 22);
-            this.stepTimeTextBox.TabIndex = 13;
+            this.clearIVTargetSelectionButton.Location = new System.Drawing.Point(102, 70);
+            this.clearIVTargetSelectionButton.Name = "clearIVTargetSelectionButton";
+            this.clearIVTargetSelectionButton.Size = new System.Drawing.Size(146, 29);
+            this.clearIVTargetSelectionButton.TabIndex = 22;
+            this.clearIVTargetSelectionButton.Text = "Clear selections";
+            this.clearIVTargetSelectionButton.UseVisualStyleBackColor = true;
+            this.clearIVTargetSelectionButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clearIVTargetSelectionButton_MouseClick);
             // 
-            // label9
+            // ivTargetDaqNameDropdown
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(49, 353);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(76, 16);
-            this.label9.TabIndex = 9;
-            this.label9.Text = "Save to file:";
+            this.ivTargetDaqNameDropdown.FormattingEnabled = true;
+            this.ivTargetDaqNameDropdown.Location = new System.Drawing.Point(103, 44);
+            this.ivTargetDaqNameDropdown.Margin = new System.Windows.Forms.Padding(2);
+            this.ivTargetDaqNameDropdown.Name = "ivTargetDaqNameDropdown";
+            this.ivTargetDaqNameDropdown.Size = new System.Drawing.Size(145, 21);
+            this.ivTargetDaqNameDropdown.TabIndex = 21;
             // 
-            // label10
+            // label20
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(40, 277);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(84, 16);
-            this.label10.TabIndex = 12;
-            this.label10.Text = "Step time [s]:";
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(16, 47);
+            this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(82, 16);
+            this.label20.TabIndex = 20;
+            this.label20.Text = "Target DAQ:";
             // 
-            // selectFileButton
+            // label19
             // 
-            this.selectFileButton.Location = new System.Drawing.Point(40, 326);
-            this.selectFileButton.Name = "selectFileButton";
-            this.selectFileButton.Size = new System.Drawing.Size(199, 24);
-            this.selectFileButton.TabIndex = 10;
-            this.selectFileButton.Text = "Select file";
-            this.selectFileButton.UseVisualStyleBackColor = true;
-            this.selectFileButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.selectFileButton_MouseClick);
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(16, 24);
+            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(84, 16);
+            this.label19.TabIndex = 19;
+            this.label19.Text = "Target Load:";
             // 
-            // cancelButton
+            // ivTargetLoadNameDropdown
             // 
-            this.cancelButton.Location = new System.Drawing.Point(141, 437);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(99, 31);
-            this.cancelButton.TabIndex = 11;
-            this.cancelButton.Text = "Cancel test";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cancelButton_MouseClick);
+            this.ivTargetLoadNameDropdown.FormattingEnabled = true;
+            this.ivTargetLoadNameDropdown.Location = new System.Drawing.Point(103, 19);
+            this.ivTargetLoadNameDropdown.Margin = new System.Windows.Forms.Padding(2);
+            this.ivTargetLoadNameDropdown.Name = "ivTargetLoadNameDropdown";
+            this.ivTargetLoadNameDropdown.Size = new System.Drawing.Size(145, 21);
+            this.ivTargetLoadNameDropdown.TabIndex = 18;
+            this.ivTargetLoadNameDropdown.SelectedIndexChanged += new System.EventHandler(this.targetLoadNameDropdown_SelectedIndexChanged);
             // 
-            // testProgressTextBox
+            // averagingCheckBox
             // 
-            this.testProgressTextBox.Location = new System.Drawing.Point(509, 395);
-            this.testProgressTextBox.Name = "testProgressTextBox";
-            this.testProgressTextBox.Size = new System.Drawing.Size(117, 22);
-            this.testProgressTextBox.TabIndex = 14;
+            this.averagingCheckBox.AutoSize = true;
+            this.averagingCheckBox.Location = new System.Drawing.Point(160, 278);
+            this.averagingCheckBox.Margin = new System.Windows.Forms.Padding(2);
+            this.averagingCheckBox.Name = "averagingCheckBox";
+            this.averagingCheckBox.Size = new System.Drawing.Size(88, 20);
+            this.averagingCheckBox.TabIndex = 17;
+            this.averagingCheckBox.Text = "Averaging";
+            this.averagingCheckBox.UseVisualStyleBackColor = true;
             // 
             // ivTabControl
             // 
@@ -600,138 +599,6 @@
             this.ivTabControl.SelectedIndex = 0;
             this.ivTabControl.Size = new System.Drawing.Size(200, 146);
             this.ivTabControl.TabIndex = 16;
-            // 
-            // ivCVtab
-            // 
-            this.ivCVtab.Controls.Add(this.label16);
-            this.ivCVtab.Controls.Add(this.label17);
-            this.ivCVtab.Controls.Add(this.startVoltageTextBox);
-            this.ivCVtab.Controls.Add(this.voltStepTextBox);
-            this.ivCVtab.Controls.Add(this.stopVoltageTextBox);
-            this.ivCVtab.Controls.Add(this.label18);
-            this.ivCVtab.Location = new System.Drawing.Point(4, 22);
-            this.ivCVtab.Margin = new System.Windows.Forms.Padding(2);
-            this.ivCVtab.Name = "ivCVtab";
-            this.ivCVtab.Padding = new System.Windows.Forms.Padding(2);
-            this.ivCVtab.Size = new System.Drawing.Size(192, 120);
-            this.ivCVtab.TabIndex = 2;
-            this.ivCVtab.Text = "CV mode";
-            this.ivCVtab.UseVisualStyleBackColor = true;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(18, 71);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(106, 16);
-            this.label18.TabIndex = 14;
-            this.label18.Text = "Voltage step [V]:";
-            // 
-            // stopVoltageTextBox
-            // 
-            this.stopVoltageTextBox.Location = new System.Drawing.Point(117, 39);
-            this.stopVoltageTextBox.Name = "stopVoltageTextBox";
-            this.stopVoltageTextBox.Size = new System.Drawing.Size(50, 22);
-            this.stopVoltageTextBox.TabIndex = 17;
-            // 
-            // voltStepTextBox
-            // 
-            this.voltStepTextBox.Location = new System.Drawing.Point(117, 68);
-            this.voltStepTextBox.Name = "voltStepTextBox";
-            this.voltStepTextBox.Size = new System.Drawing.Size(50, 22);
-            this.voltStepTextBox.TabIndex = 13;
-            // 
-            // startVoltageTextBox
-            // 
-            this.startVoltageTextBox.Location = new System.Drawing.Point(117, 10);
-            this.startVoltageTextBox.Name = "startVoltageTextBox";
-            this.startVoltageTextBox.Size = new System.Drawing.Size(50, 22);
-            this.startVoltageTextBox.TabIndex = 18;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(16, 13);
-            this.label17.Name = "label17";
-            this.label17.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label17.Size = new System.Drawing.Size(105, 16);
-            this.label17.TabIndex = 15;
-            this.label17.Text = "Start voltage [V]:";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(18, 42);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(106, 16);
-            this.label16.TabIndex = 16;
-            this.label16.Text = "Stop voltage [V]:";
-            // 
-            // ivCCtab
-            // 
-            this.ivCCtab.Controls.Add(this.label13);
-            this.ivCCtab.Controls.Add(this.stopCurrentTextBox);
-            this.ivCCtab.Controls.Add(this.label15);
-            this.ivCCtab.Controls.Add(this.label14);
-            this.ivCCtab.Controls.Add(this.curStepTextBox);
-            this.ivCCtab.Controls.Add(this.startCurrentTextBox);
-            this.ivCCtab.Location = new System.Drawing.Point(4, 22);
-            this.ivCCtab.Margin = new System.Windows.Forms.Padding(2);
-            this.ivCCtab.Name = "ivCCtab";
-            this.ivCCtab.Padding = new System.Windows.Forms.Padding(2);
-            this.ivCCtab.Size = new System.Drawing.Size(192, 120);
-            this.ivCCtab.TabIndex = 1;
-            this.ivCCtab.Text = "CC mode";
-            this.ivCCtab.UseVisualStyleBackColor = true;
-            // 
-            // startCurrentTextBox
-            // 
-            this.startCurrentTextBox.Location = new System.Drawing.Point(117, 8);
-            this.startCurrentTextBox.Name = "startCurrentTextBox";
-            this.startCurrentTextBox.Size = new System.Drawing.Size(50, 22);
-            this.startCurrentTextBox.TabIndex = 12;
-            // 
-            // curStepTextBox
-            // 
-            this.curStepTextBox.Location = new System.Drawing.Point(117, 61);
-            this.curStepTextBox.Name = "curStepTextBox";
-            this.curStepTextBox.Size = new System.Drawing.Size(50, 22);
-            this.curStepTextBox.TabIndex = 7;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(27, 11);
-            this.label14.Name = "label14";
-            this.label14.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label14.Size = new System.Drawing.Size(100, 16);
-            this.label14.TabIndex = 9;
-            this.label14.Text = "Start current [A]:";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(28, 64);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(101, 16);
-            this.label15.TabIndex = 8;
-            this.label15.Text = "Current step [A]:";
-            // 
-            // stopCurrentTextBox
-            // 
-            this.stopCurrentTextBox.Location = new System.Drawing.Point(117, 35);
-            this.stopCurrentTextBox.Name = "stopCurrentTextBox";
-            this.stopCurrentTextBox.Size = new System.Drawing.Size(50, 22);
-            this.stopCurrentTextBox.TabIndex = 11;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(27, 38);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(101, 16);
-            this.label13.TabIndex = 10;
-            this.label13.Text = "Stop current [A]:";
             // 
             // ivCRtab
             // 
@@ -752,54 +619,14 @@
             this.ivCRtab.Text = "CR mode";
             this.ivCRtab.UseVisualStyleBackColor = true;
             // 
-            // label6
+            // stepTypeLabel
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(5, 93);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(107, 16);
-            this.label6.TabIndex = 2;
-            this.label6.Text = "Resistance step ";
-            // 
-            // stopResTextBox
-            // 
-            this.stopResTextBox.Location = new System.Drawing.Point(122, 34);
-            this.stopResTextBox.Name = "stopResTextBox";
-            this.stopResTextBox.Size = new System.Drawing.Size(50, 22);
-            this.stopResTextBox.TabIndex = 5;
-            // 
-            // resStepTextBox
-            // 
-            this.resStepTextBox.Location = new System.Drawing.Point(122, 90);
-            this.resStepTextBox.Name = "resStepTextBox";
-            this.resStepTextBox.Size = new System.Drawing.Size(50, 22);
-            this.resStepTextBox.TabIndex = 1;
-            // 
-            // startResTextBox
-            // 
-            this.startResTextBox.Location = new System.Drawing.Point(122, 6);
-            this.startResTextBox.Name = "startResTextBox";
-            this.startResTextBox.Size = new System.Drawing.Size(50, 22);
-            this.startResTextBox.TabIndex = 6;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(8, 9);
-            this.label7.Name = "label7";
-            this.label7.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.label7.Size = new System.Drawing.Size(123, 16);
-            this.label7.TabIndex = 3;
-            this.label7.Text = "Start resistance [R]:";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 34);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(124, 16);
-            this.label8.TabIndex = 4;
-            this.label8.Text = "Stop resistance [R]:";
+            this.stepTypeLabel.AutoSize = true;
+            this.stepTypeLabel.Location = new System.Drawing.Point(87, 93);
+            this.stepTypeLabel.Name = "stepTypeLabel";
+            this.stepTypeLabel.Size = new System.Drawing.Size(28, 16);
+            this.stepTypeLabel.TabIndex = 8;
+            this.stepTypeLabel.Text = "[R]:";
             // 
             // proportionalStepsCheckBox
             // 
@@ -812,100 +639,273 @@
             this.proportionalStepsCheckBox.UseVisualStyleBackColor = true;
             this.proportionalStepsCheckBox.CheckedChanged += new System.EventHandler(this.proportionalStepsCheckBox_CheckedChanged);
             // 
-            // stepTypeLabel
+            // label8
             // 
-            this.stepTypeLabel.AutoSize = true;
-            this.stepTypeLabel.Location = new System.Drawing.Point(87, 93);
-            this.stepTypeLabel.Name = "stepTypeLabel";
-            this.stepTypeLabel.Size = new System.Drawing.Size(28, 16);
-            this.stepTypeLabel.TabIndex = 8;
-            this.stepTypeLabel.Text = "[R]:";
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(8, 34);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(124, 16);
+            this.label8.TabIndex = 4;
+            this.label8.Text = "Stop resistance [R]:";
             // 
-            // averagingCheckBox
+            // label7
             // 
-            this.averagingCheckBox.AutoSize = true;
-            this.averagingCheckBox.Location = new System.Drawing.Point(160, 278);
-            this.averagingCheckBox.Margin = new System.Windows.Forms.Padding(2);
-            this.averagingCheckBox.Name = "averagingCheckBox";
-            this.averagingCheckBox.Size = new System.Drawing.Size(88, 20);
-            this.averagingCheckBox.TabIndex = 17;
-            this.averagingCheckBox.Text = "Averaging";
-            this.averagingCheckBox.UseVisualStyleBackColor = true;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(8, 9);
+            this.label7.Name = "label7";
+            this.label7.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label7.Size = new System.Drawing.Size(123, 16);
+            this.label7.TabIndex = 3;
+            this.label7.Text = "Start resistance [R]:";
             // 
-            // ivTargetLoadNameDropdown
+            // startResTextBox
             // 
-            this.ivTargetLoadNameDropdown.FormattingEnabled = true;
-            this.ivTargetLoadNameDropdown.Location = new System.Drawing.Point(103, 19);
-            this.ivTargetLoadNameDropdown.Margin = new System.Windows.Forms.Padding(2);
-            this.ivTargetLoadNameDropdown.Name = "ivTargetLoadNameDropdown";
-            this.ivTargetLoadNameDropdown.Size = new System.Drawing.Size(145, 21);
-            this.ivTargetLoadNameDropdown.TabIndex = 18;
-            this.ivTargetLoadNameDropdown.SelectedIndexChanged += new System.EventHandler(this.targetLoadNameDropdown_SelectedIndexChanged);
+            this.startResTextBox.Location = new System.Drawing.Point(122, 6);
+            this.startResTextBox.Name = "startResTextBox";
+            this.startResTextBox.Size = new System.Drawing.Size(50, 22);
+            this.startResTextBox.TabIndex = 6;
             // 
-            // label19
+            // resStepTextBox
             // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(16, 24);
-            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(84, 16);
-            this.label19.TabIndex = 19;
-            this.label19.Text = "Target Load:";
+            this.resStepTextBox.Location = new System.Drawing.Point(122, 90);
+            this.resStepTextBox.Name = "resStepTextBox";
+            this.resStepTextBox.Size = new System.Drawing.Size(50, 22);
+            this.resStepTextBox.TabIndex = 1;
             // 
-            // label20
+            // stopResTextBox
             // 
-            this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(16, 47);
-            this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(82, 16);
-            this.label20.TabIndex = 20;
-            this.label20.Text = "Target DAQ:";
+            this.stopResTextBox.Location = new System.Drawing.Point(122, 34);
+            this.stopResTextBox.Name = "stopResTextBox";
+            this.stopResTextBox.Size = new System.Drawing.Size(50, 22);
+            this.stopResTextBox.TabIndex = 5;
             // 
-            // ivTargetDaqNameDropdown
+            // label6
             // 
-            this.ivTargetDaqNameDropdown.FormattingEnabled = true;
-            this.ivTargetDaqNameDropdown.Location = new System.Drawing.Point(103, 44);
-            this.ivTargetDaqNameDropdown.Margin = new System.Windows.Forms.Padding(2);
-            this.ivTargetDaqNameDropdown.Name = "ivTargetDaqNameDropdown";
-            this.ivTargetDaqNameDropdown.Size = new System.Drawing.Size(145, 21);
-            this.ivTargetDaqNameDropdown.TabIndex = 21;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(5, 93);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(107, 16);
+            this.label6.TabIndex = 2;
+            this.label6.Text = "Resistance step ";
             // 
-            // clearIVTargetSelectionButton
+            // ivCCtab
             // 
-            this.clearIVTargetSelectionButton.Location = new System.Drawing.Point(102, 70);
-            this.clearIVTargetSelectionButton.Name = "clearIVTargetSelectionButton";
-            this.clearIVTargetSelectionButton.Size = new System.Drawing.Size(146, 29);
-            this.clearIVTargetSelectionButton.TabIndex = 22;
-            this.clearIVTargetSelectionButton.Text = "Clear selections";
-            this.clearIVTargetSelectionButton.UseVisualStyleBackColor = true;
-            this.clearIVTargetSelectionButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.clearIVTargetSelectionButton_MouseClick);
+            this.ivCCtab.Controls.Add(this.label13);
+            this.ivCCtab.Controls.Add(this.stopCurrentTextBox);
+            this.ivCCtab.Controls.Add(this.label15);
+            this.ivCCtab.Controls.Add(this.label14);
+            this.ivCCtab.Controls.Add(this.curStepTextBox);
+            this.ivCCtab.Controls.Add(this.startCurrentTextBox);
+            this.ivCCtab.Location = new System.Drawing.Point(4, 22);
+            this.ivCCtab.Margin = new System.Windows.Forms.Padding(2);
+            this.ivCCtab.Name = "ivCCtab";
+            this.ivCCtab.Padding = new System.Windows.Forms.Padding(2);
+            this.ivCCtab.Size = new System.Drawing.Size(192, 120);
+            this.ivCCtab.TabIndex = 1;
+            this.ivCCtab.Text = "CC mode";
+            this.ivCCtab.UseVisualStyleBackColor = true;
             // 
-            // label11
+            // label13
             // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(360, 398);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(80, 16);
-            this.label11.TabIndex = 23;
-            this.label11.Text = "Test running";
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(27, 38);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(101, 16);
+            this.label13.TabIndex = 10;
+            this.label13.Text = "Stop current [A]:";
             // 
-            // testRunningIndicatorTextBox
+            // stopCurrentTextBox
             // 
-            this.testRunningIndicatorTextBox.Location = new System.Drawing.Point(333, 395);
-            this.testRunningIndicatorTextBox.Name = "testRunningIndicatorTextBox";
-            this.testRunningIndicatorTextBox.ReadOnly = true;
-            this.testRunningIndicatorTextBox.Size = new System.Drawing.Size(21, 22);
-            this.testRunningIndicatorTextBox.TabIndex = 24;
+            this.stopCurrentTextBox.Location = new System.Drawing.Point(117, 35);
+            this.stopCurrentTextBox.Name = "stopCurrentTextBox";
+            this.stopCurrentTextBox.Size = new System.Drawing.Size(50, 22);
+            this.stopCurrentTextBox.TabIndex = 11;
             // 
-            // label21
+            // label15
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(330, 444);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(327, 16);
-            this.label21.TabIndex = 25;
-            this.label21.Text = "Do not make adjustments to setup while test is running.";
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(28, 64);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(101, 16);
+            this.label15.TabIndex = 8;
+            this.label15.Text = "Current step [A]:";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(27, 11);
+            this.label14.Name = "label14";
+            this.label14.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label14.Size = new System.Drawing.Size(100, 16);
+            this.label14.TabIndex = 9;
+            this.label14.Text = "Start current [A]:";
+            // 
+            // curStepTextBox
+            // 
+            this.curStepTextBox.Location = new System.Drawing.Point(117, 61);
+            this.curStepTextBox.Name = "curStepTextBox";
+            this.curStepTextBox.Size = new System.Drawing.Size(50, 22);
+            this.curStepTextBox.TabIndex = 7;
+            // 
+            // startCurrentTextBox
+            // 
+            this.startCurrentTextBox.Location = new System.Drawing.Point(117, 8);
+            this.startCurrentTextBox.Name = "startCurrentTextBox";
+            this.startCurrentTextBox.Size = new System.Drawing.Size(50, 22);
+            this.startCurrentTextBox.TabIndex = 12;
+            // 
+            // ivCVtab
+            // 
+            this.ivCVtab.Controls.Add(this.label16);
+            this.ivCVtab.Controls.Add(this.label17);
+            this.ivCVtab.Controls.Add(this.startVoltageTextBox);
+            this.ivCVtab.Controls.Add(this.voltStepTextBox);
+            this.ivCVtab.Controls.Add(this.stopVoltageTextBox);
+            this.ivCVtab.Controls.Add(this.label18);
+            this.ivCVtab.Location = new System.Drawing.Point(4, 22);
+            this.ivCVtab.Margin = new System.Windows.Forms.Padding(2);
+            this.ivCVtab.Name = "ivCVtab";
+            this.ivCVtab.Padding = new System.Windows.Forms.Padding(2);
+            this.ivCVtab.Size = new System.Drawing.Size(192, 120);
+            this.ivCVtab.TabIndex = 2;
+            this.ivCVtab.Text = "CV mode";
+            this.ivCVtab.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(18, 42);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(106, 16);
+            this.label16.TabIndex = 16;
+            this.label16.Text = "Stop voltage [V]:";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(16, 13);
+            this.label17.Name = "label17";
+            this.label17.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.label17.Size = new System.Drawing.Size(105, 16);
+            this.label17.TabIndex = 15;
+            this.label17.Text = "Start voltage [V]:";
+            // 
+            // startVoltageTextBox
+            // 
+            this.startVoltageTextBox.Location = new System.Drawing.Point(117, 10);
+            this.startVoltageTextBox.Name = "startVoltageTextBox";
+            this.startVoltageTextBox.Size = new System.Drawing.Size(50, 22);
+            this.startVoltageTextBox.TabIndex = 18;
+            // 
+            // voltStepTextBox
+            // 
+            this.voltStepTextBox.Location = new System.Drawing.Point(117, 68);
+            this.voltStepTextBox.Name = "voltStepTextBox";
+            this.voltStepTextBox.Size = new System.Drawing.Size(50, 22);
+            this.voltStepTextBox.TabIndex = 13;
+            // 
+            // stopVoltageTextBox
+            // 
+            this.stopVoltageTextBox.Location = new System.Drawing.Point(117, 39);
+            this.stopVoltageTextBox.Name = "stopVoltageTextBox";
+            this.stopVoltageTextBox.Size = new System.Drawing.Size(50, 22);
+            this.stopVoltageTextBox.TabIndex = 17;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(18, 71);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(106, 16);
+            this.label18.TabIndex = 14;
+            this.label18.Text = "Voltage step [V]:";
+            // 
+            // testProgressTextBox
+            // 
+            this.testProgressTextBox.Location = new System.Drawing.Point(509, 395);
+            this.testProgressTextBox.Name = "testProgressTextBox";
+            this.testProgressTextBox.Size = new System.Drawing.Size(117, 22);
+            this.testProgressTextBox.TabIndex = 14;
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Location = new System.Drawing.Point(141, 437);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(99, 31);
+            this.cancelButton.TabIndex = 11;
+            this.cancelButton.Text = "Cancel test";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.cancelButton_MouseClick);
+            // 
+            // selectFileButton
+            // 
+            this.selectFileButton.Location = new System.Drawing.Point(40, 326);
+            this.selectFileButton.Name = "selectFileButton";
+            this.selectFileButton.Size = new System.Drawing.Size(199, 24);
+            this.selectFileButton.TabIndex = 10;
+            this.selectFileButton.Text = "Select file";
+            this.selectFileButton.UseVisualStyleBackColor = true;
+            this.selectFileButton.MouseClick += new System.Windows.Forms.MouseEventHandler(this.selectFileButton_MouseClick);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(40, 277);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(84, 16);
+            this.label10.TabIndex = 12;
+            this.label10.Text = "Step time [s]:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(49, 353);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(76, 16);
+            this.label9.TabIndex = 9;
+            this.label9.Text = "Save to file:";
+            // 
+            // stepTimeTextBox
+            // 
+            this.stepTimeTextBox.Location = new System.Drawing.Point(117, 277);
+            this.stepTimeTextBox.Name = "stepTimeTextBox";
+            this.stepTimeTextBox.Size = new System.Drawing.Size(28, 22);
+            this.stepTimeTextBox.TabIndex = 13;
+            // 
+            // fileNameTextBox
+            // 
+            this.fileNameTextBox.Location = new System.Drawing.Point(39, 369);
+            this.fileNameTextBox.Multiline = true;
+            this.fileNameTextBox.Name = "fileNameTextBox";
+            this.fileNameTextBox.Size = new System.Drawing.Size(200, 62);
+            this.fileNameTextBox.TabIndex = 8;
+            // 
+            // chart1
+            // 
+            this.chart1.BackImageWrapMode = System.Windows.Forms.DataVisualization.Charting.ChartImageWrapMode.Scaled;
+            chartArea4.Name = "ChartArea1";
+            this.chart1.ChartAreas.Add(chartArea4);
+            legend4.Name = "Legend1";
+            this.chart1.Legends.Add(legend4);
+            this.chart1.Location = new System.Drawing.Point(266, 18);
+            this.chart1.Name = "chart1";
+            series4.ChartArea = "ChartArea1";
+            series4.Legend = "Legend1";
+            series4.Name = "Series1";
+            this.chart1.Series.Add(series4);
+            this.chart1.Size = new System.Drawing.Size(435, 366);
+            this.chart1.TabIndex = 7;
+            this.chart1.Text = "chart1";
+            // 
+            // ivStartButton
+            // 
+            this.ivStartButton.Location = new System.Drawing.Point(39, 437);
+            this.ivStartButton.Name = "ivStartButton";
+            this.ivStartButton.Size = new System.Drawing.Size(102, 31);
+            this.ivStartButton.TabIndex = 0;
+            this.ivStartButton.Text = "Start IV test";
+            this.ivStartButton.UseVisualStyleBackColor = true;
+            this.ivStartButton.Click += new System.EventHandler(this.ivStartButton_Click);
             // 
             // testPanelTabControl
             // 
@@ -925,7 +925,7 @@
             this.Controls.Add(this.testPanelTabControl);
             this.Controls.Add(this.showHideTestPanelButton);
             this.Controls.Add(this.openRemoteScope);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.visaTabControl);
             this.Controls.Add(this.chart2);
             this.Name = "visaInterface";
             this.Text = "VISA toolbox";
@@ -935,20 +935,20 @@
             this.manualReadWriteGroupBox.ResumeLayout(false);
             this.manualReadWriteGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
-            this.tabControl1.ResumeLayout(false);
+            this.visaTabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.ivGroupBox.ResumeLayout(false);
             this.ivGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ivTabControl.ResumeLayout(false);
-            this.ivCVtab.ResumeLayout(false);
-            this.ivCVtab.PerformLayout();
-            this.ivCCtab.ResumeLayout(false);
-            this.ivCCtab.PerformLayout();
             this.ivCRtab.ResumeLayout(false);
             this.ivCRtab.PerformLayout();
+            this.ivCCtab.ResumeLayout(false);
+            this.ivCCtab.PerformLayout();
+            this.ivCVtab.ResumeLayout(false);
+            this.ivCVtab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.testPanelTabControl.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -984,7 +984,7 @@
         private System.Windows.Forms.CheckBox appendLfCheckBox;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.ListBox openResourcesIDListBox;
-        private System.Windows.Forms.TabControl tabControl1;
+        private System.Windows.Forms.TabControl visaTabControl;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button scanResourceIDsButton;

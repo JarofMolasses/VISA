@@ -19,27 +19,8 @@ namespace VISA
 {
     public partial class visaInterface : Form
     {
+        #region Structures
         List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // the key data structure of the program. this is a list of open VISA sessions.
-
-        public visaInterface()
-        {
-            InitializeComponent();
-
-            ChartArea ca = chart1.ChartAreas[0];
-            ca.AxisX.LabelStyle.Format = "0.00";
-            ca.AxisY.LabelStyle.Format = "0.00";
-
-            ChartArea ca2 = chart2.ChartAreas[0];
-            ca2.AxisX.LabelStyle.Format = "0.00";
-            ca2.AxisY.LabelStyle.Format = "0.00";
-
-            // I-V plot hardcoded defaults
-            resStepTextBox.Text = "0.25";
-            stepTimeTextBox.Text = "0.5";
-
-            SetupControlStateMaster();
-            SetupIVControlState();
-        }
 
         public string ResourceName
         {
@@ -66,8 +47,6 @@ namespace VISA
             }
         }
 
-
-        // Get methods for the target session indices
         public int selectedOpenSessionIndex
         {
             get
@@ -75,6 +54,7 @@ namespace VISA
                 return openResourcesListBox.SelectedIndex;
             }
         }
+
         public int ivTargetLoadIndex
         {
             get
@@ -90,104 +70,10 @@ namespace VISA
                 return ivTargetDaqNameDropdown.SelectedIndex;
             }
         }
+        #endregion
 
-
-        private void findResourceButton_Click(object sender, EventArgs e)
-        {
-            // This example uses an instance of the NationalInstruments.Visa.ResourceManager class to find resources on the system.
-            // Alternatively, static methods provided by the Ivi.Visa.ResourceManager class may be used when an application
-            // requires additional VISA .NET implementations.
-            using (var rmSession = new ResourceManager())
-            {
-                availableResourcesListBox.Items.Clear();
-                var resources = rmSession.Find("(ASRL|GPIB|TCPIP|USB)?*");
-
-                foreach (string s in resources)
-                {
-                    availableResourcesListBox.Items.Add(s);
-                }
-            }
-        }
-            
-        private void availableResourcesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            string selectedString = (string)availableResourcesListBox.SelectedItem;
-            ResourceName = selectedString;
-            SetupControlStateMaster();
-        }
-
-        private void openSessionButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.Cursor = Cursors.WaitCursor;
-
-            using (var rmSession = new ResourceManager())
-            {
-                try
-                {
-                    openSessionList.Add((MessageBasedSession)rmSession.Open(ResourceName));          // initialize the VISA session and add it to the list of open sessions
-                    SetupControlStateMaster();
-                }
-                catch (InvalidCastException)
-                {
-                    MessageBox.Show("Resource selected must be a message-based session");
-                }
-                catch (Exception exp)
-                {
-                    MessageBox.Show(exp.Message);
-                }
-                finally
-                {
-                    this.Cursor = Cursors.Default;
-                }
-            }
-
-        }
-
-        private void queryButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            readTextBox.Text = String.Empty;
-            this.Cursor = Cursors.WaitCursor;     
-            try
-            {
-                string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                if (appendLfCheckBox.Checked && !textToWrite.EndsWith("\n"))
-                {
-                    textToWrite += "\n";
-                }
-                openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
-                readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
-            }
-            catch (Exception exp)
-            {
-                MessageBox.Show(exp.Message);
-            }
-            finally
-            {
-                this.Cursor = Cursors.Default;
-            }
-        }
-
-        private void writeButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            try
-            {
-                string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
-                if (appendLfCheckBox.Checked && !textToWrite.EndsWith("\n"))
-                {
-                    textToWrite += "\n";
-                }
-                openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
-            }
-            catch (Exception exp)
-            {
-                MessageBox.Show(exp.Message);
-            }
-        }
-
-        private void readButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            read();
-        }
+        #region Methods
+        #region Helper functions
         private void read()
         {
             readTextBox.Text = String.Empty;
@@ -229,7 +115,162 @@ namespace VISA
                 this.Cursor = Cursors.Default;
             }
         }
+        #endregion
 
+        #region Event handlers
+
+        /// <summary>
+        /// Form class constructor
+        /// </summary>
+        public visaInterface()
+        {
+            InitializeComponent();
+
+            ChartArea ca = chart1.ChartAreas[0];
+            ca.AxisX.LabelStyle.Format = "0.00";
+            ca.AxisY.LabelStyle.Format = "0.00";
+
+            ChartArea ca2 = chart2.ChartAreas[0];
+            ca2.AxisX.LabelStyle.Format = "0.00";
+            ca2.AxisY.LabelStyle.Format = "0.00";
+
+            // I-V plot hardcoded defaults
+            resStepTextBox.Text = "0.25";
+            stepTimeTextBox.Text = "0.5";
+
+            SetupControlStateMaster();
+            SetupIVControlState();
+        }
+
+        /// <summary>
+        /// Launch VNC viewer
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openRemoteScope_MouseClick(object sender, MouseEventArgs e)
+        {
+            VNCRemoteScope scope = new VNCRemoteScope();
+            scope.Show();
+
+        }
+
+        /// <summary>
+        /// Show/hide the IV test panel
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void showHideTestPanelButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (testPanelTabControl.Visible)
+            {
+                testPanelTabControl.Visible = false;
+                this.Width = visaTabControl.Width + visaTabControl.Location.X + 20;             // some padding seems necessary to fit the controls properly
+                showHideTestPanelButton.Text = "Show test panel";
+            }
+            else
+            {
+                testPanelTabControl.Visible = true;
+                this.Width = testPanelTabControl.Width + testPanelTabControl.Location.X + 20;
+                showHideTestPanelButton.Text = "Hide test panel";
+            }
+
+        }
+        private void findResourceButton_Click(object sender, EventArgs e)
+        {
+            // This example uses an instance of the NationalInstruments.Visa.ResourceManager class to find resources on the system.
+            // Alternatively, static methods provided by the Ivi.Visa.ResourceManager class may be used when an application
+            // requires additional VISA .NET implementations.
+            using (var rmSession = new ResourceManager())
+            {
+                availableResourcesListBox.Items.Clear();
+                var resources = rmSession.Find("(ASRL|GPIB|TCPIP|USB)?*");
+
+                foreach (string s in resources)
+                {
+                    availableResourcesListBox.Items.Add(s);
+                }
+            }
+        }
+
+        private void availableResourcesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            string selectedString = (string)availableResourcesListBox.SelectedItem;
+            ResourceName = selectedString;
+            SetupControlStateMaster();
+        }
+
+        private void openSessionButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+
+            using (var rmSession = new ResourceManager())
+            {
+                try
+                {
+                    openSessionList.Add((MessageBasedSession)rmSession.Open(ResourceName));          // initialize the VISA session and add it to the list of open sessions
+                    SetupControlStateMaster();
+                }
+                catch (InvalidCastException)
+                {
+                    MessageBox.Show("Resource selected must be a message-based session");
+                }
+                catch (Exception exp)
+                {
+                    MessageBox.Show(exp.Message);
+                }
+                finally
+                {
+                    this.Cursor = Cursors.Default;
+                }
+            }
+
+        }
+
+        private void queryButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            readTextBox.Text = String.Empty;
+            this.Cursor = Cursors.WaitCursor;
+            try
+            {
+                string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
+                if (appendLfCheckBox.Checked && !textToWrite.EndsWith("\n"))
+                {
+                    textToWrite += "\n";
+                }
+                openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
+                readTextBox.Text = InsertCommonEscapeSequences(openSessionList[selectedOpenSessionIndex].RawIO.ReadString());
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+            finally
+            {
+                this.Cursor = Cursors.Default;
+            }
+        }
+
+        private void writeButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                string textToWrite = ReplaceCommonEscapeSequences(writeTextBox.Text);
+                if (appendLfCheckBox.Checked && !textToWrite.EndsWith("\n"))
+                {
+                    textToWrite += "\n";
+                }
+                openSessionList[selectedOpenSessionIndex].RawIO.Write(textToWrite);
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+        }
+
+        private void readButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            read();
+        }
         private void clearButton_MouseClick(object sender, MouseEventArgs e)
         {
             readTextBox.Text = String.Empty;
@@ -245,12 +286,10 @@ namespace VISA
             return s.Replace("\n", "\\n").Replace("\r", "\\r");
         }
 
-        /*
-         * Controls the greying out of buttons in the Session control and Read/Write sections
-         * Controls the active resources lists and the selected resource text box
-         * 
-         * call whenever resources are added or removed
-         */
+        /// <summary>
+        /// Controls greying out main control panel buttons
+        /// Called whenever new resources are added or removed
+        /// </summary>
         private void SetupControlStateMaster()
         {
             // Update the open resources list boxes
@@ -343,7 +382,9 @@ namespace VISA
             }
         }
 
-        // Dispose of all sessions on form close. This seems to prevent the DC Load from dropping out and requiring power cycle.
+        /// <summary>
+        /// On close: dispose all remaining sessions in the openSessionList
+        /// </summary>
         private void visaInterface_FormClosing(object sender, FormClosingEventArgs e)
         {
             foreach (MessageBasedSession mb in openSessionList)
@@ -360,6 +401,7 @@ namespace VISA
 
             read();
         }
+
         private void openResourcesListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectedTargetResourceTextBox.Text = openResourcesListBox.SelectedItem.ToString();
@@ -372,17 +414,13 @@ namespace VISA
                 closeSessionButton.Enabled = false;
             }
         }
+        #endregion
+        #endregion
 
-
-
-        /* I-V test
-         * (I'm given to understand global variables are generally not a good idea)
-         */
-
+        #region IV sweep automated test
         StreamWriter outFile;                                                                 // output file writer initialization
         bool testInProgress = false;                                                          // state variable used to cancel the test
         const int CR = 0; const int CC = 1; const int CV = 2;                                 // enumerating modes for the I-V test 
-
 
         // For responsive UI: use async and await instead of blocking for the time delays.
         private void ivStartButton_Click(object sender, EventArgs e)
@@ -410,7 +448,6 @@ namespace VISA
             {
                 averageBuffer = 32;
             }
-
 
             // Parse the input parameters 
             string chartName = "";
@@ -442,7 +479,6 @@ namespace VISA
             }
 
             // Generate plot labels and output files
-            // TODO: should maybe add indicator of CC/CR/CV mode in the file name
             try
             {
                 if (!fileNameTextBox.Text.EndsWith(".csv"))
@@ -500,10 +536,11 @@ namespace VISA
             chart2.Series[chartName].ChartType = SeriesChartType.Line;
 
 
-            // I-V test begins here
+            // I-V test begins 
             openSessionList[ivTargetLoadIndex].RawIO.Write("CONF:REM ON\n");
             testInProgress = true;                              
             outFile.WriteLine($"{chartName},Volts,Amps,Power");
+
             foreach (float value in loadConditionList)
             {
                 numSteps--;
@@ -573,9 +610,9 @@ namespace VISA
 
                 outFile.WriteLine($"{value.ToString()},{volts.ToString()},{amps.ToString()},{power.ToString()}");
             }
+
             loadOff();
             testInProgress = false;                         // End of I-V test
-
             
             chart2.SaveImage($"{outFileName.Replace(".csv", "")}.png", ChartImageFormat.Png); // This is a horrible workaround to save a larger image of the chart.
                                                                                               // We make a copy which is large and invisible, chart2, for example. Then save chart2
@@ -603,7 +640,6 @@ namespace VISA
             openSessionList[ivTargetLoadIndex].RawIO.Write("MODE CVH\n");
             openSessionList[ivTargetLoadIndex].RawIO.Write("VOLT 0\n");
         }
-
 
         private void setLoadRes(float res)
         {
@@ -666,7 +702,9 @@ namespace VISA
             ivTargetLoadNameDropdown.SelectedIndex = -1;
         }
 
-        // Controls the greying out of buttons in the IV test section
+        /// <summary>
+        /// Controls greying out buttons in the IV test panel
+        /// </summary>
         private void SetupIVControlState()
         {
             bool isLoadSelected = false;
@@ -695,31 +733,7 @@ namespace VISA
             else
                 stepTypeLabel.Text = @"[R]:";
         }
-
-        // VNC remote scope launcher
-        private void openRemoteScope_MouseClick(object sender, MouseEventArgs e)
-        {
-            VNCRemoteScope scope = new VNCRemoteScope();
-            scope.Show();
-
-        }
-
-        private void showHideTestPanelButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            if (testPanelTabControl.Visible)
-            {
-                testPanelTabControl.Visible = false;
-                this.Width = 520;
-                showHideTestPanelButton.Text = "Show test panel";
-            }
-            else
-            {
-                testPanelTabControl.Visible = true;
-                this.Width = 1280;
-                showHideTestPanelButton.Text = "Hide test panel";
-            }
-            
-        }
+        #endregion
     }
 
 }

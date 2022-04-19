@@ -103,7 +103,6 @@ namespace VISA
             bitmap.Save(filename, ImageFormat.Png);
         }
 
-
         private void updateClientStatusIndicator()
         {
             if (vncControl1.Client.IsConnected)
