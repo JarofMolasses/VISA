@@ -24,23 +24,24 @@
 
         /// <summary>
         /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
+        /// the contents of this method with the code editor. 
+        /// Don't touch this, unless you really want to.
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtHost = new System.Windows.Forms.TextBox();
+            this.hostNameTextBox = new System.Windows.Forms.TextBox();
             this.okButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // txtHost
+            // hostNameTextBox
             // 
-            this.txtHost.Location = new System.Drawing.Point(12, 31);
-            this.txtHost.Name = "txtHost";
-            this.txtHost.Size = new System.Drawing.Size(360, 22);
-            this.txtHost.TabIndex = 0;
-            this.txtHost.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtHost_KeyPress);
+            this.hostNameTextBox.Location = new System.Drawing.Point(12, 31);
+            this.hostNameTextBox.Name = "hostNameTextBox";
+            this.hostNameTextBox.Size = new System.Drawing.Size(360, 20);
+            this.hostNameTextBox.TabIndex = 0;
+            this.hostNameTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.hostNameTextBox_KeyPress);
             // 
             // okButton
             // 
@@ -67,7 +68,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(12, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(192, 16);
+            this.label1.Size = new System.Drawing.Size(155, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Enter host name or IP address: ";
             // 
@@ -79,9 +80,9 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.okButton);
-            this.Controls.Add(this.txtHost);
+            this.Controls.Add(this.hostNameTextBox);
             this.Name = "ConnectDialog";
-            this.Text = "Connect remote front panel";
+            this.Text = "Connect to VNC host";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -89,7 +90,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtHost;
+        private System.Windows.Forms.TextBox hostNameTextBox;
         private System.Windows.Forms.Button okButton;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Label label1;

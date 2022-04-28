@@ -14,14 +14,18 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
 using System.Threading;
 using VncSharp;
+using ICDIBasic;
 
 namespace VISA
 {
     public partial class visaInterface : Form
     {
         #region Structures
-        List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // the key data structure of the program. this is a list of open VISA sessions.
+        List<MessageBasedSession> openSessionList = new List<MessageBasedSession>();          // the main data structure of the program. this is a list of open VISA sessions.
 
+        /// <summary>
+        /// The name of the currently selected available resource
+        /// </summary>
         public string ResourceName
         {
             get
@@ -34,40 +38,14 @@ namespace VISA
             }
         }
 
-        public string targetName
-        {
-            get
-            {
-                return selectedTargetResourceTextBox.Text;
-            }
-
-            set
-            {
-                selectedTargetResourceTextBox.Text = value;
-            }
-        }
-
+        /// <summary>
+        /// The index of the currently selected open session for manual reads and writes
+        /// </summary>
         public int selectedOpenSessionIndex
         {
             get
             {
                 return openResourcesListBox.SelectedIndex;
-            }
-        }
-
-        public int ivTargetLoadIndex
-        {
-            get
-            {
-                return ivTargetLoadNameDropdown.SelectedIndex;
-            }
-        }
-
-        public int ivTargetDaqIndex
-        {
-            get
-            {
-                return ivTargetDaqNameDropdown.SelectedIndex;
             }
         }
         #endregion
@@ -118,7 +96,6 @@ namespace VISA
         #endregion
 
         #region Event handlers
-
         /// <summary>
         /// Form class constructor
         /// </summary>
@@ -138,6 +115,9 @@ namespace VISA
             resStepTextBox.Text = "0.25";
             stepTimeTextBox.Text = "0.5";
 
+            // Scope logger hardcoded defaults
+            
+
             SetupControlStateMaster();
             SetupIVControlState();
         }
@@ -151,7 +131,6 @@ namespace VISA
         {
             VNCRemoteScope scope = new VNCRemoteScope();
             scope.Show();
-
         }
 
         /// <summary>
@@ -267,6 +246,23 @@ namespace VISA
             }
         }
 
+        private void writeSCPI(string command, int targetIndex)
+        {
+            try
+            {
+                string textToWrite = command;
+                if (appendLfCheckBox.Checked && !textToWrite.EndsWith("\n"))
+                {
+                    textToWrite += "\n";
+                }
+                openSessionList[targetIndex].RawIO.Write(textToWrite);
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+            }
+        }
+
         private void readButton_MouseClick(object sender, MouseEventArgs e)
         {
             read();
@@ -296,6 +292,8 @@ namespace VISA
             openResourcesListBox.Items.Clear();
             ivTargetDaqNameDropdown.Items.Clear();
             ivTargetLoadNameDropdown.Items.Clear();
+            loggingTargetDAQCombo.Items.Clear();
+            loggingTargetScopeCombo.Items.Clear();
 
             // fill out the listboxes
             foreach (MessageBasedSession mb in openSessionList)
@@ -305,6 +303,8 @@ namespace VISA
                     openResourcesListBox.Items.Add(mb.ResourceName.ToString());
                     ivTargetDaqNameDropdown.Items.Add(mb.ResourceName.ToString());
                     ivTargetLoadNameDropdown.Items.Add(mb.ResourceName.ToString());
+                    loggingTargetDAQCombo.Items.Add(mb.ResourceName.ToString());
+                    loggingTargetScopeCombo.Items.Add(mb.ResourceName.ToString());
                 }
             }
 
@@ -417,11 +417,33 @@ namespace VISA
         #endregion
         #endregion
 
-        #region IV sweep automated test
+        #region IV sweep automation
+        #region Structures
+        /// <summary>
+        /// The index of the target DC load for IV curve sweep
+        /// </summary>
+        public int ivTargetLoadIndex
+        {
+            get
+            {
+                return ivTargetLoadNameDropdown.SelectedIndex;
+            }
+        }
+
+        /// <summary>
+        /// The index of the target DAQ for IV curve sweep
+        /// </summary>
+        public int ivTargetDaqIndex
+        {
+            get
+            {
+                return ivTargetDaqNameDropdown.SelectedIndex;
+            }
+        }
         StreamWriter outFile;                                                                 // output file writer initialization
         bool testInProgress = false;                                                          // state variable used to cancel the test
         const int CR = 0; const int CC = 1; const int CV = 2;                                 // enumerating modes for the I-V test 
-
+        #endregion 
         // For responsive UI: use async and await instead of blocking for the time delays.
         private void ivStartButton_Click(object sender, EventArgs e)
         {
@@ -728,6 +750,218 @@ namespace VISA
                 stepTypeLabel.Text = @"[R]:";
         }
         #endregion
-    }
 
+        private void openCANButton_Click(object sender, EventArgs e)
+        {
+            CANGUI can = new CANGUI();
+            can.Show();
+        }
+
+        #region Scope datalogging
+
+        string testFolderString;
+        string scopeCapturePathString;
+        string CSVFileString;
+        VNCRemoteScope logScope = new VNCRemoteScope();
+        const int defaultLoggingInterval = 60000;
+
+        int numCaptures = 0;
+        int numPoints = 0;
+        bool recording = false;
+
+        int maxCaptures = 50;
+        int maxDAQPoints = 1000;
+        float volts = 0; float amps = 0;
+
+        int scopeCycleCounter = 0;
+        int baseScopeTimerInterval = 1000;
+        
+        /// <summary>
+        /// Gets DAQ logging interval in milliseconds
+        /// </summary>
+        public int DAQLoggingInterval
+        {
+            get
+            {
+                if(DAQLoggingIntervalText.Text == null)
+                {
+                    return defaultLoggingInterval;
+                }
+                else
+                {
+                    try
+                    {
+                        return int.Parse(DAQLoggingIntervalText.Text) * 1000;
+                    }
+                    catch(System.FormatException)
+                    {
+                        return defaultLoggingInterval;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Scope sampling happens differently in order to allow for auto-centering waveform. We constantly tick at some rate,
+        /// and subsample to get the scope capture occasionally.
+        /// Returns scope logging interval in number of cycles (1 cycle = 1 second). We have hardcoded the cycle time to 1000ms in the scopeTimer object.
+        /// </summary>
+        public int scopeLoggingSubsampleInterval
+        {
+            get
+            {
+                if(scopeLoggingIntervalText.Text == null)
+                {
+                    return defaultLoggingInterval/1000;
+                }
+                else
+                {
+                    try
+                    {
+                        return int.Parse(scopeLoggingIntervalText.Text);
+                    }
+                    catch(System.FormatException)
+                    {
+                        return defaultLoggingInterval/1000;
+                    }
+                }
+            }
+            set
+            {
+                scopeLoggingIntervalText.Text = scopeLoggingSubsampleInterval.ToString();
+            }
+        }
+
+        private void selectDirectoryButton_Click(object sender, EventArgs e)
+        {
+            folderBrowserDialog1.ShowDialog();
+            testFolderString = folderBrowserDialog1.SelectedPath;
+            directoryNameTextBox.Text = testFolderString;
+            updateEventLog("Test folder string: " + testFolderString);
+
+            scopeCapturePathString = System.IO.Path.Combine(testFolderString, "Scope captures");
+            System.IO.Directory.CreateDirectory(scopeCapturePathString);
+        }
+
+        private void connectLoggingScopeButton_Click(object sender, EventArgs e)
+        {
+            logScope.Show();
+            logScope.connectScope();
+        }
+
+        private void startRecordingButton_Click(object sender, EventArgs e)
+        {
+            numCaptures = 0;
+            numPoints = 0;
+            scopeCycleCounter = 0;
+            recording = true;
+            scopeTimer.Enabled = true;
+            daqTimer.Enabled = true;
+
+            CSVFileString = System.IO.Path.Combine(testFolderString, $"{Path.GetFileNameWithoutExtension(testFolderString)}.csv");
+            updateEventLog("Saving data file to: " + CSVFileString);
+            if(File.Exists(CSVFileString))
+            {
+                File.Delete(CSVFileString);         // ruthlessly delete the old file if you have selected an old test folder. we can adjust this behaviour later
+            }
+            using(StreamWriter sw = new StreamWriter(CSVFileString))
+            {
+                sw.WriteLine("Time, Volts, Amps");
+            }
+
+            volts = float.Parse(query("MEAS:VOLT:DC? (@101)\n", loggingTargetDAQCombo.SelectedIndex));
+            float shuntVolts = float.Parse(query("MEAS:VOLT:DC? (@102)\n", loggingTargetDAQCombo.SelectedIndex));
+            amps = shuntVolts * 200;           // shunt resistance factor = 1/R
+
+            writeSCPI(":chan1:scale 1",loggingTargetScopeCombo.SelectedIndex);
+            writeSCPI(":chan1:coupling DC", loggingTargetScopeCombo.SelectedIndex);
+            writeSCPI(":chan3:scale 1", loggingTargetScopeCombo.SelectedIndex);
+            writeSCPI(":chan3:coupling DC", loggingTargetScopeCombo.SelectedIndex);
+            writeSCPI(":timebase:scale 0.010", loggingTargetScopeCombo.SelectedIndex);
+
+            updateLoggingControlState(true);
+        }
+
+        private void scopeTimer_Tick(object sender, EventArgs e)
+        {
+            // only capture scope screenshots every [interval] ticks of scopeTimer
+            if(numCaptures < maxCaptures && scopeCycleCounter == 0)
+            {
+                string timestamp = DateTime.Now.ToString("dd MM yy_hh-mm-ss");
+                string scopeCaptureFilePathString = System.IO.Path.Combine(scopeCapturePathString, timestamp + ".png");
+                logScope.screenShot(scopeCaptureFilePathString);
+
+                updateEventLog("Saved screenshot to file: " + scopeCaptureFilePathString);
+                numCaptures++;
+            }
+
+            // but auto centre the waveforms on every tick
+            if(autoCentreCheckBox.Checked)  
+            {
+                string nr3Volts = volts.ToString();
+                string nr3Amps = amps.ToString();
+                writeSCPI(":chan1:offs " + nr3Volts, loggingTargetScopeCombo.SelectedIndex);
+                writeSCPI(":chan3:offs " + nr3Amps, loggingTargetScopeCombo.SelectedIndex);
+            }
+
+            scopeCycleCounter = (scopeCycleCounter + 1) % scopeLoggingSubsampleInterval;
+            updateEventLog("Scope cycle counter = " + scopeCycleCounter.ToString());
+        }
+
+        private void stopRecordingButton_Click(object sender, EventArgs e)
+        {
+            recording = false;
+            scopeTimer.Enabled = false;
+            daqTimer.Enabled = false;
+            updateLoggingControlState(false);
+        }
+
+        private void updateLoggingControlState(bool loggingInProgress)
+        {
+            loggingTargetDAQCombo.Enabled = !loggingInProgress;
+            loggingTargetScopeCombo.Enabled = !loggingInProgress;
+
+            scopeLoggingIntervalText.Enabled = !loggingInProgress;
+            DAQLoggingIntervalText.Enabled = !loggingInProgress;
+
+            selectDirectoryButton.Enabled = !loggingInProgress;
+            startRecordingButton.Enabled = !loggingInProgress;
+            connectLoggingScopeButton.Enabled = !loggingInProgress;
+
+            if(loggingInProgress)
+            {
+                loggingRunningIndicatorBox.BackColor = Color.Red;
+            }
+            else
+            {
+                loggingRunningIndicatorBox.BackColor = Color.White;
+            }
+        }
+
+        public void updateEventLog(string eventMessage)
+        {
+            eventLogListBox.Items.Add(eventMessage);
+            eventLogListBox.SelectedIndex = eventLogListBox.Items.Count - 1;
+        }
+        private void daqTimer_Tick(object sender, EventArgs e)
+        {
+            daqTimer.Interval = DAQLoggingInterval;
+            if(numPoints < maxDAQPoints && loggingTargetDAQCombo.SelectedIndex != -1)
+            {
+                volts = float.Parse(query("MEAS:VOLT:DC? (@101)\n", loggingTargetDAQCombo.SelectedIndex));
+                float shuntVolts = float.Parse(query("MEAS:VOLT:DC? (@102)\n", loggingTargetDAQCombo.SelectedIndex));
+                amps = shuntVolts * 200;           // shunt resistance factor = 1/R
+
+
+                string timestamp = DateTime.Now.ToString("dd MM yy_hh-mm-ss");
+                string logString = $"{ timestamp },{ volts.ToString()},{ amps.ToString()}";
+                using (StreamWriter sw = File.AppendText(CSVFileString))
+                {
+                    sw.WriteLine(logString);
+                }
+
+            }
+        }
+        #endregion
+    }
 }

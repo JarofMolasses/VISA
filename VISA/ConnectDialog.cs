@@ -16,17 +16,40 @@ namespace VISA
         public ConnectDialog()
         {
             InitializeComponent();
-            txtHost.Text = "10.52.52.134";      // hardcoded default to address of Agilent scope OSC016, change as needed
+            hostNameTextBox.Text = "10.52.52.134";      // hardcoded default to address of Agilent scope OSC016, change as needed
         }
 
         public string Host
         {
             get
             {
-                return txtHost.Text;
+                return hostNameTextBox.Text;
             }
         }
 
+        private void okButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+        }
+
+        private void cancelButton_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+        }
+
+        // allow enter key to submit the Host address
+        private void hostNameTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (Char)Keys.Return)
+                this.DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Opens a dialog box to receive host name from user
+        /// </summary>
+        /// <returns>
+        /// Host name 
+        /// </returns>
         public static string GetVncHost()
         {
             using (ConnectDialog dialog = new ConnectDialog())
@@ -43,21 +66,5 @@ namespace VISA
             }
         }
 
-        private void okButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.DialogResult = DialogResult.OK;
-        }
-
-        private void cancelButton_MouseClick(object sender, MouseEventArgs e)
-        {
-            this.DialogResult = DialogResult.Cancel;
-        }
-
-        // allow enter key to submit the Host address
-        private void txtHost_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (Char)Keys.Return)
-                this.DialogResult = DialogResult.OK;
-        }
     }
 }
